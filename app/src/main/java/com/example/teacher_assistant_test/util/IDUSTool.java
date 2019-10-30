@@ -40,14 +40,17 @@ public class IDUSTool {
      *
      * @param stu_id  学号
      * @param score  成绩
+     * @param total_score  总成绩
      */
-    public void insertStuMarkDB(String stu_id, String score) {
+    public void insertStuMarkDB(String stu_id, String score, int total_score) {
         //实例化常量值
         ContentValues contentValues = new ContentValues();
         //插入学号
         contentValues.put("stu_id", stu_id);
         //插入成绩
         contentValues.put("score", score);
+        //插入总成绩
+        contentValues.put("total_score", total_score);
         //调用insert插入数据
         sqLiteDatabase.insert("StudentMark", null, contentValues);
     }

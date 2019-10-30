@@ -35,4 +35,12 @@
         android:layout_weight="2"
         android:text="成绩" />
 
+    <TextView
+        android:id="@+id/stu_total_score"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="总成绩" />
+
 </LinearLayout>

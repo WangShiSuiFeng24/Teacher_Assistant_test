@@ -5,12 +5,14 @@ public class Student {
     private String stu_name;
     private String stu_gender;
     private String score;
+    private int total_score;
 
-    public Student(String stu_id, String stu_name, String stu_gender, String score) {
+    public Student(String stu_id, String stu_name, String stu_gender, String score, int total_score) {
         this.stu_id = stu_id;
         this.stu_name = stu_name;
         this.stu_gender = stu_gender;
         this.score = score;
+        this.total_score = total_score;
     }
 
     public String getStu_id() {
@@ -25,4 +27,5 @@ public class Student {
     public String getScore() {
         return score;
     }
+    public int getTotal_score() {return total_score;}
 }

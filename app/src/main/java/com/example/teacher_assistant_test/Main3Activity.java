@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
@@ -45,7 +46,8 @@ import java.util.List;
 public class Main3Activity extends AppCompatActivity {
     private static final String TAG = "Main3Activity";
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
-    private List<Student> studentList = new ArrayList<>();
+
+    private List<Mark> markList = new ArrayList<>();
 
     private RecognizerDialog mIatDialog = null;
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
@@ -84,8 +86,8 @@ public class Main3Activity extends AppCompatActivity {
                     //处理resultStr
                     StrProcess strProcess = new StrProcess(resultStr);
                     String stu_id = strProcess.getStu_id();
-                    String score = strProcess.getScore();
                     Log.i(TAG,"stu_id:"+stu_id);
+                    String score = strProcess.getScore();
                     Log.i(TAG,"score:"+score);
 
                     if(stu_id == null) {
@@ -107,8 +109,11 @@ public class Main3Activity extends AppCompatActivity {
                                 }).show();
                     } else {
                         //不为空，插入数据
+                        Calculator calculator = new Calculator();
+                        int total_score = (int) calculator.calculate(score);
+                        Log.i(TAG,"total_score:"+total_score);
                         IDUSTool idusTool = new IDUSTool(Main3Activity.this);
-                        idusTool.insertStuMarkDB(stu_id,score);
+                        idusTool.insertStuMarkDB(stu_id,score,total_score);
 
                         //自动刷新本页面
                         finish();
@@ -168,12 +173,12 @@ public class Main3Activity extends AppCompatActivity {
             }
         });
 
-        initStudent();
-        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Student);
+        initScore();
+        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        StudentAdapter studentAdapter = new StudentAdapter(studentList);
-        recyclerView.setAdapter(studentAdapter);
+        MarkAdapter markAdapter = new MarkAdapter(markList);
+        recyclerView.setAdapter(markAdapter);
     }
 
     @Override
@@ -198,25 +203,20 @@ public class Main3Activity extends AppCompatActivity {
         }
     }
 
-    private void showResultDialog() {
-//        View view = LayoutInflater.from(Main3Activity.this).inflate(R.layout.)
-    }
-
-    private void initStudent() {
-        String sqlSelect="SELECT Student.stu_id,Student.stu_name,Student.stu_gender,StudentMark.score FROM Student LEFT JOIN StudentMark ON Student.stu_id = StudentMark.stu_id";
+    private void initScore() {
+        String sqlSelect="SELECT * FROM StudentMark";
         //扫描数据库，将信息放入markList
-//        MyDatabaseHelper mdb = new MyDatabaseHelper(this, "Student.db", null, 2);//打开数据库
+//        MyDatabaseHelper mdb = new MyDatabaseHelper(this, "Mark.db", null, 2);//打开数据库
 //        SQLiteDatabase sd = mdb.getReadableDatabase();//获取数据库
         SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main3Activity.this);
         Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
         while(cursor.moveToNext()){
-            String stu_id = cursor.getString(cursor.getColumnIndex("stu_id"));
-            String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
-            String stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
+            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
             String score = cursor.getString(cursor.getColumnIndex("score"));
+            int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
 
-            Student student = new Student(stu_id, stu_name, stu_gender, score);
-            studentList.add(student);
+            Mark mark = new Mark(stu_id, score, total_score);
+            markList.add(mark);
         }
         cursor.close();
     }

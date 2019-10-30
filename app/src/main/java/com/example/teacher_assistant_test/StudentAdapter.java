@@ -18,6 +18,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         private TextView stu_name;
         private TextView stu_gender;
         private TextView score;
+        private TextView total_score;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -25,6 +26,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             stu_name = itemView.findViewById(R.id.stu_name);
             stu_gender = itemView.findViewById(R.id.stu_gender);
             score = itemView.findViewById(R.id.stu_score);
+            total_score = itemView.findViewById(R.id.stu_total_score);
         }
     }
 
@@ -45,6 +47,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         holder.stu_name.setText(student.getStu_name());
         holder.stu_gender.setText(student.getStu_gender());
         holder.score.setText(String.valueOf(student.getScore()));
+        holder.total_score.setText(String.valueOf(student.getTotal_score()));
     }
 
     @Override

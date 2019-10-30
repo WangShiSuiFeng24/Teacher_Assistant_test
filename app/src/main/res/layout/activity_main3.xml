@@ -5,12 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <include layout="@layout/student_item">
+    <include layout="@layout/mark_item">
 
     </include>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Recycler_View_Student"
+        android:id="@+id/Recycler_View_Mark"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>

@@ -16,11 +16,13 @@ public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView student_id;
         TextView student_score;
+        TextView total_score;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             student_id = itemView.findViewById(R.id.student_id);
             student_score = itemView.findViewById(R.id.student_score);
+            total_score = itemView.findViewById(R.id.total_score);
         }
     }
 
@@ -39,6 +41,7 @@ public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder> {
         Mark mark = mList.get(position);
         holder.student_id.setText(String.valueOf(mark.getStu_id()));
         holder.student_score.setText(String.valueOf(mark.getScore()));
+        holder.total_score.setText(String.valueOf(mark.getTotal_score()));
     }
 
     @Override

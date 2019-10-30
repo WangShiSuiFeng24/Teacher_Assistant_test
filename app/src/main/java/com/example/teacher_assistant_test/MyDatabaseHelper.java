@@ -21,7 +21,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             + "mark_id integer primary key,"
             + "stu_id integer unique,"
             + "class_id integer,"
-            + "score text)";
+            + "score text,"
+            + "total_score integer)";
 
     private static MyDatabaseHelper myDatabaseHelper;
 
