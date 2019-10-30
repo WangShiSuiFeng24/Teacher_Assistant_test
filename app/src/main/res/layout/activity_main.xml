@@ -6,21 +6,21 @@
     android:padding="10dp">
 
     <Button
-        android:id="@+id/Test_1"
+        android:id="@+id/Test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test_1"/>
+        android:text="Test查看"/>
 
     <Button
         android:id="@+id/Test_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test_2"/>
+        android:text=""/>
 
     <Button
-        android:id="@+id/Test_3"
+        android:id="@+id/Test_Insert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test_3" />
+        android:text="Test_Insert" />
 
 </LinearLayout>

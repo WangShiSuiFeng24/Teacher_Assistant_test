@@ -23,33 +23,31 @@ public class MainActivity extends AppCompatActivity {
 
         initDataBase();
 
-        bt1 = findViewById(R.id.Test_1);
+        bt1 = findViewById(R.id.Test);
         bt2 = findViewById(R.id.Test_2);
-        bt3 = findViewById(R.id.Test_3);
+        bt3 = findViewById(R.id.Test_Insert);
 
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-//                intent.putExtra("Test_1" ,"Test_1");
+
                 startActivity(intent);
             }
         });
 
-        bt2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-//                intent.putExtra("Test_2" ,"Test_2");
-                startActivity(intent);
-            }
-        });
+//        bt2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                private static fianl DELETE_DB = "DELETE FROM Student.db"
+//            }
+//        });
 
         bt3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Main3Activity.class);
-//                intent.putExtra("Test_3" ,"Test_3");
+
                 startActivity(intent);
             }
         });
