@@ -1,5 +1,6 @@
 package com.example.teacher_assistant_test;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -8,12 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -77,20 +80,41 @@ public class Main3Activity extends AppCompatActivity {
                     Log.d(TAG, "recognizer result：" + resultStr);
 //                    Toast.makeText(Main3Activity.this, resultStr, Toast.LENGTH_LONG).show();
 //                    showTip(resultStr);
-
+//                    showResultDialog();
+                    //处理resultStr
                     StrProcess strProcess = new StrProcess(resultStr);
                     String stu_id = strProcess.getStu_id();
                     String score = strProcess.getScore();
                     Log.i(TAG,"stu_id:"+stu_id);
                     Log.i(TAG,"score:"+score);
 
-                    IDUSTool idusTool = new IDUSTool(Main3Activity.this);
-                    idusTool.insertStuMarkDB(stu_id,score);
+                    if(stu_id == null) {
+//                        Toast.makeText(Main3Activity.this, "请重新录音", Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
+                        builder.setTitle("Tip")
+                                .setMessage("不符合规则，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                    } else {
+                        //不为空，插入数据
+                        IDUSTool idusTool = new IDUSTool(Main3Activity.this);
+                        idusTool.insertStuMarkDB(stu_id,score);
 
-                    //自动刷新本页面
-                    finish();
-                    Intent intent = new Intent(Main3Activity.this, Main3Activity.class);
-                    startActivity(intent);
+                        //自动刷新本页面
+                        finish();
+                        Intent intent = new Intent(Main3Activity.this, Main3Activity.class);
+                        startActivity(intent);
+                    }
                 }
             }
 
@@ -172,6 +196,10 @@ public class Main3Activity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+    }
+
+    private void showResultDialog() {
+//        View view = LayoutInflater.from(Main3Activity.this).inflate(R.layout.)
     }
 
     private void initStudent() {

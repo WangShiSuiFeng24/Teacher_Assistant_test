@@ -20,8 +20,13 @@ public class StrProcess {
 
     //清除所有空格及标点符号
     private void preProcess() {
-        String[] buff =resultStr.replaceAll(" ", "").replaceAll("\\p{P}","").split("号");
-        stu_id = buff[0];
-        score = buff[1];
+        if(resultStr.contains("号") && resultStr.contains("+")) {
+            String[] buff = resultStr.replaceAll(" ", "").replaceAll("\\p{P}", "").split("号");
+            stu_id = buff[0];
+            score = buff[1];
+        } else {
+            stu_id = null;
+            score = null;
+        }
     }
 }
