@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        myDatabaseHelper = new MyDatabaseHelper(MainActivity.this, "Student.db", null, 2);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 禁用横屏
+
         setContentView(R.layout.activity_main);
 
         initDataBase();
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 //        SQLiteDatabase sqLiteDatabase = myDatabaseHelper.getWritableDatabase();
         idusTool.insertStuDB("1", "Dan", "girl");
         idusTool.insertStuDB("2", "Jow", "boy");
-        idusTool.insertStuDB("3", "Marry", "gril");
+        idusTool.insertStuDB("3", "Marry", "girl");
         idusTool.insertStuDB("4", "Jorge", "boy");
         idusTool.insertStuDB("5", "Judy", "girl");
         for (int i=1; i<=20; i++) {

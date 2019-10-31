@@ -1,32 +1,52 @@
 package com.example.teacher_assistant_test.util;
-//本类为语音结果字符串的处理工具类，可以获得学号stu_id和成绩score
+
+import android.util.Log;
+
+import com.example.teacher_assistant_test.Mark;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+//本类为语音结果字符串的处理工具类，返回一个List<Mark>
 public class StrProcess {
-    private String resultStr;
-    private String stu_id;
-    private String score;
 
-    public StrProcess(String resultStr) {
-        this.resultStr = resultStr;
-        preProcess();
-    }
+    private StrProcess() {}
 
-    public String getStu_id() {
-        return stu_id;
-    }
+    //使用正则表达式切割字符串resultStr成多条Mark,将多条Mark存入List<Mark>中
+    public static List<Mark> StrToMarkList(String resultStr) {
+        List<Mark> markList = new ArrayList<>();
+        //创建模式串
+        String pattern = "[1-9][0-9]?号[，。]{0,2}[0-9]{1,3}[\\+][0-9]{1,2}";
+        //创建Pattern对象
+        Pattern r = Pattern.compile(pattern);
+        //创建Macher对象
+        Matcher matcher = r.matcher(resultStr);
+        Log.i("StrProcess", "m:"+ matcher.toString());
 
-    public String getScore() {
-        return score;
-    }
-
-    //清除所有空格及标点符号
-    private void preProcess() {
-        if(resultStr.contains("号") && resultStr.contains("+")) {
-            String[] buff = resultStr.replaceAll(" ", "").replaceAll("\\p{P}", "").split("号");
-            stu_id = buff[0];
-            score = buff[1];
-        } else {
-            stu_id = null;
-            score = null;
+        //将匹配结果存入一个List<String>
+        List<String> list = new ArrayList<>();
+        while(matcher.find()) {
+            list.add(matcher.group());
         }
+
+        if(list.size()==0) return null;
+
+        //处理List<String>中的每一条String
+        for(int i=0; i<list.size(); i++) {
+            String[] buff = list.get(i).replaceAll(" ", "").replaceAll("\\p{P}", "").split("号");
+            int stu_id = Integer.parseInt(buff[0]);
+            Log.i("StrProcess","stu_id:"+stu_id);
+            String score = buff[1];
+            Log.i("StrProcess", "score:"+score);
+            Calculator calculator = new Calculator();
+            int total_score = (int) calculator.calculate(score);
+            Log.i("StrProcess", "total_score:"+total_score);
+            Mark mark = new Mark(stu_id, score, total_score);
+            markList.add(mark);
+        }
+        return markList;
     }
 }

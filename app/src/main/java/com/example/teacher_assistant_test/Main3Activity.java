@@ -47,7 +47,7 @@ public class Main3Activity extends AppCompatActivity {
     private static final String TAG = "Main3Activity";
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
-    private List<Mark> markList = new ArrayList<>();
+//    private List<Mark> markList = new ArrayList<>();
 
     private RecognizerDialog mIatDialog = null;
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
@@ -83,18 +83,15 @@ public class Main3Activity extends AppCompatActivity {
 //                    Toast.makeText(Main3Activity.this, resultStr, Toast.LENGTH_LONG).show();
 //                    showTip(resultStr);
 //                    showResultDialog();
-                    //处理resultStr
-                    StrProcess strProcess = new StrProcess(resultStr);
-                    String stu_id = strProcess.getStu_id();
-                    Log.i(TAG,"stu_id:"+stu_id);
-                    String score = strProcess.getScore();
-                    Log.i(TAG,"score:"+score);
 
-                    if(stu_id == null) {
+                    //处理resultStr
+                    List<Mark> markList = StrProcess.StrToMarkList(resultStr);
+
+                    if(markList == null) {
 //                        Toast.makeText(Main3Activity.this, "请重新录音", Toast.LENGTH_LONG).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
                         builder.setTitle("Tip")
-                                .setMessage("不符合规则，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
+                                .setMessage("无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -108,17 +105,25 @@ public class Main3Activity extends AppCompatActivity {
                                     }
                                 }).show();
                     } else {
-                        //不为空，插入数据
-                        Calculator calculator = new Calculator();
-                        int total_score = (int) calculator.calculate(score);
-                        Log.i(TAG,"total_score:"+total_score);
-                        IDUSTool idusTool = new IDUSTool(Main3Activity.this);
-                        idusTool.insertStuMarkDB(stu_id,score,total_score);
+                        //不为空，先显示数据，可修改，后由用户选择是否保存数据到数据库中
+                        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Main3Activity.this);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                        MarkAdapter markAdapter = new MarkAdapter(markList);
+                        recyclerView.setAdapter(markAdapter);
+
+
+
+//                        Calculator calculator = new Calculator();
+//                        int total_score = (int) calculator.calculate(score);
+//                        Log.i(TAG,"total_score:"+total_score);
+//                        IDUSTool idusTool = new IDUSTool(Main3Activity.this);
+//                        idusTool.insertStuMarkDB(stu_id,score,total_score);
 
                         //自动刷新本页面
-                        finish();
-                        Intent intent = new Intent(Main3Activity.this, Main3Activity.class);
-                        startActivity(intent);
+//                        finish();
+//                        Intent intent = new Intent(Main3Activity.this, Main3Activity.class);
+//                        startActivity(intent);
                     }
                 }
             }
@@ -160,10 +165,13 @@ public class Main3Activity extends AppCompatActivity {
                     }
                 } else {
                     // Permission has already been granted
-                    mIatDialog = new RecognizerDialog(Main3Activity.this, null);
+
+                    //初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
+                    //使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
+                    mIatDialog = new RecognizerDialog(Main3Activity.this, mInitListener);
 
 //                if(mIatDialog!=null)
-                    mIatDialog.setParameter(SpeechConstant.VAD_EOS, "3000");
+                    mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
 //                mIatDialog.setParameter(SpeechConstant.ACCENT, "mandarin");
 
                     mIatDialog.setListener(mRecognizerDialogListener);
@@ -173,12 +181,12 @@ public class Main3Activity extends AppCompatActivity {
             }
         });
 
-        initScore();
-        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        MarkAdapter markAdapter = new MarkAdapter(markList);
-        recyclerView.setAdapter(markAdapter);
+//        initScore();
+//        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+//        MarkAdapter markAdapter = new MarkAdapter(markList);
+//        recyclerView.setAdapter(markAdapter);
     }
 
     @Override
@@ -203,23 +211,23 @@ public class Main3Activity extends AppCompatActivity {
         }
     }
 
-    private void initScore() {
-        String sqlSelect="SELECT * FROM StudentMark";
-        //扫描数据库，将信息放入markList
-//        MyDatabaseHelper mdb = new MyDatabaseHelper(this, "Mark.db", null, 2);//打开数据库
-//        SQLiteDatabase sd = mdb.getReadableDatabase();//获取数据库
-        SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main3Activity.this);
-        Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
-        while(cursor.moveToNext()){
-            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
-            String score = cursor.getString(cursor.getColumnIndex("score"));
-            int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
-
-            Mark mark = new Mark(stu_id, score, total_score);
-            markList.add(mark);
-        }
-        cursor.close();
-    }
+//    private void initScore() {
+//        String sqlSelect="SELECT * FROM StudentMark";
+//        //扫描数据库，将信息放入markList
+////        MyDatabaseHelper mdb = new MyDatabaseHelper(this, "Mark.db", null, 2);//打开数据库
+////        SQLiteDatabase sd = mdb.getReadableDatabase();//获取数据库
+//        SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main3Activity.this);
+//        Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
+//        while(cursor.moveToNext()){
+//            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
+//            String score = cursor.getString(cursor.getColumnIndex("score"));
+//            int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
+//
+//            Mark mark = new Mark(stu_id, score, total_score);
+//            markList.add(mark);
+//        }
+//        cursor.close();
+//    }
 
     // 读取动态修正返回结果
     private String updateResult(RecognizerResult results) {
@@ -243,42 +251,21 @@ public class Main3Activity extends AppCompatActivity {
         //如果pgs是rpl就在已有的结果中删除掉要覆盖的sn部分
         if (pgs.equals("rpl")) {
             Log.d(this.getClass().getName(), "recognizer result replace：" + results.getResultString());
-//            Regex regex = new Regex(",");
+//
             String[] strings = rg.replace("[", "").replace("]", "").split(",");
-
-//            val strings = rg!!.replace("[", "").replace("]", "").split(",".toRegex())
-//                    .dropLastWhile { it.isEmpty() }
-//                .toTypedArray()
             int begin = Integer.parseInt(strings[0]);
             int end = Integer.parseInt(strings[1]);
-//            for (i in begin..end) {
-//                mIatResults.remove(i.toString() + "");
-//            }
-            int i = begin;
-            if (begin <= end) {
-                while(true) {
-                    this.mIatResults.remove(i + "");
-                    if (i == end) {
-                        break;
-                    }
-                    ++i;
-                }
+            for (int i = begin; i <= end; i++) {
+                mIatResults.remove(i+"");
             }
         }
 
-        if(sn != null) mIatResults.put(sn, text);
-
+        mIatResults.put(sn, text);
         StringBuffer resultBuffer = new StringBuffer();
 
-        Iterator iterator = mIatResults.keySet().iterator();
-        while (iterator.hasNext()) {
-            String key = (String)iterator.next();
+        for (String key : mIatResults.keySet()) {
             resultBuffer.append(mIatResults.get(key));
         }
-
-//        for (key in mIatResults.keys) {
-//            resultBuffer.append(mIatResults.get(key));
-//        }
 
         return resultBuffer.toString();
         //mResultText.setText(resultBuffer.toString())
