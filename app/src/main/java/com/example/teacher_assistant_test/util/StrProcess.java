@@ -18,13 +18,13 @@ public class StrProcess {
     //使用正则表达式切割字符串resultStr成多条Mark,将多条Mark存入List<Mark>中
     public static List<Mark> StrToMarkList(String resultStr) {
         List<Mark> markList = new ArrayList<>();
-        //创建模式串
+        //创建模式串,正则表达式！！！
         String pattern = "[1-9][0-9]?号[，。]{0,2}[0-9]{1,3}[\\+][0-9]{1,2}";
         //创建Pattern对象
         Pattern r = Pattern.compile(pattern);
         //创建Macher对象
         Matcher matcher = r.matcher(resultStr);
-        Log.i("StrProcess", "m:"+ matcher.toString());
+//        Log.i("StrProcess", "m:"+ matcher.toString());
 
         //将匹配结果存入一个List<String>
         List<String> list = new ArrayList<>();

@@ -47,7 +47,7 @@ public class Main3Activity extends AppCompatActivity {
     private static final String TAG = "Main3Activity";
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
-//    private List<Mark> markList = new ArrayList<>();
+    private List<Mark> markList = new ArrayList<>();
 
     private RecognizerDialog mIatDialog = null;
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
@@ -63,6 +63,12 @@ public class Main3Activity extends AppCompatActivity {
 //        myDatabaseHelper = new MyDatabaseHelper(this,"Student.db",null,2);
         setContentView(R.layout.activity_main3);
 
+        final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Main3Activity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        final MarkAdapter markAdapter = new MarkAdapter(markList);
+        recyclerView.setAdapter(markAdapter);
+
         fab = findViewById(R.id.fab);
         mInitListener = new InitListener() {
             @Override
@@ -75,7 +81,7 @@ public class Main3Activity extends AppCompatActivity {
         mRecognizerDialogListener = new RecognizerDialogListener() {
             @Override
             public void onResult(RecognizerResult results, boolean isLast) {
-                Log.d(this.getClass().getName(), "recognizer result：" + results.getResultString());
+                Log.d(this.getClass().getName(), "recognizer json result：" + results.getResultString());
 
                 String resultStr = updateResult(results);
                 if (isLast) {
@@ -85,9 +91,9 @@ public class Main3Activity extends AppCompatActivity {
 //                    showResultDialog();
 
                     //处理resultStr
-                    List<Mark> markList = StrProcess.StrToMarkList(resultStr);
+                    List<Mark> newMarkList = StrProcess.StrToMarkList(resultStr);
 
-                    if(markList == null) {
+                    if(newMarkList == null) {
 //                        Toast.makeText(Main3Activity.this, "请重新录音", Toast.LENGTH_LONG).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
                         builder.setTitle("Tip")
@@ -106,19 +112,14 @@ public class Main3Activity extends AppCompatActivity {
                                 }).show();
                     } else {
                         //不为空，先显示数据，可修改，后由用户选择是否保存数据到数据库中
-                        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Main3Activity.this);
-                        recyclerView.setLayoutManager(linearLayoutManager);
-                        MarkAdapter markAdapter = new MarkAdapter(markList);
-                        recyclerView.setAdapter(markAdapter);
-
-
-
-//                        Calculator calculator = new Calculator();
-//                        int total_score = (int) calculator.calculate(score);
-//                        Log.i(TAG,"total_score:"+total_score);
-//                        IDUSTool idusTool = new IDUSTool(Main3Activity.this);
-//                        idusTool.insertStuMarkDB(stu_id,score,total_score);
+                        //遍历newMarkList，将其添加到markList
+                        Iterator<Mark> iterator = newMarkList.iterator();
+                        while(iterator.hasNext()) {
+                            markList.add(iterator.next());
+                        }
+                        markAdapter.notifyDataSetChanged();
+                        //清空错误缓存
+                        mIatResults.clear();
 
                         //自动刷新本页面
 //                        finish();
@@ -231,6 +232,7 @@ public class Main3Activity extends AppCompatActivity {
 
     // 读取动态修正返回结果
     private String updateResult(RecognizerResult results) {
+
         String text = JsonParser.parseIatResult(results.getResultString());
         Log.d(Main3Activity.this.getLocalClassName(), "parseIatResult：" + text);
 
@@ -243,6 +245,7 @@ public class Main3Activity extends AppCompatActivity {
             sn = resultJson.optString("sn");
             pgs = resultJson.optString("pgs");
             rg = resultJson.optString("rg");
+            Log.d(this.getClass().getName(), "sn:"+sn+"\r\npgs:"+pgs+"\r\ng:"+rg);
         } catch (JSONException e) {
             e.printStackTrace();
             return "";
@@ -257,10 +260,12 @@ public class Main3Activity extends AppCompatActivity {
             int end = Integer.parseInt(strings[1]);
             for (int i = begin; i <= end; i++) {
                 mIatResults.remove(i+"");
+                Log.d(this.getClass().getName(), "mIatResults"+mIatResults.toString());
             }
         }
 
         mIatResults.put(sn, text);
+        Log.d(this.getClass().getName(), "mIatResults"+mIatResults.toString());
         StringBuffer resultBuffer = new StringBuffer();
 
         for (String key : mIatResults.keySet()) {
