@@ -19,7 +19,8 @@ public class StrProcess {
     public static List<Mark> StrToMarkList(String resultStr) {
         List<Mark> markList = new ArrayList<>();
         //创建模式串,正则表达式！！！
-        String pattern = "[1-9][0-9]?号[，。]{0,2}[0-9]{1,3}[\\+][0-9]{1,2}";
+//        String pattern = "[1-9][0-9]?号[，。]{0,2}[0-9]{1,3}[\\+][0-9]{1,2}";
+        String pattern = "[1-9][0-9]?号[，。]{0,2}[0-9]{1,3}[\\+][0-9]|10";
         //创建Pattern对象
         Pattern r = Pattern.compile(pattern);
         //创建Macher对象

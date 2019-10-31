@@ -173,7 +173,7 @@ public class Main3Activity extends AppCompatActivity {
 
 //                if(mIatDialog!=null)
                     mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
-//                mIatDialog.setParameter(SpeechConstant.ACCENT, "mandarin");
+                    mIatDialog.setParameter("dwa", "wpgs");
 
                     mIatDialog.setListener(mRecognizerDialogListener);
 
@@ -260,7 +260,7 @@ public class Main3Activity extends AppCompatActivity {
             int end = Integer.parseInt(strings[1]);
             for (int i = begin; i <= end; i++) {
                 mIatResults.remove(i+"");
-                Log.d(this.getClass().getName(), "mIatResults"+mIatResults.toString());
+                Log.d(this.getClass().getName(), "修正mIatResults"+mIatResults.toString());
             }
         }
 
