@@ -94,10 +94,9 @@ public class Main3Activity extends AppCompatActivity {
                     List<Mark> newMarkList = StrProcess.StrToMarkList(resultStr);
 
                     if(newMarkList == null) {
-//                        Toast.makeText(Main3Activity.this, "请重新录音", Toast.LENGTH_LONG).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
                         builder.setTitle("Tip")
-                                .setMessage("无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
+                                .setMessage("语音识别结果为"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

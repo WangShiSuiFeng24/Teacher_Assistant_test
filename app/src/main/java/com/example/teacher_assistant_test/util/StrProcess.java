@@ -17,14 +17,16 @@ public class StrProcess {
 
     //使用正则表达式切割字符串resultStr成多条Mark,将多条Mark存入List<Mark>中
     public static List<Mark> StrToMarkList(String resultStr) {
+
+        String str = resultStr.replaceAll("家|加", "+").replaceAll("吧|班", "8");
         List<Mark> markList = new ArrayList<>();
         //创建模式串,正则表达式！！！
 //        String pattern = "[1-9][0-9]?号[，。]{0,2}[0-9]{1,3}[\\+][0-9]{1,2}";
-        String pattern = "[1-9][0-9]?号[，。]{0,2}[0-9]{1,3}[\\+][0-9]|10";
+        String pattern = "[1-9][0-9]?号[，。]{0,2}[0-9]{1,3}[\\+](10|[0-9])";
         //创建Pattern对象
         Pattern r = Pattern.compile(pattern);
         //创建Macher对象
-        Matcher matcher = r.matcher(resultStr);
+        Matcher matcher = r.matcher(str);
 //        Log.i("StrProcess", "m:"+ matcher.toString());
 
         //将匹配结果存入一个List<String>
@@ -37,7 +39,8 @@ public class StrProcess {
 
         //处理List<String>中的每一条String
         for(int i=0; i<list.size(); i++) {
-            String[] buff = list.get(i).replaceAll(" ", "").replaceAll("\\p{P}", "").split("号");
+//            String[] buff = list.get(i).replaceAll(" ", "").replaceAll("\\p{P}", "").split("号");
+            String[] buff = list.get(i).replaceAll(" ", "").replaceAll("[，。,.]", "").split("号");
             int stu_id = Integer.parseInt(buff[0]);
             Log.i("StrProcess","stu_id:"+stu_id);
             String score = buff[1];
