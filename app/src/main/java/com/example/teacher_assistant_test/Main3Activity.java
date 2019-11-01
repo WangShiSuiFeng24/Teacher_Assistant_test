@@ -8,20 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
@@ -49,7 +45,6 @@ public class Main3Activity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
     private List<Mark> markList = new ArrayList<>();
-
     private Button clear_data;
     private Button save_to_db;
 
@@ -59,12 +54,11 @@ public class Main3Activity extends AppCompatActivity {
     private RecognizerDialogListener mRecognizerDialogListener;
     private FloatingActionButton fab;
 
-//    private MyDatabaseHelper myDatabaseHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        myDatabaseHelper = new MyDatabaseHelper(this,"Student.db",null,2);
         setContentView(R.layout.activity_main3);
 
         final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
@@ -99,6 +93,7 @@ public class Main3Activity extends AppCompatActivity {
                     int stu_id = preMark.getStu_id();
                     String score = preMark.getScore();
                     int total_score = preMark.getTotal_score();
+
                     new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
                     Toast.makeText(Main3Activity.this, "已保存！", Toast.LENGTH_SHORT).show();
                 }
@@ -135,7 +130,7 @@ public class Main3Activity extends AppCompatActivity {
                     if(newMarkList == null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
                         builder.setTitle("Tip")
-                                .setMessage("语音识别结果为"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
+                                .setMessage("语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -145,9 +140,15 @@ public class Main3Activity extends AppCompatActivity {
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
+//                                        dialog.dismiss();
                                     }
-                                }).show();
+                                });
+                        AlertDialog dialog = builder.create();
+                        //调用这个方法时，按对话框以外的地方不起作用。按返回键还起作用
+//                        dialog.setCanceledOnTouchOutside(false);
+                        //调用这个方法时，按对话框以外的地方不起作用。按返回键也不起作用
+                        dialog.setCancelable(false);
+                        dialog.show();
                     } else {
                         //不为空，先显示数据，可修改，后由用户选择是否保存数据到数据库中
                         //遍历newMarkList，将其添加到markList
@@ -221,11 +222,14 @@ public class Main3Activity extends AppCompatActivity {
         });
 
 //        initScore();
-//        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//        MarkAdapter markAdapter = new MarkAdapter(markList);
-//        recyclerView.setAdapter(markAdapter);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            super.onSaveInstanceState(outState);
+        }
+
     }
 
     @Override
