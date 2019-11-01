@@ -1,5 +1,7 @@
 package com.example.teacher_assistant_test;
 
+import com.example.teacher_assistant_test.util.Calculator;
+
 public class Student {
     private int stu_id;
     private String stu_name;
@@ -27,5 +29,5 @@ public class Student {
     public String getScore() {
         return score;
     }
-    public int getTotal_score() {return total_score;}
+    public int getTotal_score() { return total_score; }
 }

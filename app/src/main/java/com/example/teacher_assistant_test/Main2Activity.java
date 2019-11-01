@@ -30,8 +30,6 @@ public class Main2Activity extends AppCompatActivity {
     private void initStudent() {
         String sqlSelect="SELECT Student.stu_id,Student.stu_name,Student.stu_gender,StudentMark.score,StudentMark.total_score FROM Student LEFT JOIN StudentMark ON Student.stu_id = StudentMark.stu_id";
         //扫描数据库，将信息放入markList
-//        MyDatabaseHelper mdb = new MyDatabaseHelper(this, "Student.db", null, 2);//打开数据库
-//        SQLiteDatabase sd = mdb.getReadableDatabase();//获取数据库
         SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main2Activity.this);
         Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
         while(cursor.moveToNext()){

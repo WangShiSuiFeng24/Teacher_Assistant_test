@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -83,25 +85,72 @@ public class Main3Activity extends AppCompatActivity {
         //保存当前页面数据到数据库
         save_to_db.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
+            public void onClick(final View v) {
+                final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
                 Iterator<Mark> iterator = markList.iterator();
                 while(iterator.hasNext()) {
-                    //先用preMark接收
-                    Mark preMark = iterator.next();
+                    //先用preMark保存当前页面mark条目
+                    final Mark preMark = iterator.next();
 
-                    int stu_id = preMark.getStu_id();
-                    String score = preMark.getScore();
-                    int total_score = preMark.getTotal_score();
+                    //查询数据库中是否存在与将要插入的preMark相同的stu_id,若相同，则警告是否修改，否则直接插入
+                    String sqlSelect = "SELECT StudentMark.stu_id,StudentMark.score FROM StudentMark";
+                    SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main3Activity.this);
+                    Cursor cursor = sd.rawQuery(sqlSelect, new String[] {});
+                    if(cursor.isLast()) {
+                        //StudentMark表为空，第一次更新
+                        int stu_id = preMark.getStu_id();
+                        String score = preMark.getScore();
+                        int total_score = preMark.getTotal_score();
 
-                    new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
-                    Toast.makeText(Main3Activity.this, "已保存！", Toast.LENGTH_SHORT).show();
+                        new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
+                    } else {
+                        //StudentMark表不为空
+                        //flag初始设为false,代表学号不相同
+                        boolean flag = false;
+                        while(cursor.moveToNext()) {
+                            final int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
+                            String score = cursor.getString(cursor.getColumnIndex("score"));
+                            if(preMark.getStu_id() == stu_id) {
+                                flag = true;
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
+                                builder.setCancelable(false)
+                                        .setTitle("Alarm")
+                                        .setMessage("数据库学号:"+preMark.getStu_id()+" 已存在,"+
+                                                "是否需要更改成绩:"+score+"为:"+preMark.getScore())
+                                        .setPositiveButton("确定更改!", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                //更改数据库中相同学号的成绩score
+                                                ContentValues values = new ContentValues();
+                                                values.put("score", preMark.getScore());
+                                                values.put("total_score", preMark.getTotal_score());
+                                                db.update("StudentMark", values, "stu_id=?", new String[]{String.valueOf(stu_id)});
+                                                Toast.makeText(Main3Activity.this, stu_id+"号更改成功!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .setNegativeButton("取消更改!", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                //取消更改成绩
+                                                dialog.dismiss();
+                                            }
+                                        }).show();
+                                break;
+                            }
+                        }
+
+                        if(!flag) {
+                            int stu_id = preMark.getStu_id();
+                            String score = preMark.getScore();
+                            int total_score = preMark.getTotal_score();
+
+                            new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
+                            Toast.makeText(Main3Activity.this, "已保存!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-
             }
         });
-
-
 
         fab = findViewById(R.id.fab);
         mInitListener = new InitListener() {
@@ -120,14 +169,13 @@ public class Main3Activity extends AppCompatActivity {
                 String resultStr = updateResult(results);
                 if (isLast) {
                     Log.d(TAG, "recognizer result：" + resultStr);
-//                    Toast.makeText(Main3Activity.this, resultStr, Toast.LENGTH_LONG).show();
 //                    showTip(resultStr);
-//                    showResultDialog();
 
                     //处理resultStr
                     List<Mark> newMarkList = StrProcess.StrToMarkList(resultStr);
 
                     if(newMarkList == null) {
+                        //处理结果为null，无有效成绩
                         AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
                         builder.setTitle("Tip")
                                 .setMessage("语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
@@ -203,7 +251,6 @@ public class Main3Activity extends AppCompatActivity {
                         }
                         //清空错误缓存
                         mIatResults.clear();
-
                     }
                 }
             }
