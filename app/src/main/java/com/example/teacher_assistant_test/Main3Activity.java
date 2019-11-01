@@ -54,8 +54,8 @@ public class Main3Activity extends AppCompatActivity {
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
     private InitListener mInitListener;
     private RecognizerDialogListener mRecognizerDialogListener;
-    private FloatingActionButton fab;
-
+//    private FloatingActionButton fab;
+    private Button fab;
 
 
     @Override

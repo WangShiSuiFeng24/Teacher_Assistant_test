@@ -61,8 +61,6 @@ public class Main2Activity extends AppCompatActivity {
                         }).show();
             }
         });
-
-
     }
 
     private void initStudent() {
