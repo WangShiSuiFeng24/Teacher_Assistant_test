@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         idusTool.insertStuDB("3", "Marry", "girl");
         idusTool.insertStuDB("4", "Jorge", "boy");
         idusTool.insertStuDB("5", "Judy", "girl");
-        for (int i=1; i<=100; i++) {
+        for (int i=1; i<=99; i++) {
             idusTool.insertStuDB(""+i+"", "", "");
         }
 
