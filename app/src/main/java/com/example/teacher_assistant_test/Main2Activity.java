@@ -35,7 +35,7 @@ public class Main2Activity extends AppCompatActivity {
         SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main2Activity.this);
         Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
         while(cursor.moveToNext()){
-            String stu_id = cursor.getString(cursor.getColumnIndex("stu_id"));
+            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
             String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
             String stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
             String score = cursor.getString(cursor.getColumnIndex("score"));

@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.util.Calculator;
@@ -49,6 +50,9 @@ public class Main3Activity extends AppCompatActivity {
 
     private List<Mark> markList = new ArrayList<>();
 
+    private Button clear_data;
+    private Button save_to_db;
+
     private RecognizerDialog mIatDialog = null;
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
     private InitListener mInitListener;
@@ -68,6 +72,41 @@ public class Main3Activity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         final MarkAdapter markAdapter = new MarkAdapter(markList);
         recyclerView.setAdapter(markAdapter);
+
+        clear_data = findViewById(R.id.clear_data);
+        save_to_db = findViewById(R.id.save_to_db);
+
+        //清除当前页面数据
+        clear_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markList.clear();
+                markAdapter.notifyDataSetChanged();
+                Toast.makeText(Main3Activity.this, "已清空！", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //保存当前页面数据到数据库
+        save_to_db.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
+                Iterator<Mark> iterator = markList.iterator();
+                while(iterator.hasNext()) {
+                    //先用preMark接收
+                    Mark preMark = iterator.next();
+
+                    int stu_id = preMark.getStu_id();
+                    String score = preMark.getScore();
+                    int total_score = preMark.getTotal_score();
+                    new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
+                    Toast.makeText(Main3Activity.this, "已保存！", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
 
         fab = findViewById(R.id.fab);
         mInitListener = new InitListener() {
