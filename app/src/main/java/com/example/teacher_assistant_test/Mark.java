@@ -19,5 +19,7 @@ public class Mark {
         return score;
     }
 
+    public void setScore(String score) {this.score = score;}
+
     public int getTotal_score() {return total_score;}
 }

@@ -152,18 +152,58 @@ public class Main3Activity extends AppCompatActivity {
                     } else {
                         //不为空，先显示数据，可修改，后由用户选择是否保存数据到数据库中
                         //遍历newMarkList，将其添加到markList
-                        Iterator<Mark> iterator = newMarkList.iterator();
-                        while(iterator.hasNext()) {
-                            markList.add(iterator.next());
+                        final Iterator<Mark> iteratorNew = newMarkList.iterator();
+                        while(iteratorNew.hasNext()) {
+                            final Mark newMark = iteratorNew.next();
+                            if(markList.size() == 0) {
+                                //第一次添加
+                                markList.add(newMark);
+                                markAdapter.notifyDataSetChanged();
+                            } else {
+                                //flag初始设为false,代表学号不相同
+                                boolean flag = false;
+                                for(int i=0; i<markList.size(); i++) {
+                                    final Mark mark = markList.get(i);
+                                    if(newMark.getStu_id() == mark.getStu_id()) {
+                                        //语音识别stu_id相同，这里处理
+                                        //弹出dialog,是否更改数据，
+                                        flag = true;
+                                        final AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
+                                        builder.setCancelable(false);
+                                        builder.setTitle("Alarm").
+                                                setMessage("学号:"+newMark.getStu_id()+" 已存在,"+
+                                                        "是否需要更改成绩:"+mark.getScore()+"为:"+newMark.getScore())
+                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        //学号相同，更改成绩
+                                                        mark.setScore(newMark.getScore());
+                                                        markAdapter.notifyDataSetChanged();
+                                                        dialog.dismiss();
+                                                    }
+                                                })
+                                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        //取消更改成绩
+                                                        dialog.dismiss();
+                                                    }
+                                                }).show();
+                                        break;
+                                    }
+                                }
+
+                                if(!flag) {
+                                    //语音识别stu_id没有一个相同，这里处理
+                                    markList.add(newMark);
+                                    markAdapter.notifyDataSetChanged();
+                                }
+                            }
+
                         }
-                        markAdapter.notifyDataSetChanged();
                         //清空错误缓存
                         mIatResults.clear();
 
-                        //自动刷新本页面
-//                        finish();
-//                        Intent intent = new Intent(Main3Activity.this, Main3Activity.class);
-//                        startActivity(intent);
                     }
                 }
             }
@@ -224,12 +264,12 @@ public class Main3Activity extends AppCompatActivity {
 //        initScore();
     }
 
+    //在Activity中重写onSaveInstanceState(Bundle outState)方法实现横竖屏切换保存数据
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             super.onSaveInstanceState(outState);
         }
-
     }
 
     @Override
