@@ -111,31 +111,33 @@ public class Main3Activity extends AppCompatActivity {
                             final int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
                             String score = cursor.getString(cursor.getColumnIndex("score"));
                             if(preMark.getStu_id() == stu_id) {
-                                flag = true;
-                                AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
-                                builder.setCancelable(false)
-                                        .setTitle("Alarm")
-                                        .setMessage("数据库学号:"+preMark.getStu_id()+" 已存在,"+
-                                                "是否需要更改成绩:"+score+"为:"+preMark.getScore())
-                                        .setPositiveButton("确定更改!", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                //更改数据库中相同学号的成绩score
-                                                ContentValues values = new ContentValues();
-                                                values.put("score", preMark.getScore());
-                                                values.put("total_score", preMark.getTotal_score());
-                                                db.update("StudentMark", values, "stu_id=?", new String[]{String.valueOf(stu_id)});
-                                                Toast.makeText(Main3Activity.this, stu_id+"号更改成功!", Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
-                                        .setNegativeButton("取消更改!", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                //取消更改成绩
-                                                dialog.dismiss();
-                                            }
-                                        }).show();
-                                break;
+                                if(!preMark.getScore().equals(score)) {
+                                    flag = true;
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
+                                    builder.setCancelable(false)
+                                            .setTitle("Alarm")
+                                            .setMessage("数据库学号:"+preMark.getStu_id()+" 已存在,"+
+                                                    "是否需要更改成绩:"+score+"为:"+preMark.getScore())
+                                            .setPositiveButton("确定更改!", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    //更改数据库中相同学号的成绩score
+                                                    ContentValues values = new ContentValues();
+                                                    values.put("score", preMark.getScore());
+                                                    values.put("total_score", preMark.getTotal_score());
+                                                    db.update("StudentMark", values, "stu_id=?", new String[]{String.valueOf(stu_id)});
+                                                    Toast.makeText(Main3Activity.this, stu_id+"号更改成功!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .setNegativeButton("取消更改!", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    //取消更改成绩
+                                                    dialog.dismiss();
+                                                }
+                                            }).show();
+                                    break;
+                                }
                             }
                         }
 
