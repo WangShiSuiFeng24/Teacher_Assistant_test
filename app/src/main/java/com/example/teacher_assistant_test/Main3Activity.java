@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,10 +65,44 @@ public class Main3Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main3);
 
         final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
+
+        //设置分割线
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Main3Activity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         final MarkAdapter markAdapter = new MarkAdapter(markList);
         recyclerView.setAdapter(markAdapter);
+
+
+
+        markAdapter.setOnItemClickListener(new MarkAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
+                builder.setCancelable(false)
+                        .setTitle("Alarm")
+                        .setMessage("将要删除学号为:"+markList.get(position).getStu_id()+"条目")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                markAdapter.remove(position);
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
+            }
+
+            @Override
+            public void onItemLongClick(int position) {
+//                markAdapter.remove(position);
+            }
+        });
 
         clear_data = findViewById(R.id.clear_data);
         save_to_db = findViewById(R.id.save_to_db);
@@ -98,7 +133,7 @@ public class Main3Activity extends AppCompatActivity {
                     Cursor cursor = sd.rawQuery(sqlSelect, new String[] {});
                     if(cursor.isLast()) {
                         //StudentMark表为空，第一次更新
-                        int stu_id = preMark.getStu_id();
+                        String stu_id = preMark.getStu_id();
                         String score = preMark.getScore();
                         int total_score = preMark.getTotal_score();
 
@@ -110,7 +145,7 @@ public class Main3Activity extends AppCompatActivity {
                         while(cursor.moveToNext()) {
                             final int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
                             String score = cursor.getString(cursor.getColumnIndex("score"));
-                            if(preMark.getStu_id() == stu_id) {
+                            if(preMark.getStu_id().equals(String.valueOf(stu_id))) {
                                 if(!preMark.getScore().equals(score)) {
                                     flag = true;
                                     AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
@@ -142,7 +177,7 @@ public class Main3Activity extends AppCompatActivity {
                         }
 
                         if(!flag) {
-                            int stu_id = preMark.getStu_id();
+                            String stu_id = preMark.getStu_id();
                             String score = preMark.getScore();
                             int total_score = preMark.getTotal_score();
 
@@ -214,7 +249,7 @@ public class Main3Activity extends AppCompatActivity {
                                 boolean flag = false;
                                 for(int i=0; i<markList.size(); i++) {
                                     final Mark mark = markList.get(i);
-                                    if(newMark.getStu_id() == mark.getStu_id()) {
+                                    if(newMark.getStu_id().equals(mark.getStu_id())) {
                                         //语音识别stu_id相同，这里处理
                                         //弹出dialog,是否更改数据，
                                         flag = true;
@@ -228,6 +263,7 @@ public class Main3Activity extends AppCompatActivity {
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         //学号相同，更改成绩
                                                         mark.setScore(newMark.getScore());
+                                                        mark.setTotal_score(newMark.getTotal_score());
                                                         markAdapter.notifyDataSetChanged();
                                                         dialog.dismiss();
                                                     }

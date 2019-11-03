@@ -3,6 +3,8 @@ package com.example.teacher_assistant_test;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,23 @@ public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder> {
 
     public MarkAdapter(List<Mark> mList) {this.mList = mList;}
 
+    public void remove(int i) {
+        mList.remove(i);
+        notifyItemRemoved(i);
+        notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener{  //自定义接口回调设置点击事件
+        void onItemClick(int position);
+        void onItemLongClick(int position);
+    }
+
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        mOnItemClickListener=onItemClickListener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -37,15 +56,38 @@ public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         Mark mark = mList.get(position);
-        holder.student_id.setText(String.valueOf(mark.getStu_id()));
-        holder.student_score.setText(String.valueOf(mark.getScore()));
+        holder.student_id.setText(mark.getStu_id());
+        holder.student_score.setText(mark.getScore());
         holder.total_score.setText(String.valueOf(mark.getTotal_score()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int ps = holder.getLayoutPosition();
+                mOnItemClickListener.onItemClick(ps);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                int ps=holder.getLayoutPosition();
+                mOnItemClickListener.onItemLongClick(ps);
+                return false;
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return mList.size();
     }
+
+
+
+
 }

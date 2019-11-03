@@ -42,7 +42,7 @@ public class IDUSTool {
      * @param score  成绩
      * @param total_score  总成绩
      */
-    public void insertStuMarkDB(int stu_id, String score, int total_score) {
+    public void insertStuMarkDB(String stu_id, String score, int total_score) {
         //实例化常量值
         ContentValues contentValues = new ContentValues();
         //插入学号
