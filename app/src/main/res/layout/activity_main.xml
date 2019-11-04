@@ -5,22 +5,30 @@
     android:layout_height="match_parent"
     android:padding="10dp">
 
-    <Button
-        android:id="@+id/Test"
+    <include layout="@layout/test_item">
+
+    </include>
+
+<!--    <Button-->
+<!--        android:id="@+id/Test"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Test查看"/>-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Recycler_View_Test"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Test查看"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/Test_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""/>
-
-    <Button
-        android:id="@+id/Test_Insert"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Test_Insert" />
+        android:id="@+id/fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:background="@drawable/ic_record" />
 
 </LinearLayout>

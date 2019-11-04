@@ -1,18 +1,19 @@
-package com.example.teacher_assistant_test;
+package com.example.teacher_assistant_test.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.bean.Mark;
+
 import java.util.List;
 
-public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder> {
+    public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder> {
     private List<Mark> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {

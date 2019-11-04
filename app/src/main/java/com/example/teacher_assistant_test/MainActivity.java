@@ -1,63 +1,162 @@
 package com.example.teacher_assistant_test;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
+import com.example.teacher_assistant_test.adapter.TestAdapter;
+import com.example.teacher_assistant_test.bean.Test;
 import com.example.teacher_assistant_test.util.IDUSTool;
+import com.example.teacher_assistant_test.util.JsonParser;
+import com.example.teacher_assistant_test.util.StrProcess;
+import com.google.android.material.snackbar.Snackbar;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private Button bt1,bt2,bt3;
-//    private MyDatabaseHelper myDatabaseHelper;
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+
+    private List<Test> testList = new ArrayList<>();
+    TestAdapter testAdapter;
+
+    private Button fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 禁用横屏
-
         setContentView(R.layout.activity_main);
+
+        initTest();
 
         initDataBase();
 
-        bt1 = findViewById(R.id.Test);
-        bt2 = findViewById(R.id.Test_2);
-        bt3 = findViewById(R.id.Test_Insert);
+        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Test);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        testAdapter = new TestAdapter(testList);
+        recyclerView.setAdapter(testAdapter);
 
-        bt1.setOnClickListener(new View.OnClickListener() {
+        testAdapter.setOnItemClickListener(new TestAdapter.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(int position) {
+                //单击则查询
                 Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-
+                Test test = testList.get(position);
+                Log.i("MainActivity", "test_id:"+test.getTest_id());
+                intent.putExtra("test_id", test.getTest_id());
                 startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(final int position) {
+                //长按则删除
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setCancelable(false)
+                        .setTitle("Alarm")
+                        .setMessage("将要删除TEST为:"+testList.get(position).getTest_name()+"条目")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                testAdapter.remove(position);
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
             }
         });
 
-//        bt2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                private static fianl DELETE_DB = "DELETE FROM Student.db"
-//            }
-//        });
+        fab = findViewById(R.id.fab);
 
-        bt3.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Main3Activity.class);
+                // Here, thisActivity is the current activity
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.RECORD_AUDIO)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                startActivity(intent);
+                    // Permission is not granted
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                            Manifest.permission.RECORD_AUDIO)) {
+                        // Show an explanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                    } else {
+                        // No explanation needed; request the permission
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.RECORD_AUDIO},
+                                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
+                } else {
+                    // Permission has already been granted
+
+                    //跳转到语音识别录成绩界面
+                    Intent intent = new Intent(MainActivity.this, Main3Activity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
 
+
+    private void initTest() {
+        String sqlSelect = "SELECT StudentTest.test_id,StudentTest.test_name FROM StudentTest";
+        SQLiteDatabase database = MyDatabaseHelper.getInstance(MainActivity.this);
+        Cursor cursor = database.rawQuery(sqlSelect, new String[]{});
+        while(cursor.moveToNext()) {
+            long test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
+            String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
+
+            Test test = new Test(test_id, test_name);
+            testList.add(test);
+        }
+        cursor.close();
+    }
+
     private void initDataBase() {
         IDUSTool idusTool = new IDUSTool(MainActivity.this);
-//        SQLiteDatabase sqLiteDatabase = myDatabaseHelper.getWritableDatabase();
         idusTool.insertStuDB("1", "Dan", "girl");
         idusTool.insertStuDB("2", "Jow", "boy");
         idusTool.insertStuDB("3", "Marry", "girl");
@@ -66,11 +165,5 @@ public class MainActivity extends AppCompatActivity {
         for (int i=1; i<=99; i++) {
             idusTool.insertStuDB(""+i+"", "", "");
         }
-
-
-
-//        idusTool.insertStuMarkDB("2", "88");
-//        idusTool.insertStuMarkDB("3", "99");
-
     }
 }

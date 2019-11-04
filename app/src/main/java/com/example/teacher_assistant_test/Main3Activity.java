@@ -16,15 +16,18 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.adapter.MarkAdapter;
+import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -38,10 +41,15 @@ import com.iflytek.cloud.ui.RecognizerDialogListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import static java.sql.Types.NULL;
 
 public class Main3Activity extends AppCompatActivity {
     private static final String TAG = "Main3Activity";
@@ -74,6 +82,50 @@ public class Main3Activity extends AppCompatActivity {
         final MarkAdapter markAdapter = new MarkAdapter(markList);
         recyclerView.setAdapter(markAdapter);
 
+        fab = findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Here, thisActivity is the current activity
+                if (ContextCompat.checkSelfPermission(Main3Activity.this,
+                        Manifest.permission.RECORD_AUDIO)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Permission is not granted
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(Main3Activity.this,
+                            Manifest.permission.RECORD_AUDIO)) {
+                        // Show an explanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                    } else {
+                        // No explanation needed; request the permission
+                        ActivityCompat.requestPermissions(Main3Activity.this,
+                                new String[]{Manifest.permission.RECORD_AUDIO},
+                                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
+                } else {
+                    // Permission has already been granted
+
+                    //初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
+                    //使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
+                    mIatDialog = new RecognizerDialog(Main3Activity.this, mInitListener);
+
+//                if(mIatDialog!=null)
+                    mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
+                    mIatDialog.setParameter("dwa", "wpgs");
+
+                    mIatDialog.setListener(mRecognizerDialogListener);
+
+                    mIatDialog.show();
+                }
+            }
+        });
 
 
         markAdapter.setOnItemClickListener(new MarkAdapter.OnItemClickListener() {
@@ -121,75 +173,155 @@ public class Main3Activity extends AppCompatActivity {
         save_to_db.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
-                Iterator<Mark> iterator = markList.iterator();
-                while(iterator.hasNext()) {
-                    //先用preMark保存当前页面mark条目
-                    final Mark preMark = iterator.next();
+                final EditText edit = new EditText(Main3Activity.this);
+                //先弹出一个可编辑的AlertDialog，可以编辑test_name
+                final AlertDialog alertDialog = new AlertDialog.Builder(Main3Activity.this)
+                        .setCancelable(false)
+                        .setTitle("Test_Name:")
+                        .setView(edit)
+                        .setPositiveButton("确定", null)
+                        .setNegativeButton("取消", null)
+                        .show();
 
-                    //查询数据库中是否存在与将要插入的preMark相同的stu_id,若相同，则警告是否修改，否则直接插入
-                    String sqlSelect = "SELECT StudentMark.stu_id,StudentMark.score FROM StudentMark";
-                    SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main3Activity.this);
-                    Cursor cursor = sd.rawQuery(sqlSelect, new String[] {});
-                    if(cursor.isLast()) {
-                        //StudentMark表为空，第一次更新
-                        String stu_id = preMark.getStu_id();
-                        String score = preMark.getScore();
-                        int total_score = preMark.getTotal_score();
+                //拿到按钮并判断是否是POSITIVEBUTTON，然后我们自己实现监听
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String input = edit.getText().toString().trim();
+                        if (input.equals("")) {
+                            Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            String editText = edit.getText().toString().trim();
+                            long unique_test_id = new Date().getTime();
 
-                        new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
-                    } else {
-                        //StudentMark表不为空
-                        //flag初始设为false,代表学号不相同
-                        boolean flag = false;
-                        while(cursor.moveToNext()) {
-                            final int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
-                            String score = cursor.getString(cursor.getColumnIndex("score"));
-                            if(preMark.getStu_id().equals(String.valueOf(stu_id))) {
-                                if(!preMark.getScore().equals(score)) {
-                                    flag = true;
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
-                                    builder.setCancelable(false)
-                                            .setTitle("Alarm")
-                                            .setMessage("数据库学号:"+preMark.getStu_id()+" 已存在,"+
-                                                    "是否需要更改成绩:"+score+"为:"+preMark.getScore())
-                                            .setPositiveButton("确定更改!", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    //更改数据库中相同学号的成绩score
-                                                    ContentValues values = new ContentValues();
-                                                    values.put("score", preMark.getScore());
-                                                    values.put("total_score", preMark.getTotal_score());
-                                                    db.update("StudentMark", values, "stu_id=?", new String[]{String.valueOf(stu_id)});
-                                                    Toast.makeText(Main3Activity.this, stu_id+"号更改成功!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .setNegativeButton("取消更改!", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    //取消更改成绩
-                                                    dialog.dismiss();
-                                                }
-                                            }).show();
-                                    break;
+                            //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
+                            final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
+                            //查询数据库中是否存在与将要插入的preMark相同的test_name,若相同，则提示用户test_name已存在重新输入，否则直接新建插入全部数据
+                            String sqlSelect = "SELECT test_name FROM StudentTest";
+                            Cursor cursor = db.rawQuery(sqlSelect, new String[]{});
+
+                            if(cursor.isLast()) {
+                                //StudentTest表为空，第一次更新
+                                new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, editText);
+                                Toast.makeText(Main3Activity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
+                            }
+
+                            else {
+                                //StudentTest表不为空
+//                                //flag初始设为false,代表StudentTest表中有没相同的test_name
+//                                boolean flag = false;
+                                while(cursor.moveToNext()) {
+                                    String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
+
+                                    if(editText.equals(test_name)) {
+                                        //StudentTest表中已有相同test_name,提示用户重新输入
+                                        Toast.makeText(Main3Activity.this, editText+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
+//                                        flag = true;
+                                        return;
+                                    }
+                                }
+
+                                //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
+
+                                //先把test_id和test_name插入到StudentTest表中
+                                new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, editText);
+
+                                //再向StudentMark表中插入当前页面数据
+                                Iterator<Mark> iterator = markList.iterator();
+                                while(iterator.hasNext()) {
+                                    //先用preMark保存当前页面mark条目
+                                    final Mark preMark = iterator.next();
+
+                                    String stu_id = preMark.getStu_id();
+                                    long test_id = unique_test_id;
+                                    String score = preMark.getScore();
+                                    int total_score = preMark.getTotal_score();
+                                    new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, test_id, score, total_score);
+                                    Toast.makeText(Main3Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
+
                                 }
                             }
-                        }
-
-                        if(!flag) {
-                            String stu_id = preMark.getStu_id();
-                            String score = preMark.getScore();
-                            int total_score = preMark.getTotal_score();
-
-                            new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
-                            Toast.makeText(Main3Activity.this, "已保存!", Toast.LENGTH_SHORT).show();
+                            cursor.close();
+                            //让AlertDialog消失
+                            alertDialog.cancel();
                         }
                     }
-                }
+                });
+
+
+
+
+//                final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
+//                Iterator<Mark> iterator = markList.iterator();
+//                while(iterator.hasNext()) {
+//                    //先用preMark保存当前页面mark条目
+//                    final Mark preMark = iterator.next();
+//
+//                    //查询数据库中是否存在与将要插入的preMark相同的stu_id,若相同，则警告是否修改，否则直接插入
+//                    String sqlSelect = "SELECT StudentMark.stu_id,StudentMark.score FROM StudentMark";
+//                    SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main3Activity.this);
+//                    Cursor cursor = sd.rawQuery(sqlSelect, new String[] {});
+//                    if(cursor.isLast()) {
+//                        //StudentMark表为空，第一次更新
+//                        String stu_id = preMark.getStu_id();
+//                        String score = preMark.getScore();
+//                        int total_score = preMark.getTotal_score();
+//
+//                        new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
+//                    } else {
+//                        //StudentMark表不为空
+//                        //flag初始设为false,代表学号不相同
+//                        boolean flag = false;
+//                        while(cursor.moveToNext()) {
+//                            final int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
+//                            String score = cursor.getString(cursor.getColumnIndex("score"));
+//                            if(preMark.getStu_id().equals(String.valueOf(stu_id))) {
+//                                if(!preMark.getScore().equals(score)) {
+//                                    flag = true;
+//                                    AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
+//                                    builder.setCancelable(false)
+//                                            .setTitle("Alarm")
+//                                            .setMessage("数据库学号:"+preMark.getStu_id()+" 已存在,"+
+//                                                    "是否需要更改成绩:"+score+"为:"+preMark.getScore())
+//                                            .setPositiveButton("确定更改!", new DialogInterface.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(DialogInterface dialog, int which) {
+//                                                    //更改数据库中相同学号的成绩score
+//                                                    ContentValues values = new ContentValues();
+//                                                    values.put("score", preMark.getScore());
+//                                                    values.put("total_score", preMark.getTotal_score());
+//                                                    db.update("StudentMark", values, "stu_id=?", new String[]{String.valueOf(stu_id)});
+//                                                    Toast.makeText(Main3Activity.this, stu_id+"号更改成功!", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            })
+//                                            .setNegativeButton("取消更改!", new DialogInterface.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(DialogInterface dialog, int which) {
+//                                                    //取消更改成绩
+//                                                    dialog.dismiss();
+//                                                }
+//                                            }).show();
+//                                    break;
+//                                }
+//                            }
+//                        }
+//
+//                        if(!flag) {
+//                            String stu_id = preMark.getStu_id();
+//                            String score = preMark.getScore();
+//                            int total_score = preMark.getTotal_score();
+//
+//                            new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, score, total_score);
+//                            Toast.makeText(Main3Activity.this, "已保存!", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                }
             }
         });
 
-        fab = findViewById(R.id.fab);
+
+
         mInitListener = new InitListener() {
             @Override
             public void onInit(int code) {
@@ -303,48 +435,8 @@ public class Main3Activity extends AppCompatActivity {
         // 请勿在“=”与 appid 之间添加任务空字符或者转义符
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5db04b35");
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Here, thisActivity is the current activity
-                if (ContextCompat.checkSelfPermission(Main3Activity.this,
-                        Manifest.permission.RECORD_AUDIO)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission is not granted
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(Main3Activity.this,
-                            Manifest.permission.RECORD_AUDIO)) {
-                        // Show an explanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
-                    } else {
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(Main3Activity.this,
-                                new String[]{Manifest.permission.RECORD_AUDIO},
-                                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
-                    }
-                } else {
-                    // Permission has already been granted
-
-                    //初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
-                    //使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
-                    mIatDialog = new RecognizerDialog(Main3Activity.this, mInitListener);
-
-//                if(mIatDialog!=null)
-                    mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
-                    mIatDialog.setParameter("dwa", "wpgs");
-
-                    mIatDialog.setListener(mRecognizerDialogListener);
-
-                    mIatDialog.show();
-                }
-            }
-        });
+        //已进入当前页面就执行点击事件
+        fab.performClick();
 
 //        initScore();
     }

@@ -2,10 +2,9 @@ package com.example.teacher_assistant_test.util;
 
 import android.util.Log;
 
-import com.example.teacher_assistant_test.Mark;
+import com.example.teacher_assistant_test.bean.Mark;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

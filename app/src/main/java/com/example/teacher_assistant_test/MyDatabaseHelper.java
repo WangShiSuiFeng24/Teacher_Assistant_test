@@ -13,16 +13,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             + "stu_name text,"
             + "stu_gender text)";
 
-    private static final String CREATE_CLASS = "create table StudentClass("
-            + "class_id integer primary key,"
-            + "class_name text)";
+//    private static final String CREATE_CLASS = "create table StudentClass("
+//            + "class_id integer primary key,"
+//            + "class_name text)";
 
     private static final String CREATE_MARK = "create table StudentMark("
-            + "mark_id integer primary key,"
-            + "stu_id integer unique,"
-            + "class_id integer,"
+            + "mark_id integer primary key unique,"
+            + "test_id integer,"
+            + "stu_id integer,"
             + "score text,"
             + "total_score integer)";
+
+    private static final String CREATE_TEST= "create table StudentTest("
+            + "test_id integer ,"
+            + "test_name text)";
 
     private static MyDatabaseHelper myDatabaseHelper;
 
@@ -41,8 +45,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_STUDENT);
-        db.execSQL(CREATE_CLASS);
+//        db.execSQL(CREATE_CLASS);
         db.execSQL(CREATE_MARK);
+        db.execSQL(CREATE_TEST);
 
         Log.d("MyDatabaseHelper", "create success!");
 //        Toast.makeText(mContext,"create success!", Toast.LENGTH_SHORT).show();
@@ -51,8 +56,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists Student");
-        db.execSQL("drop table if exists StudentClass");
+//        db.execSQL("drop table if exists StudentClass");
         db.execSQL("drop table if exists StudentMark");
+        db.execSQL("drop table if exists StudentTest");
         onCreate(db);
     }
 }

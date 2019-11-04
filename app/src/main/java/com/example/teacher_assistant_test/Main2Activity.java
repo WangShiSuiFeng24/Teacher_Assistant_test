@@ -6,12 +6,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.teacher_assistant_test.adapter.StudentAdapter;
+import com.example.teacher_assistant_test.bean.Student;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +26,16 @@ public class Main2Activity extends AppCompatActivity {
 
     private Button clear_score;
 
+    private long test_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        Intent intent = getIntent();
+        test_id = intent.getLongExtra("test_id", 0);
+        Log.i("Main2Activity", "test_id:"+test_id);
 
         initStudent();
         final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Student);
@@ -64,20 +75,52 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void initStudent() {
-        String sqlSelect="SELECT Student.stu_id,Student.stu_name,Student.stu_gender,StudentMark.score,StudentMark.total_score FROM Student LEFT JOIN StudentMark ON Student.stu_id = StudentMark.stu_id";
+        Log.i("Main2Activity", "开始初始化Student.........");
+        String sqlSelect="SELECT StudentMark.stu_id,Student.stu_name,Student.stu_gender,StudentMark.test_id,StudentTest.test_name,StudentMark.score,StudentMark.total_score "
+                + "FROM StudentMark INNER JOIN Student ON StudentMark.stu_id = Student.stu_id "
+                + "INNER JOIN StudentTest ON StudentMark.test_id = StudentTest.test_id";
         //扫描数据库，将信息放入markList
         SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main2Activity.this);
         Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
-        while(cursor.moveToNext()){
-            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
-            String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
-            String stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
-            String score = cursor.getString(cursor.getColumnIndex("score"));
-            int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
 
-            Student student = new Student(stu_id, stu_name, stu_gender, score, total_score);
-            studentList.add(student);
+        //打印cursor中的行数
+        Log.i("Main2Activity", "cursor.getCount():"+cursor.getCount());
+
+        while(cursor.moveToNext()){
+            int test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
+            Log.i("Main2Activity", "数据库test_id:"+test_id);
+
+            //只有当查询出的条目的test_id等于传入的this.test_id时才将该条目add到List<Student>
+            if(test_id == this.test_id) {
+                int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
+                String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
+                String stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
+                String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
+                String score = cursor.getString(cursor.getColumnIndex("score"));
+                int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
+
+                Student student = new Student(stu_id, stu_name, stu_gender, test_name, score, total_score);
+                studentList.add(student);
+            }
         }
         cursor.close();
     }
+
+//    private void initStudent() {
+//        String sqlSelect="SELECT Student.stu_id,Student.stu_name,Student.stu_gender,StudentMark.score,StudentMark.total_score FROM Student LEFT JOIN StudentMark ON Student.stu_id = StudentMark.stu_id";
+//        //扫描数据库，将信息放入markList
+//        SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main2Activity.this);
+//        Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
+//        while(cursor.moveToNext()){
+//            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
+//            String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
+//            String stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
+//            String score = cursor.getString(cursor.getColumnIndex("score"));
+//            int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
+//
+//            Student student = new Student(stu_id, stu_name, stu_gender, score, total_score);
+//            studentList.add(student);
+//        }
+//        cursor.close();
+//    }
 }
