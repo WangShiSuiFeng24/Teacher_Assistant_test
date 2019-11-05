@@ -1,5 +1,7 @@
 package com.example.teacher_assistant_test.adapter;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +61,9 @@ import java.util.List;
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        holder.student_id.setTag(position);
+        holder.student_score.setTag(position);
+
         Mark mark = mList.get(position);
         holder.student_id.setText(mark.getStu_id());
         holder.student_score.setText(mark.getScore());
@@ -82,14 +87,69 @@ import java.util.List;
                 return false;
             }
         });
+
+        holder.student_id.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(Integer.parseInt(holder.student_id.getTag().toString()) == position) {
+                    //设置Tag解决错乱问题
+                    onStuIdFillListener.onStuIdFill(position, s.toString());
+                }
+            }
+        });
+
+        holder.student_score.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(Integer.parseInt(holder.student_score.getTag(position).toString()) == position) {
+                    onScoreFillListener.onScoreFill(position, s.toString());
+                }
+            }
+        });
     }
+
+    private OnStuIdFillListener onStuIdFillListener;
+    private OnScoreFillListener onScoreFillListener;
+
+    public interface OnStuIdFillListener {
+        void onStuIdFill(int position, String stu_id);
+    }
+
+    public interface OnScoreFillListener {
+        void onScoreFill(int position, String score);
+    }
+
+    public void setOnStuIdFillListener(OnStuIdFillListener onStuIdFillListener) {
+        this.onStuIdFillListener = onStuIdFillListener;
+    }
+
+    public void setOnScoreFillListener(OnScoreFillListener onScoreFillListener) {
+        this.onScoreFillListener = onScoreFillListener;
+    }
+
 
     @Override
     public int getItemCount() {
         return mList.size();
     }
-
-
-
-
 }

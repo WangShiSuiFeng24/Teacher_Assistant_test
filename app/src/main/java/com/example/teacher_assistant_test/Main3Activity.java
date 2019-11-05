@@ -67,7 +67,6 @@ public class Main3Activity extends AppCompatActivity {
 //    private FloatingActionButton fab;
     private Button fab;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +81,28 @@ public class Main3Activity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         final MarkAdapter markAdapter = new MarkAdapter(markList);
         recyclerView.setAdapter(markAdapter);
+
+        markAdapter.setOnStuIdFillListener(new MarkAdapter.OnStuIdFillListener() {
+            @Override
+            public void onStuIdFill(int position, String stu_id) {
+                //编辑学号监听
+                //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
+                if(position < markList.size()) {
+                    markList.get(position).setStu_id(stu_id);
+                }
+            }
+        });
+
+        markAdapter.setOnScoreFillListener(new MarkAdapter.OnScoreFillListener() {
+            @Override
+            public void onScoreFill(int position, String score) {
+                //编辑成绩监听
+                //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
+                if(position < markList.size()) {
+                    markList.get(position).setScore(score);
+                }
+            }
+        });
 
         fab = findViewById(R.id.fab);
 
@@ -336,7 +357,7 @@ public class Main3Activity extends AppCompatActivity {
                     Log.d(TAG, "recognizer result：" + resultStr);
 //                    showTip(resultStr);
 
-                    //处理resultStr,将处理后的结果显示到activity_main3界面上
+                    //处理resultStr,将处理后的结果markList中，并刷新页面，newMarkList中为将语音识别结果处理后的字符串
                     List<Mark> newMarkList = StrProcess.StrToMarkList(resultStr);
 
                     if(newMarkList == null) {
@@ -352,7 +373,7 @@ public class Main3Activity extends AppCompatActivity {
 //                        //调用这个方法时，按对话框以外的地方不起作用。按返回键也不起作用
 //                        dialog.setCancelable(false);
                     } else {
-                        //不为空，先显示数据，可修改，后由用户选择是否保存数据到数据库中
+                        //不为空，先显示数据，可编辑修改，后由用户选择是否保存数据到数据库中
                         //遍历newMarkList，将其添加到markList
                         final Iterator<Mark> iteratorNew = newMarkList.iterator();
                         while(iteratorNew.hasNext()) {
