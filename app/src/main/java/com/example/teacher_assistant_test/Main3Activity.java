@@ -16,6 +16,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,8 @@ import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.MarkAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
+import com.example.teacher_assistant_test.util.Calculator;
+import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
@@ -100,6 +103,21 @@ public class Main3Activity extends AppCompatActivity {
                 //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
                 if(position < markList.size()) {
                     markList.get(position).setScore(score);
+                    //先要判断编辑的score字符串是否符合规则，是则计算total_score,否则不计算
+                    if(new CheckExpression().checkExpression(score)) {
+                        int total_score = (int) new Calculator().calculate(score);
+                        markList.get(position).setTotal_score(total_score);
+
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 刷新操作
+                                markAdapter.notifyDataSetChanged();
+//                                notifyDataSetChanged();
+                            }
+                        });
+
+                    }
                 }
             }
         });

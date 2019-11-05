@@ -121,7 +121,7 @@ import java.util.List;
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(Integer.parseInt(holder.student_score.getTag(position).toString()) == position) {
+                if(Integer.parseInt(holder.student_score.getTag().toString()) == position) {
                     onScoreFillListener.onScoreFill(position, s.toString());
                 }
             }
