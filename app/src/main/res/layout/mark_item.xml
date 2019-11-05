@@ -17,6 +17,7 @@
         android:gravity="center"
         android:layout_weight="2"
         android:text="成绩" />
+
     <TextView
         android:id="@+id/total_score"
         android:layout_width="0dp"

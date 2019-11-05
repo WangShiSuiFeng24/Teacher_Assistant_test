@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 Test test = testList.get(position);
                 Log.i("MainActivity", "test_id:"+test.getTest_id());
                 intent.putExtra("test_id", test.getTest_id());
+                intent.putExtra("test_name", test.getTest_name());
                 startActivity(intent);
             }
 

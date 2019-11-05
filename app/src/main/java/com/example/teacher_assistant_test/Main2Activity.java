@@ -28,6 +28,7 @@ public class Main2Activity extends AppCompatActivity {
     private Button clear_score;
 
     private long test_id;
+    private String test_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +37,19 @@ public class Main2Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         test_id = intent.getLongExtra("test_id", 0);
+        test_name = intent.getStringExtra("test_name");
         Log.i("Main2Activity", "test_id:"+test_id);
 
         initStudent();
 
         //设置标题栏文字
-        if(studentList.size() != 0) {
-            String title = studentList.get(0).getTest_name();
-            Log.i("Main2Activity", "title:"+title);
-            if(!TextUtils.isEmpty(title)) setTitle(title);
-        }
+        setTitle(test_name);
 
+//        if(studentList.size() != 0) {
+//            String title = studentList.get(0).getTest_name();
+//            Log.i("Main2Activity", "title:"+title);
+//            if(!TextUtils.isEmpty(title)) setTitle(title);
+//        }
 
         final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Student);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
