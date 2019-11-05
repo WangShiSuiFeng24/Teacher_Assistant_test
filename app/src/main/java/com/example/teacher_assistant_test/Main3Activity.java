@@ -108,6 +108,13 @@ public class Main3Activity extends AppCompatActivity {
                         int total_score = (int) new Calculator().calculate(score);
                         markList.get(position).setTotal_score(total_score);
 
+                        //在一个ViewHolder.onBind()里面用通过bus发消息去通知刷新列表notifyDataSetChanged()，
+                        // 这个时候刚好列表在滚动或者在layout()，那么就会报错。
+                        // Caused by java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing
+                        //此法原理：
+                        //主线程刷新UI是通过消息队列，当列表正在滚动或者layout时调用notifyDataSetChanged()，
+                        //那么notifyDataSetChanged()里面的代码是和正在滚动或者layout同一消息里面的，如果加上Handler.post()，
+                        //那么就是新建立消息放入消息队列末尾，这样两个刷新不在同一个消息，就完美避开了这个问题。
                         new Handler().post(new Runnable() {
                             @Override
                             public void run() {
