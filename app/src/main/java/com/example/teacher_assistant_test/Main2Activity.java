@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.StudentAdapter;
 import com.example.teacher_assistant_test.bean.Student;
+import com.example.teacher_assistant_test.util.GetAlertDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +39,12 @@ public class Main2Activity extends AppCompatActivity {
         Intent intent = getIntent();
         test_id = intent.getLongExtra("test_id", 0);
         test_name = intent.getStringExtra("test_name");
-        Log.i("Main2Activity", "test_id:"+test_id);
+        Log.i("Main2Activity", "test_id:"+test_id+" test_name:"+test_name);
 
         initStudent();
 
         //设置标题栏文字
         setTitle(test_name);
-
 //        if(studentList.size() != 0) {
 //            String title = studentList.get(0).getTest_name();
 //            Log.i("Main2Activity", "title:"+title);
@@ -61,28 +61,23 @@ public class Main2Activity extends AppCompatActivity {
         clear_score.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Main2Activity.this);
-                builder.setCancelable(false)
-                        .setTitle("Alarm")
-                        .setMessage("即将清空成绩,慎重!!!")
-                        .setPositiveButton("确定清空!", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                SQLiteDatabase database = MyDatabaseHelper.getInstance(Main2Activity.this);
-                                String deleteAll = "DELETE FROM StudentMark";
-                                database.execSQL(deleteAll);
-                                studentList.clear();
-                                studentAdapter.notifyDataSetChanged();
-                                initStudent();
-                                Toast.makeText(Main2Activity.this, "成绩已清空", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("取消清空!", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this,
+                        "Alarm", "即将清空成绩,慎重!!!", null, "确定清空!",
+                        "取消清空!");
+                alertDialog.setCancelable(false);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SQLiteDatabase database = MyDatabaseHelper.getInstance(Main2Activity.this);
+                        String deleteAll = "DELETE FROM StudentMark";
+                        database.execSQL(deleteAll);
+                        studentList.clear();
+                        studentAdapter.notifyDataSetChanged();
+                        initStudent();
+                        alertDialog.dismiss();
+                        Toast.makeText(Main2Activity.this, "成绩已清空", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
@@ -118,22 +113,4 @@ public class Main2Activity extends AppCompatActivity {
         }
         cursor.close();
     }
-
-//    private void initStudent() {
-//        String sqlSelect="SELECT Student.stu_id,Student.stu_name,Student.stu_gender,StudentMark.score,StudentMark.total_score FROM Student LEFT JOIN StudentMark ON Student.stu_id = StudentMark.stu_id";
-//        //扫描数据库，将信息放入markList
-//        SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main2Activity.this);
-//        Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
-//        while(cursor.moveToNext()){
-//            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
-//            String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
-//            String stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
-//            String score = cursor.getString(cursor.getColumnIndex("score"));
-//            int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
-//
-//            Student student = new Student(stu_id, stu_name, stu_gender, score, total_score);
-//            studentList.add(student);
-//        }
-//        cursor.close();
-//    }
 }

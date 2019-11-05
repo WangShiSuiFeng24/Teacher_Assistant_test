@@ -3,6 +3,7 @@ package com.example.teacher_assistant_test.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,8 +18,8 @@ import java.util.List;
     private List<Mark> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView student_id;
-        TextView student_score;
+        EditText student_id;
+        EditText student_score;
         TextView total_score;
 
         public ViewHolder(@NonNull View itemView) {

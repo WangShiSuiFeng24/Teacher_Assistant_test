@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 
 import com.example.teacher_assistant_test.adapter.TestAdapter;
 import com.example.teacher_assistant_test.bean.Test;
+import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
@@ -90,23 +91,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemLongClick(final int position) {
                 //长按则删除
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setCancelable(false)
-                        .setTitle("Alarm")
-                        .setMessage("将要删除TEST为:"+testList.get(position).getTest_name()+"条目")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                testAdapter.remove(position);
-                                dialogInterface.dismiss();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        }).show();
+                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
+                        "Alarm", "将要删除TEST为:"+testList.get(position).getTest_name()+"条目",
+                        null, "Yes", "No");
+
+                alertDialog.setCancelable(false);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        testAdapter.remove(position);
+                        alertDialog.dismiss();
+                    }
+                });
             }
         });
 

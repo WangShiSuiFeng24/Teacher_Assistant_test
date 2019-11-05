@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.MarkAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
+import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
@@ -175,13 +176,9 @@ public class Main3Activity extends AppCompatActivity {
             public void onClick(final View v) {
                 final EditText edit = new EditText(Main3Activity.this);
                 //先弹出一个可编辑的AlertDialog，可以编辑test_name
-                final AlertDialog alertDialog = new AlertDialog.Builder(Main3Activity.this)
-                        .setCancelable(false)
-                        .setTitle("Test_Name:")
-                        .setView(edit)
-                        .setPositiveButton("确定", null)
-                        .setNegativeButton("取消", null)
-                        .show();
+                final AlertDialog alertDialog = GetAlertDialog
+                        .getAlertDialog(Main3Activity.this,"Test_Name:",
+                                null, edit, "确定", "取消");
 
                 //拿到按钮并判断是否是POSITIVEBUTTON，然后我们自己实现监听
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -340,32 +337,21 @@ public class Main3Activity extends AppCompatActivity {
                     Log.d(TAG, "recognizer result：" + resultStr);
 //                    showTip(resultStr);
 
-                    //处理resultStr
+                    //处理resultStr,将处理后的结果显示到activity_main3界面上
                     List<Mark> newMarkList = StrProcess.StrToMarkList(resultStr);
 
                     if(newMarkList == null) {
                         //处理结果为null，无有效成绩
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
-                        builder.setTitle("Tip")
-                                .setMessage("语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9\"")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();
-                                    }
-                                });
-                        AlertDialog dialog = builder.create();
-                        //调用这个方法时，按对话框以外的地方不起作用。按返回键还起作用
-//                        dialog.setCanceledOnTouchOutside(false);
-                        //调用这个方法时，按对话框以外的地方不起作用。按返回键也不起作用
-                        dialog.setCancelable(false);
-                        dialog.show();
+                        final AlertDialog alertDialog = GetAlertDialog
+                                .getAlertDialog(Main3Activity.this, "Tip",
+                                        "语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9分\"",
+                                        null, "OK", "CANCEL");
+                        alertDialog.setCanceledOnTouchOutside(false);
+
+//                        //调用这个方法时，按对话框以外的地方不起作用。按返回键还起作用
+////                        dialog.setCanceledOnTouchOutside(false);
+//                        //调用这个方法时，按对话框以外的地方不起作用。按返回键也不起作用
+//                        dialog.setCancelable(false);
                     } else {
                         //不为空，先显示数据，可修改，后由用户选择是否保存数据到数据库中
                         //遍历newMarkList，将其添加到markList
@@ -385,28 +371,22 @@ public class Main3Activity extends AppCompatActivity {
                                         //语音识别stu_id相同，这里处理
                                         //弹出dialog,是否更改数据，
                                         flag = true;
-                                        final AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
-                                        builder.setCancelable(false);
-                                        builder.setTitle("Alarm").
-                                                setMessage("学号:"+newMark.getStu_id()+" 已存在,"+
-                                                        "是否需要更改成绩:"+mark.getScore()+"为:"+newMark.getScore())
-                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        //学号相同，更改成绩
-                                                        mark.setScore(newMark.getScore());
-                                                        mark.setTotal_score(newMark.getTotal_score());
-                                                        markAdapter.notifyDataSetChanged();
-                                                        dialog.dismiss();
-                                                    }
-                                                })
-                                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        //取消更改成绩
-                                                        dialog.dismiss();
-                                                    }
-                                                }).show();
+                                        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main3Activity.this,
+                                                "Alarm", "学号:"+newMark.getStu_id()+" 已存在,"+
+                                                "是否需要更改成绩:"+mark.getScore()+"为:"+newMark.getScore(),
+                                                null, "OK", "CANCEL");
+                                        alertDialog.setCancelable(false);
+
+                                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                //学号相同，更改成绩
+                                                mark.setScore(newMark.getScore());
+                                                mark.setTotal_score(newMark.getTotal_score());
+                                                markAdapter.notifyDataSetChanged();
+                                                alertDialog.dismiss();
+                                            }
+                                        });
                                         break;
                                     }
                                 }
@@ -437,8 +417,6 @@ public class Main3Activity extends AppCompatActivity {
 
         //已进入当前页面就执行点击事件
         fab.performClick();
-
-//        initScore();
     }
 
     //在Activity中重写onSaveInstanceState(Bundle outState)方法实现横竖屏切换保存数据
@@ -471,23 +449,6 @@ public class Main3Activity extends AppCompatActivity {
         }
     }
 
-//    private void initScore() {
-//        String sqlSelect="SELECT * FROM StudentMark";
-//        //扫描数据库，将信息放入markList
-////        MyDatabaseHelper mdb = new MyDatabaseHelper(this, "Mark.db", null, 2);//打开数据库
-////        SQLiteDatabase sd = mdb.getReadableDatabase();//获取数据库
-//        SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main3Activity.this);
-//        Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
-//        while(cursor.moveToNext()){
-//            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
-//            String score = cursor.getString(cursor.getColumnIndex("score"));
-//            int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
-//
-//            Mark mark = new Mark(stu_id, score, total_score);
-//            markList.add(mark);
-//        }
-//        cursor.close();
-//    }
 
     // 读取动态修正返回结果
     private String updateResult(RecognizerResult results) {
