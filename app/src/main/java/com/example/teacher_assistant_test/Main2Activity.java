@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,15 @@ public class Main2Activity extends AppCompatActivity {
         Log.i("Main2Activity", "test_id:"+test_id);
 
         initStudent();
+
+        //设置标题栏文字
+        if(studentList.size() != 0) {
+            String title = studentList.get(0).getTest_name();
+            Log.i("Main2Activity", "title:"+title);
+            if(!TextUtils.isEmpty(title)) setTitle(title);
+        }
+
+
         final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Student);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
