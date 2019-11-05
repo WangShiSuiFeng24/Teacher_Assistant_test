@@ -247,8 +247,6 @@ public class Main3Activity extends AppCompatActivity {
                 });
 
 
-
-
 //                final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
 //                Iterator<Mark> iterator = markList.iterator();
 //                while(iterator.hasNext()) {
@@ -324,7 +322,8 @@ public class Main3Activity extends AppCompatActivity {
             public void onInit(int code) {
                 Log.d(Main3Activity.this.getLocalClassName(), "SpeechRecognizer init() code = " + code);
                 if (code != ErrorCode.SUCCESS) {
-                    showTip("初始化失败，错误码：" + code + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案");                }
+                    Toast.makeText(Main3Activity.this, "初始化失败，错误码：" + code + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
+                }
             }
         };
         mRecognizerDialogListener = new RecognizerDialogListener() {
@@ -407,7 +406,7 @@ public class Main3Activity extends AppCompatActivity {
 
             @Override
             public void onError(SpeechError error) {
-                showTip(error.getPlainDescription(true));
+                Toast.makeText(Main3Activity.this, error.getPlainDescription(true), Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -497,13 +496,13 @@ public class Main3Activity extends AppCompatActivity {
         //mResultText.setSelection(mResultText.length())
     }
 
-    private void showTip(final String str) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Snackbar.make(fab, str, Snackbar.LENGTH_INDEFINITE)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
+//    private void showTip(final String str) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Snackbar.make(fab, str, Snackbar.LENGTH_INDEFINITE)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+//    }
 }
