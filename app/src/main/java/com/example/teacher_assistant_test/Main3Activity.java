@@ -121,15 +121,16 @@ public class Main3Activity extends AppCompatActivity {
                             //主线程刷新UI是通过消息队列，当列表正在滚动或者layout时调用notifyDataSetChanged()，
                             //那么notifyDataSetChanged()里面的代码是和正在滚动或者layout同一消息里面的，如果加上Handler.post()，
                             //那么就是新建立消息放入消息队列末尾，这样两个刷新不在同一个消息，就完美避开了这个问题。
-//                        new Handler().post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                // 刷新操作
-//                                markAdapter.notifyItemChanged(position);
-////                                markAdapter.notifyDataSetChanged();
-////                                notifyDataSetChanged();
-//                            }
-//                        });
+
+//                            new Handler().post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    // 刷新操作
+//                                    markAdapter.notifyItemChanged(position);
+//    //                                markAdapter.notifyDataSetChanged();
+//    //                                notifyDataSetChanged();
+//                                }
+//                            });
 
                         }
                     }
