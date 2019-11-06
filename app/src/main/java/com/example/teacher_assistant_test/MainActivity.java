@@ -67,14 +67,16 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.Recycler_View_Test);
 
         //添加自定义分割线
-        DividerItemDecoration divider = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
-        divider.setDrawable(ContextCompat.getDrawable(this,R.drawable.custom_divider));
-        recyclerView.addItemDecoration(divider);
+//        DividerItemDecoration divider = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+//        divider.setDrawable(ContextCompat.getDrawable(this,R.drawable.custom_divider));
+//        recyclerView.addItemDecoration(divider);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         testAdapter = new TestAdapter(testList);
         recyclerView.setAdapter(testAdapter);
+        //添加Android自带的分割线
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         testAdapter.setOnItemClickListener(new TestAdapter.OnItemClickListener() {
             @Override
