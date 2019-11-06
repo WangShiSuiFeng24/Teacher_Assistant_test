@@ -51,6 +51,9 @@ import org.json.JSONObject;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -74,10 +77,22 @@ public class Main3Activity extends AppCompatActivity {
     private Button fab;
 //    private Button refresh;
 
+    private MarkAdapter markAdapter;
+
+    private boolean isIdSortPressed;
+    private ImageView id_sort;
+    private boolean isScoreSortPressed;
+    private ImageView score_sort;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+
+        isIdSortPressed = false;
+        id_sort = findViewById(R.id.id_sort);
+        isScoreSortPressed = false;
+        score_sort = findViewById(R.id.score_sort);
 
         final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
 
@@ -86,7 +101,7 @@ public class Main3Activity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Main3Activity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        final MarkAdapter markAdapter = new MarkAdapter(markList);
+        markAdapter = new MarkAdapter(markList);
         recyclerView.setAdapter(markAdapter);
 
         markAdapter.setOnStuIdFillListener(new MarkAdapter.OnStuIdFillListener() {
@@ -113,6 +128,14 @@ public class Main3Activity extends AppCompatActivity {
 //                        score = score.replaceAll(" ","");
                             int total_score = (int) new Calculator().calculate(score);
                             markList.get(position).setTotal_score(total_score);
+
+                            //换个方式刷新页面...还是有问题，刷新一次后editText失去焦点
+//                            recyclerView.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    markAdapter.notifyDataSetChanged();
+//                                }
+//                            });
 
                             //在一个ViewHolder.onBind()里面用通过bus发消息去通知刷新列表notifyDataSetChanged()，
                             // 这个时候刚好列表在滚动或者在layout()，那么就会报错。
@@ -526,6 +549,62 @@ public class Main3Activity extends AppCompatActivity {
 
             // other 'case' lines to check for other
             // permissions this app might request.
+        }
+    }
+
+    public void idSortControl(View v) {
+        if(!isIdSortPressed) {
+            isIdSortPressed = true;
+            id_sort.setImageResource(R.drawable.ic_drop_up);
+            if(markList.size() != 0) {
+                Collections.sort(markList, new Comparator<Mark>() {
+                    @Override
+                    public int compare(Mark o1, Mark o2) {
+                        return Integer.parseInt(o1.getStu_id()) - Integer.parseInt(o2.getStu_id());
+                    }
+                });
+                markAdapter.notifyDataSetChanged();
+            }
+        } else {
+            isIdSortPressed = false;
+            id_sort.setImageResource(R.drawable.ic_drop_down);
+            if(markList.size() != 0) {
+                Collections.sort(markList, new Comparator<Mark>() {
+                    @Override
+                    public int compare(Mark o1, Mark o2) {
+                        return Integer.parseInt(o2.getStu_id()) - Integer.parseInt(o1.getStu_id()) ;
+                    }
+                });
+                markAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    public void scoreSortControl(View v) {
+        if(!isScoreSortPressed) {
+            isScoreSortPressed = true;
+            score_sort.setImageResource(R.drawable.ic_drop_up);
+            if(markList.size() != 0) {
+                Collections.sort(markList, new Comparator<Mark>() {
+                    @Override
+                    public int compare(Mark o1, Mark o2) {
+                        return o1.getTotal_score() - o2.getTotal_score();
+                    }
+                });
+                markAdapter.notifyDataSetChanged();
+            }
+        } else {
+            isScoreSortPressed = false;
+            score_sort.setImageResource(R.drawable.ic_drop_down);
+            if(markList.size() != 0) {
+                Collections.sort(markList, new Comparator<Mark>() {
+                    @Override
+                    public int compare(Mark o1, Mark o2) {
+                        return  o2.getTotal_score() - o1.getTotal_score();
+                    }
+                });
+                markAdapter.notifyDataSetChanged();
+            }
         }
     }
 

@@ -12,19 +12,68 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <TextView
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:gravity="center"
-            android:layout_weight="1"
-            android:text="学号" />
+            android:layout_weight="1" >
 
-        <TextView
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="学号" />
+
+                <ImageView
+                    android:id="@+id/id_sort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_drop_down"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:onClick="idSortControl"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:gravity="center"
-            android:layout_weight="2"
-            android:text="成绩" />
+            android:layout_weight="2" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="成绩" />
+
+                <ImageView
+                    android:id="@+id/score_sort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_drop_down"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="45dp"
+                    android:onClick="scoreSortControl"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="0dp"
