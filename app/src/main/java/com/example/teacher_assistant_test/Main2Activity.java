@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.StudentAdapter;
@@ -21,6 +22,9 @@ import com.example.teacher_assistant_test.bean.Student;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Main2Activity extends AppCompatActivity {
@@ -31,10 +35,22 @@ public class Main2Activity extends AppCompatActivity {
     private long test_id;
     private String test_name;
 
+    private StudentAdapter studentAdapter;
+
+    private boolean isIdSelectSortPressed;
+    private ImageView id_select_sort;
+    private boolean isScoreSelectSortPressed;
+    private ImageView score_select_sort;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        isIdSelectSortPressed = false;
+        id_select_sort = findViewById(R.id.id_select_sort);
+        isScoreSelectSortPressed = false;
+        score_select_sort = findViewById(R.id.score_select_sort);
 
         Intent intent = getIntent();
         test_id = intent.getLongExtra("test_id", 0);
@@ -54,7 +70,7 @@ public class Main2Activity extends AppCompatActivity {
         final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Student);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        final StudentAdapter studentAdapter = new StudentAdapter(studentList);
+        studentAdapter = new StudentAdapter(studentList);
         recyclerView.setAdapter(studentAdapter);
 
         clear_score = findViewById(R.id.clear_score);
@@ -80,6 +96,62 @@ public class Main2Activity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void idSelectSortControl(View v) {
+        if (!isIdSelectSortPressed) {
+            isIdSelectSortPressed = true;
+            id_select_sort.setImageResource(R.drawable.ic_drop_up);
+            if (studentList.size() != 0) {
+                Collections.sort(studentList, new Comparator<Student>() {
+                    @Override
+                    public int compare(Student o1, Student o2) {
+                        return o1.getStu_id() - o2.getStu_id();
+                    }
+                });
+                studentAdapter.notifyDataSetChanged();
+            }
+        } else {
+            isIdSelectSortPressed = false;
+            id_select_sort.setImageResource(R.drawable.ic_drop_down);
+            if (studentList.size() != 0) {
+                Collections.sort(studentList, new Comparator<Student>() {
+                    @Override
+                    public int compare(Student o1, Student o2) {
+                        return o2.getStu_id() - o1.getStu_id();
+                    }
+                });
+                studentAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    public void scoreSelectSortControl(View v) {
+        if(!isScoreSelectSortPressed) {
+            isScoreSelectSortPressed = true;
+            score_select_sort.setImageResource(R.drawable.ic_drop_up);
+            if(studentList.size() != 0) {
+                Collections.sort(studentList, new Comparator<Student>() {
+                    @Override
+                    public int compare(Student o1, Student o2) {
+                        return o1.getTotal_score() - o2.getTotal_score();
+                    }
+                });
+                studentAdapter.notifyDataSetChanged();
+            }
+        } else {
+            isScoreSelectSortPressed = false;
+            score_select_sort.setImageResource(R.drawable.ic_drop_down);
+            if(studentList.size() != 0) {
+                Collections.sort(studentList, new Comparator<Student>() {
+                    @Override
+                    public int compare(Student o1, Student o2) {
+                        return o2.getTotal_score() - o1.getTotal_score();
+                    }
+                });
+                studentAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private void initStudent() {
