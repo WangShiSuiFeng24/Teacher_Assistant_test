@@ -1,5 +1,7 @@
 package com.example.teacher_assistant_test.bean;
 
+import androidx.annotation.Nullable;
+
 public class Mark {
 //    private int mark_id;
 //    private int test_id;
@@ -30,4 +32,17 @@ public class Mark {
 
     public int getTotal_score() { return total_score; }
     public void setTotal_score(int total_score) { this.total_score = total_score; }
+
+    //去重关键,重写equals方法
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Mark mark = (Mark) obj;
+        return mark.stu_id.equals(stu_id);
+    }
+
+    //去重关键,把User的id当做对象的哈希表值返回
+    @Override
+    public int hashCode() {
+        return stu_id.hashCode();
+    }
 }
