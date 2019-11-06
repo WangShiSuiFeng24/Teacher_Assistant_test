@@ -2,11 +2,15 @@ package com.example.teacher_assistant_test;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -42,6 +46,8 @@ public class Main2Activity extends AppCompatActivity {
     private boolean isScoreSelectSortPressed;
     private ImageView score_select_sort;
 
+    private Button fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,27 +79,38 @@ public class Main2Activity extends AppCompatActivity {
         studentAdapter = new StudentAdapter(studentList);
         recyclerView.setAdapter(studentAdapter);
 
-        clear_score = findViewById(R.id.clear_score);
-        clear_score.setOnClickListener(new View.OnClickListener() {
+//        clear_score = findViewById(R.id.clear_score);
+//        clear_score.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this,
+//                        "Alarm", "即将清空成绩,慎重!!!", null, "确定清空!",
+//                        "取消清空!");
+//                alertDialog.setCancelable(false);
+//                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        SQLiteDatabase database = MyDatabaseHelper.getInstance(Main2Activity.this);
+//                        String deleteAll = "DELETE FROM StudentMark";
+//                        database.execSQL(deleteAll);
+//                        studentList.clear();
+//                        studentAdapter.notifyDataSetChanged();
+//                        initStudent();
+//                        alertDialog.dismiss();
+//                        Toast.makeText(Main2Activity.this, "成绩已清空", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
+
+        fab = findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this,
-                        "Alarm", "即将清空成绩,慎重!!!", null, "确定清空!",
-                        "取消清空!");
-                alertDialog.setCancelable(false);
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        SQLiteDatabase database = MyDatabaseHelper.getInstance(Main2Activity.this);
-                        String deleteAll = "DELETE FROM StudentMark";
-                        database.execSQL(deleteAll);
-                        studentList.clear();
-                        studentAdapter.notifyDataSetChanged();
-                        initStudent();
-                        alertDialog.dismiss();
-                        Toast.makeText(Main2Activity.this, "成绩已清空", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                //跳转到语音识别录成绩界面
+                Intent intent = new Intent(Main2Activity.this, Main3Activity.class);
+                startActivity(intent);
             }
         });
     }

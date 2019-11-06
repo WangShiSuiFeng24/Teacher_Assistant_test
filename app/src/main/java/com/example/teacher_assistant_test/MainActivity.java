@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     // Permission has already been granted
-
                     //跳转到语音识别录成绩界面
                     Intent intent = new Intent(MainActivity.this, Main3Activity.class);
                     startActivity(intent);

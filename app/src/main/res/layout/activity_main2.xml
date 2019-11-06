@@ -96,23 +96,37 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Recycler_View_Student"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Recycler_View_Student"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <Button
-            android:id="@+id/clear_score"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="清空成绩" />
+            android:id="@+id/fab"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/ic_record" />
 
-    </LinearLayout>
+    </RelativeLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" >-->
+
+<!--        <Button-->
+<!--            android:id="@+id/clear_score"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="清空成绩" />-->
+
+<!--    </LinearLayout>-->
 
 </LinearLayout>
