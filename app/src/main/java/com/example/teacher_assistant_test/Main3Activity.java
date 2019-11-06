@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.MarkAdapter;
@@ -69,6 +71,7 @@ public class Main3Activity extends AppCompatActivity {
     private RecognizerDialogListener mRecognizerDialogListener;
 //    private FloatingActionButton fab;
     private Button fab;
+    private Button refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,32 +101,36 @@ public class Main3Activity extends AppCompatActivity {
 
         markAdapter.setOnScoreFillListener(new MarkAdapter.OnScoreFillListener() {
             @Override
-            public void onScoreFill(int position, String score) {
+            public void onScoreFill(final int position, String score) {
                 //编辑成绩监听
                 //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
                 if(position < markList.size()) {
-                    markList.get(position).setScore(score);
-                    //先要判断编辑的score字符串是否符合规则，是则计算total_score,否则不计算
-                    if(new CheckExpression().checkExpression(score)) {
-                        int total_score = (int) new Calculator().calculate(score);
-                        markList.get(position).setTotal_score(total_score);
+                    if(!TextUtils.isEmpty(score)) {
+                        markList.get(position).setScore(score);
+                        //先要判断编辑的score字符串是否符合规则，是则计算total_score,否则不计算
+                        if(new CheckExpression().checkExpression(score)) {
+//                        score = score.replaceAll(" ","");
+                            int total_score = (int) new Calculator().calculate(score);
+                            markList.get(position).setTotal_score(total_score);
 
-                        //在一个ViewHolder.onBind()里面用通过bus发消息去通知刷新列表notifyDataSetChanged()，
-                        // 这个时候刚好列表在滚动或者在layout()，那么就会报错。
-                        // Caused by java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing
-                        //此法原理：
-                        //主线程刷新UI是通过消息队列，当列表正在滚动或者layout时调用notifyDataSetChanged()，
-                        //那么notifyDataSetChanged()里面的代码是和正在滚动或者layout同一消息里面的，如果加上Handler.post()，
-                        //那么就是新建立消息放入消息队列末尾，这样两个刷新不在同一个消息，就完美避开了这个问题。
-                        new Handler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // 刷新操作
-                                markAdapter.notifyDataSetChanged();
-//                                notifyDataSetChanged();
-                            }
-                        });
+                            //在一个ViewHolder.onBind()里面用通过bus发消息去通知刷新列表notifyDataSetChanged()，
+                            // 这个时候刚好列表在滚动或者在layout()，那么就会报错。
+                            // Caused by java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing
+                            //此法原理：
+                            //主线程刷新UI是通过消息队列，当列表正在滚动或者layout时调用notifyDataSetChanged()，
+                            //那么notifyDataSetChanged()里面的代码是和正在滚动或者layout同一消息里面的，如果加上Handler.post()，
+                            //那么就是新建立消息放入消息队列末尾，这样两个刷新不在同一个消息，就完美避开了这个问题。
+//                        new Handler().post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                // 刷新操作
+//                                markAdapter.notifyItemChanged(position);
+////                                markAdapter.notifyDataSetChanged();
+////                                notifyDataSetChanged();
+//                            }
+//                        });
 
+                        }
                     }
                 }
             }
@@ -171,6 +178,19 @@ public class Main3Activity extends AppCompatActivity {
 
                     mIatDialog.show();
                 }
+            }
+        });
+
+
+
+
+
+
+        refresh = findViewById(R.id.refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markAdapter.notifyDataSetChanged();
             }
         });
 
@@ -231,12 +251,13 @@ public class Main3Activity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         String input = edit.getText().toString().trim();
+                        long unique_test_id = new Date().getTime();
                         if (input.equals("")) {
                             Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
                             return;
                         } else {
                             String editText = edit.getText().toString().trim();
-                            long unique_test_id = new Date().getTime();
+//                            long unique_test_id = new Date().getTime();
 
                             //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
                             final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
@@ -289,6 +310,10 @@ public class Main3Activity extends AppCompatActivity {
                             //让AlertDialog消失
                             alertDialog.cancel();
                         }
+                        Intent intent = new Intent(Main3Activity.this, Main2Activity.class);
+                        intent.putExtra("test_id", unique_test_id);
+                        intent.putExtra("test_name", input);
+                        startActivity(intent);
                     }
                 });
 

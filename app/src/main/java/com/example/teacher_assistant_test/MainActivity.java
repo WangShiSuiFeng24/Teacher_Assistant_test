@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 禁用横屏
         setContentView(R.layout.activity_main);
 
-        initTest();
+//        initTest();
 
         initDataBase();
 
@@ -142,6 +142,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //小技巧是把需要更新的view 可以都放在initview（）中，在resume中调用这个方法即可。
+    @Override
+    protected void onResume() {
+        Log.d("MainActivity", "onResume()");
+        super.onResume();
+        //先清空testList
+        testList.clear();
+        //再重新add数据到testList
+        initTest();
+        //通知RecyclerView，告诉它Adapter的数据发生了变化
+        testAdapter.notifyDataSetChanged();
     }
 
 

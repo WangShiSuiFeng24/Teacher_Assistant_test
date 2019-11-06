@@ -3,6 +3,7 @@ package com.example.teacher_assistant_test.adapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -18,6 +19,10 @@ import java.util.List;
 
     public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder> {
     private List<Mark> mList;
+
+//    //editText的焦点，我们可以通过一个int变量记录他在adapter中的位置
+//    int stuIdFocusPos = -1;
+//    int scoreFocusPos = -1;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         EditText student_id;
@@ -61,6 +66,9 @@ import java.util.List;
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        //当前holder的position
+        final int currentPosition = position;
+
         holder.student_id.setTag(position);
         holder.student_score.setTag(position);
 
@@ -126,6 +134,34 @@ import java.util.List;
                 }
             }
         });
+
+
+//        //当前holder是我们记录下的焦点位置时，我们给当前的editext设置焦点并设置光标位置
+//        if (stuIdFocusPos == position) {
+//            holder.student_id.requestFocus();
+//            holder.student_id.setSelection(holder.student_id.getText().length());
+//        }
+//
+//        //我们给当前holder中的edittext添加touch事件监听，在action_up手指抬起时，记录下焦点position
+//        holder.student_id.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    etFocusPos = position;
+//                }
+//                return false;
+//            }
+//        });
+//
+//        holder.student_score.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    etFocusPos = position;
+//                }
+//                return false;
+//            }
+//        });
     }
 
     private OnStuIdFillListener onStuIdFillListener;
