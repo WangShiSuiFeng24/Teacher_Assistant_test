@@ -35,64 +35,60 @@
 
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Recycler_View_Mark"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent" >
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        -->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom|end"-->
-<!--        android:layout_margin="16dp"-->
-<!--        android:src="@drawable/ic_record"/>-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Recycler_View_Mark"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </androidx.recyclerview.widget.RecyclerView>
 
         <Button
             android:id="@+id/fab"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/ic_record" />
 
-        <Button
-            android:id="@+id/refresh"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="100dp"
-            android:background="@drawable/ic_refresh" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/fab"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_marginBottom="50dp"-->
+<!--            android:backgroundTint="@color/transparent"-->
+<!--            android:src="@drawable/ic_record"-->
+<!--            app:borderWidth="0dp"-->
+<!--            app:elevation="10dp"-->
+<!--            app:rippleColor="@color/transparent" />-->
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/clear_data"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="清空" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
-        <Button
-            android:id="@+id/save_to_db"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="保存" />
+            <Button
+                android:id="@+id/clear_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="清空" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/save_to_db"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="保存" />
+
+        </LinearLayout>
 
 
+    </RelativeLayout>
 
 </LinearLayout>

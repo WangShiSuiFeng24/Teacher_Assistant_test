@@ -34,6 +34,7 @@ import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -71,7 +72,7 @@ public class Main3Activity extends AppCompatActivity {
     private RecognizerDialogListener mRecognizerDialogListener;
 //    private FloatingActionButton fab;
     private Button fab;
-    private Button refresh;
+//    private Button refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,13 +187,13 @@ public class Main3Activity extends AppCompatActivity {
 
 
 
-        refresh = findViewById(R.id.refresh);
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                markAdapter.notifyDataSetChanged();
-            }
-        });
+//        refresh = findViewById(R.id.refresh);
+//        refresh.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                markAdapter.notifyDataSetChanged();
+//            }
+//        });
 
 
         markAdapter.setOnItemClickListener(new MarkAdapter.OnItemClickListener() {
