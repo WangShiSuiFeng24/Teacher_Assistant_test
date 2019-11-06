@@ -19,13 +19,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_MARK = "create table StudentMark("
             + "mark_id integer primary key unique,"
-            + "test_id integer,"
+            + "test_id long,"
             + "stu_id integer,"
             + "score text,"
             + "total_score integer)";
 
     private static final String CREATE_TEST= "create table StudentTest("
-            + "test_id integer ,"
+            + "test_id long ,"
             + "test_name text)";
 
     private static MyDatabaseHelper myDatabaseHelper;

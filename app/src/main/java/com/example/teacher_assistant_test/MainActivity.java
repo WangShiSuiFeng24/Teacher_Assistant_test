@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //小技巧是把需要更新的view 可以都放在initview（）中，在resume中调用这个方法即可。
+    //返回刷新，小技巧是把需要更新的view 可以都放在initview（）中，在resume中调用这个方法即可。
     @Override
     protected void onResume() {
         Log.d("MainActivity", "onResume()");

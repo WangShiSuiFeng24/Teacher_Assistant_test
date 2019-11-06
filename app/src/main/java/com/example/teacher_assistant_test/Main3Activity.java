@@ -251,13 +251,13 @@ public class Main3Activity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         String input = edit.getText().toString().trim();
-                        long unique_test_id = new Date().getTime();
+                        final long unique_test_id = new Date().getTime();
+                        Log.i("Main3Activity", "unique_test_id:"+unique_test_id);
                         if (input.equals("")) {
                             Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
                             return;
                         } else {
-                            String editText = edit.getText().toString().trim();
-//                            long unique_test_id = new Date().getTime();
+//                            String editText = edit.getText().toString().trim();
 
                             //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
                             final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
@@ -267,7 +267,7 @@ public class Main3Activity extends AppCompatActivity {
 
                             if(cursor.isLast()) {
                                 //StudentTest表为空，第一次更新
-                                new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, editText);
+                                new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, input);
                                 Toast.makeText(Main3Activity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
                             }
 
@@ -278,9 +278,9 @@ public class Main3Activity extends AppCompatActivity {
                                 while(cursor.moveToNext()) {
                                     String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
 
-                                    if(editText.equals(test_name)) {
+                                    if(input.equals(test_name)) {
                                         //StudentTest表中已有相同test_name,提示用户重新输入
-                                        Toast.makeText(Main3Activity.this, editText+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Main3Activity.this, input+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
 //                                        flag = true;
                                         return;
                                     }
@@ -289,7 +289,8 @@ public class Main3Activity extends AppCompatActivity {
                                 //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
 
                                 //先把test_id和test_name插入到StudentTest表中
-                                new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, editText);
+                                new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, input);
+                                Log.i("Main3Activity", "向StudentTest表中插入unique_test_id:"+unique_test_id+",input:"+input+"成功");
 
                                 //再向StudentMark表中插入当前页面数据
                                 Iterator<Mark> iterator = markList.iterator();
@@ -298,11 +299,15 @@ public class Main3Activity extends AppCompatActivity {
                                     final Mark preMark = iterator.next();
 
                                     String stu_id = preMark.getStu_id();
-                                    long test_id = unique_test_id;
+//                                    long test_id = unique_test_id;
                                     String score = preMark.getScore();
                                     int total_score = preMark.getTotal_score();
-                                    new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, test_id, score, total_score);
+                                    new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
                                     Toast.makeText(Main3Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                    Log.i("Main3Activity", "向StudentMark表中插入stu_id:"+stu_id
+                                            +"\r\nunique_test_id:"+unique_test_id
+                                            +"\r\nscore:"+score
+                                            +"\r\ntotal_score"+total_score+"成功");
 
                                 }
                             }
@@ -311,7 +316,10 @@ public class Main3Activity extends AppCompatActivity {
                             alertDialog.cancel();
                         }
                         Intent intent = new Intent(Main3Activity.this, Main2Activity.class);
-                        intent.putExtra("test_id", unique_test_id);
+                        //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
+                        long long_to_int_test_id = (int) unique_test_id;
+                        intent.putExtra("test_id", long_to_int_test_id);
+                        Log.i("Main3Activity", "long转int的unique_test_id:"+long_to_int_test_id);
                         intent.putExtra("test_name", input);
                         startActivity(intent);
                     }
