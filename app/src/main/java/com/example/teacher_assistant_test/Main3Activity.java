@@ -58,6 +58,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static java.sql.Types.NULL;
 
@@ -144,6 +145,9 @@ public class Main3Activity extends AppCompatActivity {
                             //那么notifyDataSetChanged()里面的代码是和正在滚动或者layout同一消息里面的，如果加上Handler.post()，
                             //那么就是新建立消息放入消息队列末尾，这样两个刷新不在同一个消息，就完美避开了这个问题。
 
+                            if(!recyclerView.isComputingLayout()) {
+                                markAdapter.notifyDataSetChanged();
+                            }
 //                            new Handler().post(new Runnable() {
 //                                @Override
 //                                public void run() {
