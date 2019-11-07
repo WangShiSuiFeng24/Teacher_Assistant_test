@@ -28,9 +28,14 @@ public class Student {
     public String getStu_gender() {
         return stu_gender;
     }
+
     public String getTest_name() { return test_name; }
+
     public String getScore() {
         return score;
     }
+    public void setScore(String score) { this.score = score; }
+
     public int getTotal_score() { return total_score; }
+    public void setTotal_score(int total_score) { this.total_score = total_score;}
 }

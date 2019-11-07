@@ -1,8 +1,11 @@
 package com.example.teacher_assistant_test.adapter;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,8 +23,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         private TextView stu_id;
         private TextView stu_name;
         private TextView stu_gender;
-//        private TextView test_name;
-        private TextView score;
+        private EditText score;
         private TextView total_score;
 
         public ViewHolder(@NonNull View itemView) {
@@ -29,7 +31,6 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             stu_id = itemView.findViewById(R.id.stu_id);
             stu_name = itemView.findViewById(R.id.stu_name);
             stu_gender = itemView.findViewById(R.id.stu_gender);
-//            test_name = itemView.findViewById(R.id.stu_test_name);
             score = itemView.findViewById(R.id.stu_score);
             total_score = itemView.findViewById(R.id.stu_total_score);
         }
@@ -46,18 +47,49 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        holder.score.setTag(position);
+
         Student student = studentList.get(position);
         holder.stu_id.setText(String.valueOf(student.getStu_id()));
         holder.stu_name.setText(student.getStu_name());
         holder.stu_gender.setText(student.getStu_gender());
-//        holder.test_name.setText(student.getTest_name());
         holder.score.setText(student.getScore());
         holder.total_score.setText(String.valueOf(student.getTotal_score()));
+
+        holder.score.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(Integer.parseInt(holder.score.getTag().toString()) == position) {
+                    //设置Tag解决错乱问题
+                    onScoreFillListener.onScoreFill(position, s.toString());
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return studentList.size();
+    }
+
+    private OnScoreFillListener onScoreFillListener;
+
+    public interface OnScoreFillListener {
+        void onScoreFill(int position, String score);
+    }
+
+    public void setOnScoreFillListener(OnScoreFillListener onScoreFillListener) {
+        this.onScoreFillListener = onScoreFillListener;
     }
 }

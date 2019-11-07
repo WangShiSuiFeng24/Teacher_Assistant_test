@@ -138,7 +138,7 @@ public class Main3Activity extends AppCompatActivity {
 //                            },1000);
 
                             //在一个ViewHolder.onBind()里面用通过bus发消息去通知刷新列表notifyDataSetChanged()，
-                            // 这个时候刚好列表在滚动或者在layout()，那么就会报错。
+                            // 这个时候刚好列表在滚动或者在la yout()，那么就会报错。
                             // Caused by java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing
                             //此法原理：
                             //主线程刷新UI是通过消息队列，当列表正在滚动或者layout时调用notifyDataSetChanged()，

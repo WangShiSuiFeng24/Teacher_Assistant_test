@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.StudentAdapter;
 import com.example.teacher_assistant_test.bean.Student;
+import com.example.teacher_assistant_test.util.Calculator;
+import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class Main2Activity extends AppCompatActivity {
     private String test_name;
 
     private StudentAdapter studentAdapter;
+    private RecyclerView recyclerView;
 
     private boolean isIdSelectSortPressed;
     private ImageView id_select_sort;
@@ -73,11 +76,37 @@ public class Main2Activity extends AppCompatActivity {
 //            if(!TextUtils.isEmpty(title)) setTitle(title);
 //        }
 
-        final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Student);
+        recyclerView = findViewById(R.id.Recycler_View_Student);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         studentAdapter = new StudentAdapter(studentList);
         recyclerView.setAdapter(studentAdapter);
+
+        studentAdapter.setOnScoreFillListener(new StudentAdapter.OnScoreFillListener() {
+            @Override
+            public void onScoreFill(int position, String score) {
+                //编辑成绩监听
+                //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
+                if(position < studentList.size()) {
+                    //位置存在
+                    //判断当前EditText中内容score是否为空
+                    if(!TextUtils.isEmpty(score)) {
+                        //不为空
+                        studentList.get(position).setScore(score);
+                        //先要判断编辑的score字符串是否符合规则，是则计算total_score,否则不计算
+                        if(new CheckExpression().checkExpression(score)) {
+//                        score = score.replaceAll(" ","");
+                            int total_score = (int) new Calculator().calculate(score);
+                            studentList.get(position).setTotal_score(total_score);
+
+                            if(!recyclerView.isComputingLayout()) {
+                                studentAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
 //        clear_score = findViewById(R.id.clear_score);
 //        clear_score.setOnClickListener(new View.OnClickListener() {
