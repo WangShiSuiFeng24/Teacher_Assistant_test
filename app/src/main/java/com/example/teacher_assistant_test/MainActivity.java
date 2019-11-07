@@ -44,10 +44,17 @@ import com.iflytek.cloud.ui.RecognizerDialogListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
@@ -64,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        initTest();
-
+        importSheet();
 //        initDataBase();
 
         RecyclerView recyclerView = findViewById(R.id.Recycler_View_Test);
@@ -174,6 +181,31 @@ public class MainActivity extends AppCompatActivity {
             testList.add(test);
         }
         cursor.close();
+    }
+
+
+    private void importSheet() {
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+        ContentValues values = new ContentValues();
+        try {
+            InputStream is = getResources().getAssets().open("id_name_info.xls");
+
+            Workbook workbook = Workbook.getWorkbook(is);
+
+            Sheet sheet = workbook.getSheet(0);
+
+            for (int j=1; j < sheet.getRows(); j++) {
+
+                values.put("stu_id", sheet.getCell(0, j).getContents());
+                values.put("stu_name", sheet.getCell(1, j).getContents());
+                values.put("stu_gender", sheet.getCell(3, j).getContents());
+                db.insert("Student", null, values);
+                values.clear();
+            }
+            workbook.close();
+        } catch (IOException | BiffException e) {
+            e.printStackTrace();
+        }
     }
 
 
