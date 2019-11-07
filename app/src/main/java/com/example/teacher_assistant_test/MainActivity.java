@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        initTest();
 
-        initDataBase();
+//        initDataBase();
 
         RecyclerView recyclerView = findViewById(R.id.Recycler_View_Test);
 
@@ -176,15 +176,18 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    private void initDataBase() {
-        IDUSTool idusTool = new IDUSTool(MainActivity.this);
-        idusTool.insertStuDB("1", "Dan", "girl");
-        idusTool.insertStuDB("2", "Jow", "boy");
-        idusTool.insertStuDB("3", "Marry", "girl");
-        idusTool.insertStuDB("4", "Jorge", "boy");
-        idusTool.insertStuDB("5", "Judy", "girl");
-        for (int i=1; i<=99; i++) {
-            idusTool.insertStuDB(""+i+"", "", "");
-        }
-    }
+
+
+//    private void initDataBase() {
+//        IDUSTool idusTool = new IDUSTool(MainActivity.this);
+//        idusTool.insertStuDB("1", "Dan", "girl");
+//        idusTool.insertStuDB("2", "Jow", "boy");
+//        idusTool.insertStuDB("3", "Marry", "girl");
+//        idusTool.insertStuDB("4", "Jorge", "boy");
+//        idusTool.insertStuDB("5", "Judy", "girl");
+//        for (int i=1; i<=99; i++) {
+//            idusTool.insertStuDB(""+i+"", "", "");
+//        }
+//    }
+//
 }

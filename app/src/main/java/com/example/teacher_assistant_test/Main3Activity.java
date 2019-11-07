@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +22,8 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,6 +61,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Callable;
 
 import static java.sql.Types.NULL;
@@ -292,6 +297,20 @@ public class Main3Activity extends AppCompatActivity {
                         final AlertDialog alertDialog = GetAlertDialog
                                 .getAlertDialog(Main3Activity.this,"Test_Name:",
                                         null, edit, "确定", "取消");
+                        //给edit设置焦点
+                        edit.setFocusable(true);
+                        edit.setFocusableInTouchMode(true);
+                        edit.requestFocus();
+                        //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask()
+                        {
+                            public void run()
+                            {
+                                InputMethodManager inputManager =(InputMethodManager)edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                inputManager.showSoftInput(edit, 0);
+                            }
+                        },300);
 
                         //拿到按钮并判断是否是POSITIVEBUTTON，然后我们自己实现监听
                         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
