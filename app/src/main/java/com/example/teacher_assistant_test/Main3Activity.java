@@ -75,7 +75,6 @@ public class Main3Activity extends AppCompatActivity {
     private RecognizerDialogListener mRecognizerDialogListener;
 //    private FloatingActionButton fab;
     private Button fab;
-//    private Button refresh;
 
     private MarkAdapter markAdapter;
 
@@ -129,13 +128,13 @@ public class Main3Activity extends AppCompatActivity {
                             int total_score = (int) new Calculator().calculate(score);
                             markList.get(position).setTotal_score(total_score);
 
-                            //换个方式刷新页面...还是有问题，刷新一次后editText失去焦点
-//                            recyclerView.post(new Runnable() {
+//                            //换个方式刷新页面...还是有问题，刷新一次后editText失去焦点
+//                            recyclerView.postDelayed(new Runnable() {
 //                                @Override
 //                                public void run() {
 //                                    markAdapter.notifyDataSetChanged();
 //                                }
-//                            });
+//                            },1000);
 
                             //在一个ViewHolder.onBind()里面用通过bus发消息去通知刷新列表notifyDataSetChanged()，
                             // 这个时候刚好列表在滚动或者在layout()，那么就会报错。

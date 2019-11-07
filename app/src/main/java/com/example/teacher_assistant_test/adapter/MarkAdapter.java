@@ -98,34 +98,6 @@ import java.util.List;
             }
         });
 
-//        if(holder.student_id.getTag() instanceof TextWatcher) {
-//            holder.student_id.removeTextChangedListener((TextWatcher) holder.student_id.getTag());
-//        }
-//
-//        holder.student_id.setText(mList.get(position).getStu_id());
-//
-//        TextWatcher watcher = new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                String trim = holder.student_id.getText().toString().trim();
-//                mList.get(position).setStu_id(trim);
-//            }
-//        };
-//
-//        holder.student_id.addTextChangedListener(watcher);
-//
-//        holder.student_id.setTag(watcher);
-
         holder.student_id.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -145,40 +117,6 @@ import java.util.List;
                 }
             }
         });
-
-//        if(holder.student_score.getTag() instanceof TextWatcher) {
-//            holder.student_score.removeTextChangedListener((TextWatcher) holder.student_score.getTag());
-//        }
-//
-//        holder.student_score.setText(mList.get(position).getScore());
-//
-//        TextWatcher scoreWatcher = new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                String trim = holder.student_score.getText().toString().trim();
-//                mList.get(position).setScore(trim);
-//
-//                //先要判断编辑的score字符串是否符合规则，是则计算total_score,否则不计算
-//                if(new CheckExpression().checkExpression(trim)) {
-//                    mList.get(position).setTotal_score((int) new Calculator().calculate(trim));
-//                }
-//            }
-//        };
-//
-//        holder.student_score.addTextChangedListener(scoreWatcher);
-//
-//        holder.student_score.setTag(scoreWatcher);
-
 
 
         holder.student_score.addTextChangedListener(new TextWatcher() {
