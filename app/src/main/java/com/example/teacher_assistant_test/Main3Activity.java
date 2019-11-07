@@ -298,7 +298,11 @@ public class Main3Activity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 String input = edit.getText().toString().trim();
-                                final long unique_test_id = new Date().getTime();
+                                //生成唯一id
+//                                final long unique_test_id = new Date().getTime();//太长
+                                //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
+                                final long unique_test_id = getCount() + 1;
+
                                 Log.i("Main3Activity", "unique_test_id:"+unique_test_id);
                                 if (input.equals("")) {
                                     Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
@@ -614,6 +618,17 @@ public class Main3Activity extends AppCompatActivity {
         return resultBuffer.toString();
         //mResultText.setText(resultBuffer.toString())
         //mResultText.setSelection(mResultText.length())
+    }
+
+
+    //SQLite查询test_id记录总数
+    public long getCount() {
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
+        Cursor cursor = db.rawQuery("select count(test_id) from StudentTest",null);
+        cursor.moveToFirst();
+        Long count = cursor.getLong(0);
+        cursor.close();
+        return count;
     }
 
 //    private void showTip(final String str) {

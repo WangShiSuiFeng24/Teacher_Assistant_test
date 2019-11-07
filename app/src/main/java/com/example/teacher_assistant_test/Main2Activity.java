@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +17,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,12 +35,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class Main2Activity extends AppCompatActivity {
     private List<Student> studentList = new ArrayList<>();
-
-    private Button clear_score;
 
     private long test_id;
     private String test_name;
@@ -144,6 +147,53 @@ public class Main2Activity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.save_data://监听菜单按钮
+                //保存当前页面修改数据(只修改了score)到数据库
+                //EditText(score)被实时监听，其编辑的数据实时更新在studentList中
+                //所以将studentList的数据更新到数据库即可
+                //因为只修改了score，所以只更新score
+                //score只在StudentMark表中。。只更新StudentMark表中的score
+                SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
+                ContentValues values = new ContentValues();
+                Iterator<Student> studentIterator = studentList.iterator();
+                while(studentIterator.hasNext()) {
+                    Student student = studentIterator.next();
+                    int stu_id = student.getStu_id();
+                    values.put("score", String.valueOf(student.getScore()));
+                    values.put("total_score", student.getTotal_score());
+                    Log.i("Main2Activity", "score:"+student.getScore()+" total_score:"+student.getTotal_score());
+                    //该法不会将score算术表达式自动计算成结果更新
+                    db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
+                            new String[]{""+test_id+"", ""+stu_id+""});
+                    Toast.makeText(Main2Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
+
+                    //测试
+//                    int i = db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
+//                            new String[]{"1051306716", "2"});
+//                    Log.i("Main2Activity", "update:"+i);
+
+                    //该法可行，但是会将score算术表达式自动计算成结果更新
+//                    String sqlUpdate = "UPDATE StudentMark SET score ="+student.getScore()+", total_score ="+student.getTotal_score()
+//                            +" WHERE test_id = "+test_id+" AND stu_id = "+stu_id+"";
+//                    db.execSQL(sqlUpdate);
+                    Log.i("Main2Activity", "test_id:"+test_id+" stu_id:"+stu_id);
+                }
+                db.close();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void idSelectSortControl(View v) {
         if (!isIdSelectSortPressed) {
             isIdSelectSortPressed = true;
@@ -213,7 +263,7 @@ public class Main2Activity extends AppCompatActivity {
         Log.i("Main2Activity", "cursor.getCount():"+cursor.getCount());
 
         while(cursor.moveToNext()){
-            int test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
+            long test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
             Log.i("Main2Activity", "数据库test_id:"+test_id);
 
             //只有当查询出的条目的test_id等于传入的this.test_id时才将该条目add到List<Student>
