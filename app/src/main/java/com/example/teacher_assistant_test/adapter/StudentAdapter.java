@@ -36,7 +36,10 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         }
     }
 
-    public StudentAdapter(List<Student> studentList) { this.studentList = studentList; }
+    public StudentAdapter(List<Student> studentList) {
+        this.studentList = studentList;
+        setHasStableIds(true);
+    }
 
     @NonNull
     @Override
@@ -81,6 +84,11 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     @Override
     public int getItemCount() {
         return studentList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     private OnScoreFillListener onScoreFillListener;
