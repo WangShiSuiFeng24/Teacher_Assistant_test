@@ -39,7 +39,10 @@ import java.util.List;
         }
     }
 
-    public MarkAdapter(List<Mark> mList) {this.mList = mList;}
+    public MarkAdapter(List<Mark> mList) {
+        this.mList = mList;
+        setHasStableIds(true);
+    }
 
     public void remove(int i) {
         mList.remove(i);
@@ -134,6 +137,7 @@ import java.util.List;
             public void afterTextChanged(Editable s) {
                 if(Integer.parseInt(holder.student_score.getTag().toString()) == position) {
                     onScoreFillListener.onScoreFill(position, s.toString());
+                    holder.student_score.setSelection(s.length());
                 }
             }
         });
@@ -190,5 +194,10 @@ import java.util.List;
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 }
