@@ -1,28 +1,38 @@
 package com.example.teacher_assistant_test;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.LayoutInflaterCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.InflateException;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.StudentAdapter;
@@ -56,6 +66,36 @@ public class Main2Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+//        LayoutInflaterCompat.setFactory2(LayoutInflater.from(this), new LayoutInflater.Factory2() {
+//            @Nullable
+//            @Override
+//            public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+//                AppCompatDelegate delegate = getDelegate();
+//                View view = delegate.createView(parent, name, context, attrs);
+//
+//                if(name.equalsIgnoreCase("com.example.teacher_assistant_test.res.menu.main")
+//                        || name.equalsIgnoreCase("com.example.teacher_assistant_test.view.menu.main")) {
+//                    try {
+//                        if(view instanceof TextView) {
+//                            ((TextView) view).setTextColor(Color.GREEN);
+//                        }
+//                        return view;
+//                    } catch (InflateException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                return view;
+//            }
+//
+//            @Nullable
+//            @Override
+//            public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+//                return null;
+//            }
+//        });
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 

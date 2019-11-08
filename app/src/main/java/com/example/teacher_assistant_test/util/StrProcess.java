@@ -17,7 +17,17 @@ public class StrProcess {
     //使用正则表达式切割字符串resultStr成多条Mark,将多条Mark存入List<Mark>中
     public static List<Mark> StrToMarkList(String resultStr) {
 
-        String str = resultStr.replaceAll("家|加", "+").replaceAll("吧|班", "8").replaceAll("呢", "0");
+        String str = resultStr.replaceAll("家|加", "+").replaceAll("吧|班", "8").replaceAll("呢", "0")
+                .replaceAll("零", "0")
+                .replaceAll("一", "1")
+                .replaceAll("二|两", "2")
+                .replaceAll("三", "3")
+                .replaceAll("四", "4")
+                .replaceAll("五", "5")
+                .replaceAll("六", "9")
+                .replaceAll("七", "7")
+                .replaceAll("八", "8")
+                .replaceAll("九", "9");
         Log.i("StrProcess", "str:"+str);
 
         List<Mark> markList = new ArrayList<>();
