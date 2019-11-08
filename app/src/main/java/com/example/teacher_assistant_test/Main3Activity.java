@@ -546,7 +546,27 @@ public class Main3Activity extends AppCompatActivity {
                 Collections.sort(markList, new Comparator<Mark>() {
                     @Override
                     public int compare(Mark o1, Mark o2) {
-                        return Integer.parseInt(o1.getStu_id()) - Integer.parseInt(o2.getStu_id());
+                        //是“比较o1和o2的大小”。
+                        // 返回“负数”，意味着“o1比o2小”
+                        // 返回“零”，意味着“o1等于o2”
+                        // 返回“正数”，意味着“o1大于o2”
+                        //需要先判断o1.getStu_id()和o2.getStu_id()的String类型能否转成int，否则会造成异常
+                        boolean o1Can = canParseInt(o1.getStu_id());
+                        boolean o2Can = canParseInt(o2.getStu_id());
+
+                        if(o1Can) {
+                            if(o2Can) {
+                                //都有值,升序
+                                return Integer.parseInt(o1.getStu_id()) - Integer.parseInt(o2.getStu_id());
+                            } else {
+                                //升序，定义非法的小
+                                return 1;
+                            }
+                        } else if (o2Can) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
                     }
                 });
                 markAdapter.notifyDataSetChanged();
@@ -558,7 +578,23 @@ public class Main3Activity extends AppCompatActivity {
                 Collections.sort(markList, new Comparator<Mark>() {
                     @Override
                     public int compare(Mark o1, Mark o2) {
-                        return Integer.parseInt(o2.getStu_id()) - Integer.parseInt(o1.getStu_id()) ;
+                        boolean o1Can = canParseInt(o1.getStu_id());
+                        boolean o2Can = canParseInt(o2.getStu_id());
+
+                        if(o1Can) {
+                            if(o2Can) {
+                                //都有值,降序
+                                return Integer.parseInt(o2.getStu_id()) - Integer.parseInt(o1.getStu_id()) ;
+                            } else {
+                                //降序，定义非法的小
+                                return -1;
+                            }
+                        } else if (o2Can) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+
                     }
                 });
                 markAdapter.notifyDataSetChanged();
@@ -688,6 +724,15 @@ public class Main3Activity extends AppCompatActivity {
         cursor.close();
         return count;
     }
+
+    //使用正则表达式判断该字符串是否为数字，第一个\是转义符，\d+表示匹配1个或 //多个连续数字，"+"和"*"类似，"*"表示0个或多个
+    public boolean canParseInt(String string){
+        if(string == null){ //验证是否为空
+            return false;
+        }
+        return string.matches("\\d+");
+    }
+
 
 //    private void showTip(final String str) {
 //        runOnUiThread(new Runnable() {
