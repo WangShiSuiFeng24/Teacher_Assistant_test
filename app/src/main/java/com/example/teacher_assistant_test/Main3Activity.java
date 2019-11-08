@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -29,6 +30,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.MarkAdapter;
@@ -212,6 +214,10 @@ public class Main3Activity extends AppCompatActivity {
                     mIatDialog.setListener(mRecognizerDialogListener);
 
                     mIatDialog.show();
+
+                    TextView txt = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
+                    txt.setText(R.string.tip);//更改内容
+                    txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);//去下划线
                 }
             }
         });
@@ -450,7 +456,7 @@ public class Main3Activity extends AppCompatActivity {
                         //处理结果为null，无有效成绩
                         final AlertDialog alertDialog = GetAlertDialog
                                 .getAlertDialog(Main3Activity.this, "Tip",
-                                        "语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n录音规则请参照:\"10号 90+9分\"",
+                                        "语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照: \"8号 88(+8)分\" 这样效果会更好哦！",
                                         null, "OK", "CANCEL");
                         alertDialog.setCanceledOnTouchOutside(false);
 
@@ -513,7 +519,14 @@ public class Main3Activity extends AppCompatActivity {
 
             @Override
             public void onError(SpeechError error) {
-                Toast.makeText(Main3Activity.this, error.getPlainDescription(true), Toast.LENGTH_SHORT).show();
+                /**
+                 * 过滤掉没有说话的错误码显示
+                 */
+                TextView tv_error = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
+                if (tv_error != null) {
+                    tv_error.setText("您好像没有说话哦...");
+                }
+//                Toast.makeText(Main3Activity.this, error.getPlainDescription(true), Toast.LENGTH_SHORT).show();
             }
         };
 
