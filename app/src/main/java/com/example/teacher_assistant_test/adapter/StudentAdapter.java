@@ -76,6 +76,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                 if(Integer.parseInt(holder.score.getTag().toString()) == position) {
                     //设置Tag解决错乱问题
                     onScoreFillListener.onScoreFill(position, s.toString());
+                    holder.score.setSelection(s.length());
                 }
             }
         });

@@ -129,9 +129,6 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onScoreFill(int position, String score) {
 
-
-
-
                 //编辑成绩监听
                 //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
                 if(position < studentList.size()) {
