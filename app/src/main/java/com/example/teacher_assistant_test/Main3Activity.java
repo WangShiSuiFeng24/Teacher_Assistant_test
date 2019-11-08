@@ -277,126 +277,143 @@ public class Main3Activity extends AppCompatActivity {
             public void onClick(final View v) {
                 //检查markList是否为空
                 if(markList.size() != 0) {
-                    //检查markList中是否有重复stu_id
-                    boolean flag = false;
-                    List<Mark> checkList = new ArrayList<>();
-
-                    //list.contains(o)，系统会对list中的每个元素e调用o.equals(e)方法，假如list中有n个元素，
-                    // 那么会调用n次o.equals(e)，只要有一次o.equals(e)返回了true，那么list.contains(o)返回true，
-                    // 否则返回false。
+                    //检查markList中是否有非法stu_id或非法score
+                    boolean isLegal = true;
                     for(Mark mark : markList) {
-                        if(checkList.contains(mark)) {
-                            Toast.makeText(Main3Activity.this, "有重复学号:"+mark.getStu_id(), Toast.LENGTH_SHORT).show();
-                            flag = true;
+                        if(!canParseInt(mark.getStu_id())) {
+                            isLegal = false;
+                            Toast.makeText(Main3Activity.this, "学号:"+mark.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
                             break;
                         }
-                        checkList.add(mark);
+                        if(!(new CheckExpression().checkExpression(mark.getScore()))) {
+                            isLegal = false;
+                            Toast.makeText(Main3Activity.this, "成绩:"+mark.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
                     }
 
-                    if(!flag) {
-                        final EditText edit = new EditText(Main3Activity.this);
-                        //先弹出一个可编辑的AlertDialog，可以编辑test_name
-                        final AlertDialog alertDialog = GetAlertDialog
-                                .getAlertDialog(Main3Activity.this,"测验名:",
-                                        null, edit, "确定", "取消");
-                        //给edit设置焦点
-                        edit.setFocusable(true);
-                        edit.setFocusableInTouchMode(true);
-                        edit.requestFocus();
-                        //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
-                        Timer timer = new Timer();
-                        timer.schedule(new TimerTask()
-                        {
-                            public void run()
-                            {
-                                InputMethodManager inputManager =(InputMethodManager)edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                inputManager.showSoftInput(edit, 0);
+                    if(isLegal) {
+                        //检查markList中是否有重复stu_id
+                        boolean flag = false;
+                        List<Mark> checkList = new ArrayList<>();
+
+                        //list.contains(o)，系统会对list中的每个元素e调用o.equals(e)方法，假如list中有n个元素，
+                        // 那么会调用n次o.equals(e)，只要有一次o.equals(e)返回了true，那么list.contains(o)返回true，
+                        // 否则返回false。
+                        for(Mark mark : markList) {
+                            if(checkList.contains(mark)) {
+                                Toast.makeText(Main3Activity.this, "有重复学号:"+mark.getStu_id(), Toast.LENGTH_SHORT).show();
+                                flag = true;
+                                break;
                             }
-                        },300);
+                            checkList.add(mark);
+                        }
 
-                        //拿到按钮并判断是否是POSITIVEBUTTON，然后我们自己实现监听
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String input = edit.getText().toString().trim();
-                                //生成唯一id
+                        if(!flag) {
+                            final EditText edit = new EditText(Main3Activity.this);
+                            //先弹出一个可编辑的AlertDialog，可以编辑test_name
+                            final AlertDialog alertDialog = GetAlertDialog
+                                    .getAlertDialog(Main3Activity.this,"测验名:",
+                                            null, edit, "确定", "取消");
+                            //给edit设置焦点
+                            edit.setFocusable(true);
+                            edit.setFocusableInTouchMode(true);
+                            edit.requestFocus();
+                            //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
+                            Timer timer = new Timer();
+                            timer.schedule(new TimerTask()
+                            {
+                                public void run()
+                                {
+                                    InputMethodManager inputManager =(InputMethodManager)edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    inputManager.showSoftInput(edit, 0);
+                                }
+                            },300);
+
+                            //拿到按钮并判断是否是POSITIVEBUTTON，然后我们自己实现监听
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String input = edit.getText().toString().trim();
+                                    //生成唯一id
 //                                final long unique_test_id = new Date().getTime();//太长
-                                //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
-                                final long unique_test_id = getCount() + 1;
+                                    //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
+                                    final long unique_test_id = getCount() + 1;
 
-                                Log.i("Main3Activity", "unique_test_id:"+unique_test_id);
-                                if (input.equals("")) {
-                                    Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
-                                    return;
-                                } else {
+                                    Log.i("Main3Activity", "unique_test_id:"+unique_test_id);
+                                    if (input.equals("")) {
+                                        Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
+                                        return;
+                                    } else {
 //                            String editText = edit.getText().toString().trim();
 
-                                    //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
-                                    final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
-                                    //查询数据库中是否存在与将要插入的preMark相同的test_name,若相同，则提示用户test_name已存在重新输入，否则直接新建插入全部数据
-                                    String sqlSelect = "SELECT test_name FROM StudentTest";
-                                    Cursor cursor = db.rawQuery(sqlSelect, new String[]{});
+                                        //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
+                                        final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
+                                        //查询数据库中是否存在与将要插入的preMark相同的test_name,若相同，则提示用户test_name已存在重新输入，否则直接新建插入全部数据
+                                        String sqlSelect = "SELECT test_name FROM StudentTest";
+                                        Cursor cursor = db.rawQuery(sqlSelect, new String[]{});
 
-                                    if(cursor.isLast()) {
-                                        //StudentTest表为空，第一次更新
-                                        new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, input);
-                                        Toast.makeText(Main3Activity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
-                                    }
+                                        if(cursor.isLast()) {
+                                            //StudentTest表为空，第一次更新
+                                            new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, input);
+                                            Toast.makeText(Main3Activity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
+                                        }
 
-                                    else {
-                                        //StudentTest表不为空
+                                        else {
+                                            //StudentTest表不为空
 //                                //flag初始设为false,代表StudentTest表中有没相同的test_name
 //                                boolean flag = false;
-                                        while(cursor.moveToNext()) {
-                                            String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
+                                            while(cursor.moveToNext()) {
+                                                String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
 
-                                            if(input.equals(test_name)) {
-                                                //StudentTest表中已有相同test_name,提示用户重新输入
-                                                Toast.makeText(Main3Activity.this, input+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
+                                                if(input.equals(test_name)) {
+                                                    //StudentTest表中已有相同test_name,提示用户重新输入
+                                                    Toast.makeText(Main3Activity.this, input+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
 //                                        flag = true;
-                                                return;
+                                                    return;
+                                                }
+                                            }
+
+                                            //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
+
+                                            //先把test_id和test_name插入到StudentTest表中
+                                            new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, input);
+                                            Log.i("Main3Activity", "向StudentTest表中插入unique_test_id:"+unique_test_id+",input:"+input+"成功");
+
+                                            //再向StudentMark表中插入当前页面数据
+                                            Iterator<Mark> iterator = markList.iterator();
+                                            while(iterator.hasNext()) {
+                                                //先用preMark保存当前页面mark条目
+                                                final Mark preMark = iterator.next();
+
+                                                String stu_id = preMark.getStu_id();
+//                                    long test_id = unique_test_id;
+                                                String score = preMark.getScore();
+                                                int total_score = preMark.getTotal_score();
+                                                new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
+                                                Toast.makeText(Main3Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                                Log.i("Main3Activity", "向StudentMark表中插入stu_id:"+stu_id
+                                                        +"\r\nunique_test_id:"+unique_test_id
+                                                        +"\r\nscore:"+score
+                                                        +"\r\ntotal_score"+total_score+"成功");
+
                                             }
                                         }
-
-                                        //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
-
-                                        //先把test_id和test_name插入到StudentTest表中
-                                        new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, input);
-                                        Log.i("Main3Activity", "向StudentTest表中插入unique_test_id:"+unique_test_id+",input:"+input+"成功");
-
-                                        //再向StudentMark表中插入当前页面数据
-                                        Iterator<Mark> iterator = markList.iterator();
-                                        while(iterator.hasNext()) {
-                                            //先用preMark保存当前页面mark条目
-                                            final Mark preMark = iterator.next();
-
-                                            String stu_id = preMark.getStu_id();
-//                                    long test_id = unique_test_id;
-                                            String score = preMark.getScore();
-                                            int total_score = preMark.getTotal_score();
-                                            new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
-                                            Toast.makeText(Main3Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                                            Log.i("Main3Activity", "向StudentMark表中插入stu_id:"+stu_id
-                                                    +"\r\nunique_test_id:"+unique_test_id
-                                                    +"\r\nscore:"+score
-                                                    +"\r\ntotal_score"+total_score+"成功");
-
-                                        }
+                                        cursor.close();
+                                        //让AlertDialog消失
+                                        alertDialog.cancel();
                                     }
-                                    cursor.close();
-                                    //让AlertDialog消失
-                                    alertDialog.cancel();
+                                    Intent intent = new Intent(Main3Activity.this, Main2Activity.class);
+                                    //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
+                                    long long_to_int_test_id = (int) unique_test_id;
+                                    intent.putExtra("test_id", long_to_int_test_id);
+                                    Log.i("Main3Activity", "long转int的unique_test_id:"+long_to_int_test_id);
+                                    intent.putExtra("test_name", input);
+                                    startActivity(intent);
+                                    finish();
                                 }
-                                Intent intent = new Intent(Main3Activity.this, Main2Activity.class);
-                                //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
-                                long long_to_int_test_id = (int) unique_test_id;
-                                intent.putExtra("test_id", long_to_int_test_id);
-                                Log.i("Main3Activity", "long转int的unique_test_id:"+long_to_int_test_id);
-                                intent.putExtra("test_name", input);
-                                startActivity(intent);
-                                finish();
-                            }
-                        });
+                            });
+                        }
                     }
 
                 } else {
