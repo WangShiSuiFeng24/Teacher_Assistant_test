@@ -394,6 +394,7 @@ public class Main3Activity extends AppCompatActivity {
                                 Log.i("Main3Activity", "long转int的unique_test_id:"+long_to_int_test_id);
                                 intent.putExtra("test_name", input);
                                 startActivity(intent);
+                                finish();
                             }
                         });
                     }
