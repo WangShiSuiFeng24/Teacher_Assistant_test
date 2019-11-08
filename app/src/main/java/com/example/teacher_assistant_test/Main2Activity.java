@@ -207,32 +207,44 @@ public class Main2Activity extends AppCompatActivity {
                 //所以将studentList的数据更新到数据库即可
                 //因为只修改了score，所以只更新score
                 //score只在StudentMark表中。。只更新StudentMark表中的score
-                SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
-                ContentValues values = new ContentValues();
-                Iterator<Student> studentIterator = studentList.iterator();
-                while(studentIterator.hasNext()) {
-                    Student student = studentIterator.next();
-                    int stu_id = student.getStu_id();
-                    values.put("score", String.valueOf(student.getScore()));
-                    values.put("total_score", student.getTotal_score());
-                    Log.i("Main2Activity", "score:"+student.getScore()+" total_score:"+student.getTotal_score());
-                    //该法不会将score算术表达式自动计算成结果更新
-                    db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
-                            new String[]{""+test_id+"", ""+stu_id+""});
-                    Toast.makeText(Main2Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
 
-                    //测试
+                //检查studentList中是否有非法score
+                boolean isLegal = true;
+                for(Student student : studentList) {
+                    if(!new CheckExpression().checkExpression(student.getScore())) {
+                        Toast.makeText(Main2Activity.this, "成绩:"+student.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                        isLegal = false;
+                    }
+                }
+
+                if(isLegal) {
+                    SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
+                    ContentValues values = new ContentValues();
+                    Iterator<Student> studentIterator = studentList.iterator();
+                    while(studentIterator.hasNext()) {
+                        Student student = studentIterator.next();
+                        int stu_id = student.getStu_id();
+                        values.put("score", String.valueOf(student.getScore()));
+                        values.put("total_score", student.getTotal_score());
+                        Log.i("Main2Activity", "score:"+student.getScore()+" total_score:"+student.getTotal_score());
+                        //该法不会将score算术表达式自动计算成结果更新
+                        db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
+                                new String[]{""+test_id+"", ""+stu_id+""});
+                        Toast.makeText(Main2Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
+
+                        //测试
 //                    int i = db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
 //                            new String[]{"1051306716", "2"});
 //                    Log.i("Main2Activity", "update:"+i);
 
-                    //该法可行，但是会将score算术表达式自动计算成结果更新
+                        //该法可行，但是会将score算术表达式自动计算成结果更新
 //                    String sqlUpdate = "UPDATE StudentMark SET score ="+student.getScore()+", total_score ="+student.getTotal_score()
 //                            +" WHERE test_id = "+test_id+" AND stu_id = "+stu_id+"";
 //                    db.execSQL(sqlUpdate);
-                    Log.i("Main2Activity", "test_id:"+test_id+" stu_id:"+stu_id);
+                        Log.i("Main2Activity", "test_id:"+test_id+" stu_id:"+stu_id);
+                    }
+                    db.close();
                 }
-                db.close();
                 break;
         }
         return super.onOptionsItemSelected(item);
