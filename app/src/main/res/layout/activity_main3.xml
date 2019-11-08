@@ -27,6 +27,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
+                    android:textStyle="bold"
                     android:text="学号" />
 
                 <ImageView
@@ -58,6 +59,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
+                    android:textStyle="bold"
                     android:text="成绩" />
 
                 <ImageView
@@ -80,6 +82,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:layout_weight="1"
+            android:textStyle="bold"
             android:text="总成绩" />
 
     </LinearLayout>

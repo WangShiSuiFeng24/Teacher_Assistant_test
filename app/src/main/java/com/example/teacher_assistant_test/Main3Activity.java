@@ -297,7 +297,7 @@ public class Main3Activity extends AppCompatActivity {
                         final EditText edit = new EditText(Main3Activity.this);
                         //先弹出一个可编辑的AlertDialog，可以编辑test_name
                         final AlertDialog alertDialog = GetAlertDialog
-                                .getAlertDialog(Main3Activity.this,"Test_Name:",
+                                .getAlertDialog(Main3Activity.this,"测验名:",
                                         null, edit, "确定", "取消");
                         //给edit设置焦点
                         edit.setFocusable(true);
