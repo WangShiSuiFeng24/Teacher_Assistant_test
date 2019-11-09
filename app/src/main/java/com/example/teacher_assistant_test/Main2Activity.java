@@ -241,6 +241,7 @@ public class Main2Activity extends AppCompatActivity {
                         Log.i("Main2Activity", "test_id:"+test_id+" stu_id:"+stu_id);
                     }
                     db.close();
+                    finish();
                 }
                 break;
         }
