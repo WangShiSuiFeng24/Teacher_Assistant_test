@@ -209,7 +209,7 @@ public class Main3Activity extends AppCompatActivity {
 
 //                if(mIatDialog!=null)
                     mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
-                    mIatDialog.setParameter("dwa", "wpgs");
+                    ;mIatDialog.setParameter("dwa", "wpgs");
 
                     mIatDialog.setListener(mRecognizerDialogListener);
 
@@ -676,7 +676,7 @@ public class Main3Activity extends AppCompatActivity {
             sn = resultJson.optString("sn");
             pgs = resultJson.optString("pgs");
             rg = resultJson.optString("rg");
-            Log.d(this.getClass().getName(), "sn:"+sn+"\r\npgs:"+pgs+"\r\ng:"+rg);
+            Log.d(this.getClass().getName(), "sn:"+sn+"\r\npgs:"+pgs+"\r\nrg:"+rg);
         } catch (JSONException e) {
             e.printStackTrace();
             return "";
