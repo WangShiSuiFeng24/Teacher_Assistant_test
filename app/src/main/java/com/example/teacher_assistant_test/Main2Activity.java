@@ -365,9 +365,32 @@ public class Main2Activity extends AppCompatActivity {
                 //因为只修改了score，所以只更新score
                 //score只在StudentMark表中。。只更新StudentMark表中的score
 
-                //检查studentList中是否有非法score
+                //检查studentList中是否有非法score   //增加检查studentList中是否有非法id
+                SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
                 boolean isLegal = true;
                 for(Student student : studentList) {
+//                    int stu_id = student.getStu_id();
+//                    Cursor cursor1 = db.query("Student", new String[] {"stu_id"}, "stu_id = ?",
+//                            new String[] {""+stu_id+""}, null, null, null);
+//
+//                    if(cursor1.getCount() == 0) {
+//                        AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this, "Alarm",
+//                                "数据库中不存在学号:" + stu_id +"的同学,是否添加该同学", null, "是", "否");
+//                        alertDialog.setCancelable(false);
+//                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//
+//                            }
+//                        });
+//                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                            }
+//                        });
+//                        isLegal = false;
+//                    }
+
                     if(!new CheckExpression().checkExpression(student.getScore())) {
                         Toast.makeText(Main2Activity.this, "成绩:"+student.getScore()+" 非法", Toast.LENGTH_SHORT).show();
                         isLegal = false;
@@ -375,7 +398,6 @@ public class Main2Activity extends AppCompatActivity {
                 }
 
                 if(isLegal) {
-                    SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
 
                     //更新相同学号stu_id的score和total_score
                     ContentValues values = new ContentValues();
@@ -409,10 +431,10 @@ public class Main2Activity extends AppCompatActivity {
                     for(Student student : studentList) {
                         int stu_id = student.getStu_id();
 
-                        Cursor cursor = db.query("StudentMark", new String[] {"stu_id, test_id"}, "stu_id = ? AND test_id = ?",
+                        Cursor cursor2 = db.query("StudentMark", new String[] {"stu_id, test_id"}, "stu_id = ? AND test_id = ?",
                                 new String[]{""+stu_id+"", ""+test_id+""}, null, null, null);
 
-                        if(cursor.getCount() == 0) {
+                        if(cursor2.getCount() == 0) {
                             values.clear();
                             values.put("stu_id", student.getStu_id());
                             values.put("test_id", test_id);
@@ -423,7 +445,7 @@ public class Main2Activity extends AppCompatActivity {
                         } else {
                             Log.d(Main2Activity.this.getLocalClassName(), "StudentMark表中已存在学号：" + stu_id + " 测试号：" + test_id);
                         }
-                        cursor.close();
+                        cursor2.close();
                     }
 
                     db.close();
