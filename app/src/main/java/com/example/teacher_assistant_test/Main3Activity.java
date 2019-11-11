@@ -39,6 +39,7 @@ import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
+import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -97,6 +98,8 @@ public class Main3Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+
+        ImmersiveStatusBar.setImmersiveStatusBar(this);
 
         TitleBarView titleBarView = findViewById(R.id.title3);
         titleBarView.setTitleSize(20);

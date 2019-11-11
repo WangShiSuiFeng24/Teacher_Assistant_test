@@ -45,6 +45,7 @@ import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.ExcelUtils;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
+import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
 import com.iflytek.cloud.ErrorCode;
@@ -102,6 +103,8 @@ public class Main2Activity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        ImmersiveStatusBar.setImmersiveStatusBar(this);
 
         isIdSelectSortPressed = false;
         id_select_sort = findViewById(R.id.id_select_sort);
