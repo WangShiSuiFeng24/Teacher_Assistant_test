@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -41,6 +42,7 @@ import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Student;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
+import com.example.teacher_assistant_test.util.ExcelUtils;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
@@ -57,6 +59,7 @@ import com.iflytek.cloud.ui.RecognizerDialogListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -88,6 +91,12 @@ public class Main2Activity extends AppCompatActivity {
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
 
     private Button fab;
+
+    //导出Excel
+    private ArrayList<ArrayList<String>> recordList;
+    private static String[] title = {"学号", "姓名", "性别", "成绩", "总成绩"};
+    private File file;
+    private String fileName;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -449,6 +458,7 @@ public class Main2Activity extends AppCompatActivity {
                     }
 
                     db.close();
+                    exportSheet();
                     finish();
                 }
                 break;
@@ -594,5 +604,55 @@ public class Main2Activity extends AppCompatActivity {
         intent.putExtra("test_id", test_id);
         intent.putExtra("test_name",test_name);
         context.startActivity(intent);
+    }
+
+
+    /**
+     * 导出Excel
+     * @param
+     */
+    private void exportSheet() {
+        file = new File(getSDPath() + "/Record");
+        makeDir(file);
+        ExcelUtils.initExcel(file.toString() + "/成绩表.xls", title);
+        fileName = getSDPath() + "/Record/成绩表.xls";
+        ExcelUtils.writeObjListToExcel(getRecordData(), fileName, Main2Activity.this);
+    }
+
+
+    /**
+     * 将数据集合 转化为ArrayList<ArrayList<String>>
+     * @return
+     */
+    private ArrayList<ArrayList<String>> getRecordData() {
+        recordList = new ArrayList<>();
+        for(int i=0; i<studentList.size(); i++) {
+            Student student = studentList.get(i);
+            ArrayList<String> beanList = new ArrayList<>();
+            beanList.add(String.valueOf(student.getStu_id()));
+            beanList.add(student.getStu_name());
+            beanList.add(student.getStu_gender());
+            beanList.add(student.getScore());
+            beanList.add(String.valueOf(student.getTotal_score()));
+            recordList.add(beanList);
+        }
+        return recordList;
+    }
+
+    private String getSDPath() {
+        File sdDir = null;
+        boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+        if(sdCardExist) {
+            sdDir = Environment.getExternalStorageDirectory();
+        }
+        String dir = sdDir.toString();
+        return dir;
+    }
+
+    private void makeDir(File dir) {
+        if(!dir.getParentFile().exists()) {
+            makeDir(dir.getParentFile());
+        }
+        dir.mkdir();
     }
 }
