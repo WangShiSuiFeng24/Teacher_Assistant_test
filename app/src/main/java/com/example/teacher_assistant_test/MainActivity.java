@@ -85,12 +85,14 @@ public class MainActivity extends AppCompatActivity {
         titlebarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
-                Toast.makeText(MainActivity.this,"左边", Toast.LENGTH_SHORT).show();
+                //不作处理
+//                Toast.makeText(MainActivity.this,"左边", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void rightClick() {
-                Toast.makeText(MainActivity.this,"右边",Toast.LENGTH_SHORT).show();
+                //不作处理
+//                Toast.makeText(MainActivity.this,"右边",Toast.LENGTH_SHORT).show();
             }
         });
 
