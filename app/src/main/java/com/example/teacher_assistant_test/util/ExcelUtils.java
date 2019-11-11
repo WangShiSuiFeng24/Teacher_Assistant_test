@@ -70,6 +70,11 @@ public class ExcelUtils {
         }
     }
 
+    /**
+     * 初始化Excel
+     * @param fileName
+     * @param colName
+     */
     public static void initExcel(String fileName, String[] colName) {
         format();
         WritableWorkbook workbook = null;
@@ -100,6 +105,7 @@ public class ExcelUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> void writeObjListToExcel(List<T> objList, String fileName, Context c) {
         if(objList != null && objList.size() > 0) {
             WritableWorkbook writebook = null;
@@ -114,7 +120,7 @@ public class ExcelUtils {
                 writebook = Workbook.createWorkbook(new File(fileName), workbook);
                 WritableSheet sheet = writebook.getSheet(0);
 
-
+                //i:列（Column)，j:行(Row)。
                 for(int j=0; j<objList.size(); j++) {
                     ArrayList<String> list = (ArrayList<String>) objList.get(j);
                     for(int i=0; i<list.size(); i++) {

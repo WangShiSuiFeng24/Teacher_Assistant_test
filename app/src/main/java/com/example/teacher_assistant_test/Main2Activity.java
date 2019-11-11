@@ -617,16 +617,16 @@ public class Main2Activity extends AppCompatActivity {
 //        ExcelUtils.initExcel(file.toString() + "/成绩表.xls", title);
 //        fileName = getSDPath() + "/Record/成绩表.xls";
 
-        ExcelUtils.initExcel(file.toString() + "/" + test_name + "成绩表.xls", title);
+        ExcelUtils.initExcel(file.toString() + "/" + test_name + "成绩表.xls", title);//初始化表第一行
         fileName = getSDPath() + "/Record/" + test_name + "成绩表.xls";
 
-        ExcelUtils.writeObjListToExcel(getRecordData(), fileName, Main2Activity.this);
+        ExcelUtils.writeObjListToExcel(getRecordData(), fileName, Main2Activity.this);//将ObjList写入Excel
     }
 
 
     /**
      * 将数据集合 转化为ArrayList<ArrayList<String>>
-     * @return
+     * @return ArrayList<ArrayList<ArrayList>>
      */
     private ArrayList<ArrayList<String>> getRecordData() {
         recordList = new ArrayList<>();
@@ -643,14 +643,19 @@ public class Main2Activity extends AppCompatActivity {
         return recordList;
     }
 
+    /**
+     * 获取sd卡路径
+     * @return
+     */
     private String getSDPath() {
         File sdDir = null;
-        boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+        //getExternalStorageState(),返回File 获取外部内存当前状态
+        boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);//判断sd卡是否存在，MEDIA_MOUNTED，返回getExternalStorageState() ，表明对象是否存在并具有读/写权限
         if(sdCardExist) {
-            sdDir = Environment.getExternalStorageDirectory();
+            sdDir = Environment.getExternalStorageDirectory();//获取根目录
         }
-        String dir = sdDir.toString();
-        return dir;
+
+        return sdDir.toString();
     }
 
     private void makeDir(File dir) {
