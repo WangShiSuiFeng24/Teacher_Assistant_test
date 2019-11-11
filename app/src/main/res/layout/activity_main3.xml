@@ -115,14 +115,26 @@
                 android:fastScrollEnabled="false">
             </androidx.recyclerview.widget.RecyclerView>
 
-            <Button
+            <ImageView
                 android:id="@+id/fab"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/ic_record" />
+                android:background="@drawable/round_solid_selector"
+                android:tint="@color/colorAccent"
+                android:src="@android:drawable/ic_btn_speak_now" />
+
+<!--            <Button-->
+<!--                android:id="@+id/fab"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_alignParentBottom="true"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:backgroundTint="@color/colorAccent"-->
+<!--                android:background="@android:drawable/ic_btn_speak_now" />-->
 
             <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
             <!--            android:id="@+id/fab"-->

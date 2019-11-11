@@ -27,14 +27,26 @@
             android:layout_height="match_parent">
         </androidx.recyclerview.widget.RecyclerView>
 
-        <Button
+        <ImageView
             android:id="@+id/fab"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_centerInParent="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/ic_record" />
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_solid_selector"
+            android:tint="@color/colorAccent"
+            android:src="@android:drawable/ic_btn_speak_now" />
+
+<!--        <Button-->
+<!--            android:id="@+id/fab"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_marginBottom="30dp"-->
+<!--            android:backgroundTint="@color/colorAccent"-->
+<!--            android:background="@android:drawable/ic_btn_speak_now" />-->
 
     </RelativeLayout>
 

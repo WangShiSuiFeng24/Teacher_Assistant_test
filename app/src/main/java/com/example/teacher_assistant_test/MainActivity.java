@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Test> testList = new ArrayList<>();
     TestAdapter testAdapter;
 
-    private Button fab;
+    private ImageView fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

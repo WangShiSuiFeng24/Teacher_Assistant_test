@@ -90,7 +90,7 @@ public class Main2Activity extends AppCompatActivity {
     private RecognizerDialogListener mRecognizerDialogListener;
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
 
-    private Button fab;
+    private ImageView fab;
 
     //导出Excel
     private ArrayList<ArrayList<String>> recordList;

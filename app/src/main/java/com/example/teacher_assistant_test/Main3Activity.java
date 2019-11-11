@@ -84,7 +84,7 @@ public class Main3Activity extends AppCompatActivity {
     private InitListener mInitListener;
     private RecognizerDialogListener mRecognizerDialogListener;
 //    private FloatingActionButton fab;
-    private Button fab;
+    private ImageView fab;
 
     private MarkAdapter markAdapter;
 
