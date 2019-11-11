@@ -14,7 +14,9 @@
         app:centerTextColor="#FFF"
         app:leftDrawable="@drawable/ic_back"
         app:leftTextColor="#FFF"
-        app:leftText="返回" />
+        app:leftText="返回"
+        app:rightTextColor="#FFF"
+        app:rightText="保存"/>
 
 
     <LinearLayout
