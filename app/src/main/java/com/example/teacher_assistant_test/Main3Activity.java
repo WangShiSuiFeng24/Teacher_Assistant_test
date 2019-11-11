@@ -317,6 +317,8 @@ public class Main3Activity extends AppCompatActivity {
 
                         if(!flag) {
                             final EditText edit = new EditText(Main3Activity.this);
+                            //设置EditText的可视最大行数。
+                            edit.setMaxLines(1);
                             //先弹出一个可编辑的AlertDialog，可以编辑test_name
                             final AlertDialog alertDialog = GetAlertDialog
                                     .getAlertDialog(Main3Activity.this,"测验名:",
