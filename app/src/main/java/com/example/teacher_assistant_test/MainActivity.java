@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -17,13 +18,16 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.TestAdapter;
 import com.example.teacher_assistant_test.bean.Test;
@@ -69,6 +73,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 禁用横屏
         setContentView(R.layout.activity_main);
+
+//        //隐藏标题栏
+//        if(getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
+
+        TitleBarView titlebarView= findViewById(R.id.title);
+        titlebarView.setTitleSize(20);
+        titlebarView.setTitle("园丁小助手");
+        titlebarView.setOnViewClick(new TitleBarView.onViewClick() {
+            @Override
+            public void leftClick() {
+                Toast.makeText(MainActivity.this,"左边", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void rightClick() {
+                Toast.makeText(MainActivity.this,"右边",Toast.LENGTH_SHORT).show();
+            }
+        });
 
 //        initTest();
         importSheet();

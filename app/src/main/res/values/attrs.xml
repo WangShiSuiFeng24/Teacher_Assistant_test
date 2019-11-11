@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TitlebarView">
+        <attr name="leftText" format="string"/>
+        <attr name="leftTextColor" format="color"/>
+        <attr name="centerTextColor" format="color"/>
+        <attr name="centerTitle" format="string"/>
+        <attr name="rightTextColor" format="color"/>
+        <attr name="rightText" format="string"/>
+        <attr name="leftDrawable" format="reference"/>
+        <attr name="rightDrawable" format="reference"/>
+    </declare-styleable>
+</resources>

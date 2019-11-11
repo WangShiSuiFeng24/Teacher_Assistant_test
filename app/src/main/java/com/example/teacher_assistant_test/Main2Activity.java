@@ -100,36 +100,6 @@ public class Main2Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-
-//        LayoutInflaterCompat.setFactory2(LayoutInflater.from(this), new LayoutInflater.Factory2() {
-//            @Nullable
-//            @Override
-//            public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-//                AppCompatDelegate delegate = getDelegate();
-//                View view = delegate.createView(parent, name, context, attrs);
-//
-//                if(name.equalsIgnoreCase("com.example.teacher_assistant_test.res.menu.main")
-//                        || name.equalsIgnoreCase("com.example.teacher_assistant_test.view.menu.main")) {
-//                    try {
-//                        if(view instanceof TextView) {
-//                            ((TextView) view).setTextColor(Color.GREEN);
-//                        }
-//                        return view;
-//                    } catch (InflateException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                return view;
-//            }
-//
-//            @Nullable
-//            @Override
-//            public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-//                return null;
-//            }
-//        });
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
@@ -142,6 +112,21 @@ public class Main2Activity extends AppCompatActivity {
         test_id = intent.getLongExtra("test_id", 0);
         test_name = intent.getStringExtra("test_name");
         Log.i("Main2Activity", "test_id:"+test_id+" test_name:"+test_name);
+
+        TitleBarView titleBarView = findViewById(R.id.title2);
+        titleBarView.setTitleSize(20);
+        titleBarView.setTitle(test_name);
+        titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
+            @Override
+            public void leftClick() {
+                finish();
+            }
+
+            @Override
+            public void rightClick() {
+
+            }
+        });
 
         initStudent();
 

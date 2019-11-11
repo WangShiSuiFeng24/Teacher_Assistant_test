@@ -98,6 +98,22 @@ public class Main3Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
 
+        TitleBarView titleBarView = findViewById(R.id.title3);
+        titleBarView.setTitleSize(20);
+        titleBarView.setTitle("园丁小助手");
+        titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
+            @Override
+            public void leftClick() {
+                finish();
+            }
+
+            @Override
+            public void rightClick() {
+                //不处理
+            }
+        });
+
+
         isIdSortPressed = false;
         id_sort = findViewById(R.id.id_sort);
         isScoreSortPressed = false;
