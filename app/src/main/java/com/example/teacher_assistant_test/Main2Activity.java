@@ -588,4 +588,11 @@ public class Main2Activity extends AppCompatActivity {
 
         return resultBuffer.toString();
     }
+
+    public static void actionStart(Context context, Long test_id, String test_name) {
+        Intent intent = new Intent(context, Main2Activity.class);
+        intent.putExtra("test_id", test_id);
+        intent.putExtra("test_name",test_name);
+        context.startActivity(intent);
+    }
 }

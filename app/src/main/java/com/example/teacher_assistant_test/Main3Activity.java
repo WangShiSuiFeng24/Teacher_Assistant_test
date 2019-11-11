@@ -409,13 +409,18 @@ public class Main3Activity extends AppCompatActivity {
                                         //让AlertDialog消失
                                         alertDialog.cancel();
                                     }
-                                    Intent intent = new Intent(Main3Activity.this, Main2Activity.class);
+
                                     //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
                                     long long_to_int_test_id = (int) unique_test_id;
-                                    intent.putExtra("test_id", long_to_int_test_id);
                                     Log.i("Main3Activity", "long转int的unique_test_id:"+long_to_int_test_id);
-                                    intent.putExtra("test_name", input);
-                                    startActivity(intent);
+
+                                    Main2Activity.actionStart(Main3Activity.this, long_to_int_test_id, input);
+
+//                                    Intent intent = new Intent(Main3Activity.this, Main2Activity.class);
+//                                    intent.putExtra("test_id", long_to_int_test_id);
+//                                    intent.putExtra("test_name", input);
+//                                    startActivity(intent);
+
                                     finish();
                                 }
                             });
@@ -761,6 +766,11 @@ public class Main3Activity extends AppCompatActivity {
             return false;
         }
         return string.matches("\\d+");
+    }
+
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, Main3Activity.class);
+        context.startActivity(intent);
     }
 
 

@@ -92,12 +92,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 //单击则查询
-                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
                 Test test = testList.get(position);
-                Log.i("MainActivity", "test_id:"+test.getTest_id());
-                intent.putExtra("test_id", test.getTest_id());
-                intent.putExtra("test_name", test.getTest_name());
-                startActivity(intent);
+                Main2Activity.actionStart(MainActivity.this, test.getTest_id(), test.getTest_name());
+
+//                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+//                Test test = testList.get(position);
+//                Log.i("MainActivity", "test_id:"+test.getTest_id());
+//                intent.putExtra("test_id", test.getTest_id());
+//                intent.putExtra("test_name", test.getTest_name());
+//                startActivity(intent);
             }
 
             @Override
@@ -148,8 +151,10 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Permission has already been granted
                     //跳转到语音识别录成绩界面
-                    Intent intent = new Intent(MainActivity.this, Main3Activity.class);
-                    startActivity(intent);
+                    Main3Activity.actionStart(MainActivity.this);
+
+//                    Intent intent = new Intent(MainActivity.this, Main3Activity.class);
+//                    startActivity(intent);
                 }
             }
         });
