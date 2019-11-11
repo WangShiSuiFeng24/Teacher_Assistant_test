@@ -82,7 +82,7 @@ public class ExcelUtils {
             WritableSheet sheet = workbook.createSheet("成绩表",0);
             sheet.addCell((WritableCell) new Label(0, 0, fileName, arial14format));
             for(int col=0; col<colName.length; col++) {
-                sheet.addCell(new Label(col, 0, colName[col], arial10format));
+                sheet.addCell(new Label(col, 0, colName[col], arial10format));//先是列，后是行
             }
             sheet.setRowView(0, 340);//设置行高
 

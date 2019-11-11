@@ -614,8 +614,12 @@ public class Main2Activity extends AppCompatActivity {
     private void exportSheet() {
         file = new File(getSDPath() + "/Record");
         makeDir(file);
-        ExcelUtils.initExcel(file.toString() + "/成绩表.xls", title);
-        fileName = getSDPath() + "/Record/成绩表.xls";
+//        ExcelUtils.initExcel(file.toString() + "/成绩表.xls", title);
+//        fileName = getSDPath() + "/Record/成绩表.xls";
+
+        ExcelUtils.initExcel(file.toString() + "/" + test_name + "成绩表.xls", title);
+        fileName = getSDPath() + "/Record/" + test_name + "成绩表.xls";
+
         ExcelUtils.writeObjListToExcel(getRecordData(), fileName, Main2Activity.this);
     }
 
