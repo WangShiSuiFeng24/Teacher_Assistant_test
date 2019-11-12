@@ -103,7 +103,7 @@ public class Main3Activity extends AppCompatActivity {
 
         TitleBarView titleBarView = findViewById(R.id.title3);
         titleBarView.setTitleSize(20);
-        titleBarView.setTitle("园丁小助手");
+        titleBarView.setTitle("园丁小帮手");
         titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
