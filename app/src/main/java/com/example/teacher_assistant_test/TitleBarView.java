@@ -137,6 +137,12 @@ public class TitleBarView extends RelativeLayout {
         }
     }
 
+    public void setRightTextColor(int color) {
+        if(tv_right != null) {
+            tv_right.setTextColor(color);
+        }
+    }
+
     //设置左图标
     public void setLeftDrawable(int res) {
         if (iv_left != null) {

@@ -93,6 +93,8 @@ public class Main2Activity extends AppCompatActivity {
 
     private ImageView fab;
 
+    private boolean isUpdate = false;
+
     //导出Excel
     private ArrayList<ArrayList<String>> recordList;
     private static String[] title = {"学号", "姓名", "性别", "成绩", "总成绩"};
@@ -116,9 +118,10 @@ public class Main2Activity extends AppCompatActivity {
         test_name = intent.getStringExtra("test_name");
         Log.i("Main2Activity", "test_id:"+test_id+" test_name:"+test_name);
 
-        TitleBarView titleBarView = findViewById(R.id.title2);
+        final TitleBarView titleBarView = findViewById(R.id.title2);
         titleBarView.setTitleSize(20);
         titleBarView.setTitle(test_name);
+        titleBarView.setRightTextColor(Color.parseColor("#808080"));
         titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
@@ -127,16 +130,19 @@ public class Main2Activity extends AppCompatActivity {
 
             @Override
             public void rightClick() {
-                //保存当前页面修改数据(只修改了score)到数据库
-                //EditText(score)被实时监听，其编辑的数据实时更新在studentList中
-                //所以将studentList的数据更新到数据库即可
-                //因为只修改了score，所以只更新score
-                //score只在StudentMark表中。。只更新StudentMark表中的score
+                if(!isUpdate) {
+                    //数据没有修改或增添，点击无效，不处理
+                } else {
+                    //保存当前页面修改数据(只修改了score)到数据库
+                    //EditText(score)被实时监听，其编辑的数据实时更新在studentList中
+                    //所以将studentList的数据更新到数据库即可
+                    //因为只修改了score，所以只更新score
+                    //score只在StudentMark表中。。只更新StudentMark表中的score
 
-                //检查studentList中是否有非法score   //增加检查studentList中是否有非法id
-                SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
-                boolean isLegal = true;
-                for(Student student : studentList) {
+                    //检查studentList中是否有非法score   //增加检查studentList中是否有非法id
+                    SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
+                    boolean isLegal = true;
+                    for(Student student : studentList) {
 //                    int stu_id = student.getStu_id();
 //                    Cursor cursor1 = db.query("Student", new String[] {"stu_id"}, "stu_id = ?",
 //                            new String[] {""+stu_id+""}, null, null, null);
@@ -159,66 +165,67 @@ public class Main2Activity extends AppCompatActivity {
 //                        isLegal = false;
 //                    }
 
-                    if(!new CheckExpression().checkExpression(student.getScore())) {
-                        Toast.makeText(Main2Activity.this, "成绩:"+student.getScore()+" 非法", Toast.LENGTH_SHORT).show();
-                        isLegal = false;
+                        if(!new CheckExpression().checkExpression(student.getScore())) {
+                            Toast.makeText(Main2Activity.this, "成绩:"+student.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                            isLegal = false;
+                        }
                     }
-                }
 
-                if(isLegal) {
+                    if(isLegal) {
 
-                    //更新相同学号stu_id的score和total_score
-                    ContentValues values = new ContentValues();
-                    Iterator<Student> studentIterator = studentList.iterator();
-                    while(studentIterator.hasNext()) {
-                        Student student = studentIterator.next();
-                        int stu_id = student.getStu_id();
-                        values.put("score", String.valueOf(student.getScore()));
-                        values.put("total_score", student.getTotal_score());
-                        Log.i("Main2Activity", "score:"+student.getScore()+" total_score:"+student.getTotal_score());
-                        //该法不会将score算术表达式自动计算成结果更新
-                        db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
-                                new String[]{""+test_id+"", ""+stu_id+""});
-                        Toast.makeText(Main2Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                        //更新相同学号stu_id的score和total_score
+                        ContentValues values = new ContentValues();
+                        Iterator<Student> studentIterator = studentList.iterator();
+                        while(studentIterator.hasNext()) {
+                            Student student = studentIterator.next();
+                            int stu_id = student.getStu_id();
+                            values.put("score", String.valueOf(student.getScore()));
+                            values.put("total_score", student.getTotal_score());
+                            Log.i("Main2Activity", "score:"+student.getScore()+" total_score:"+student.getTotal_score());
+                            //该法不会将score算术表达式自动计算成结果更新
+                            db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
+                                    new String[]{""+test_id+"", ""+stu_id+""});
+                            Toast.makeText(Main2Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
 
-                        //测试
+                            //测试
 //                    int i = db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
 //                            new String[]{"1051306716", "2"});
 //                    Log.i("Main2Activity", "update:"+i);
 
-                        //该法可行，但是会将score算术表达式自动计算成结果更新
+                            //该法可行，但是会将score算术表达式自动计算成结果更新
 //                    String sqlUpdate = "UPDATE StudentMark SET score ="+student.getScore()+", total_score ="+student.getTotal_score()
 //                            +" WHERE test_id = "+test_id+" AND stu_id = "+stu_id+"";
 //                    db.execSQL(sqlUpdate);
-                        Log.i("Main2Activity", "test_id:"+test_id+" stu_id:"+stu_id);
-                    }
-
-
-                    //合法时插入Student......item
-                    //向StudentMark表中插入stu_id,test_id,score,total_score
-                    for(Student student : studentList) {
-                        int stu_id = student.getStu_id();
-
-                        Cursor cursor2 = db.query("StudentMark", new String[] {"stu_id, test_id"}, "stu_id = ? AND test_id = ?",
-                                new String[]{""+stu_id+"", ""+test_id+""}, null, null, null);
-
-                        if(cursor2.getCount() == 0) {
-                            values.clear();
-                            values.put("stu_id", student.getStu_id());
-                            values.put("test_id", test_id);
-                            values.put("score", student.getScore());
-                            values.put("total_score", student.getTotal_score());
-
-                            db.insert("StudentMark", null, values);
-                        } else {
-                            Log.d(Main2Activity.this.getLocalClassName(), "StudentMark表中已存在学号：" + stu_id + " 测试号：" + test_id);
+                            Log.i("Main2Activity", "test_id:"+test_id+" stu_id:"+stu_id);
                         }
-                        cursor2.close();
-                    }
 
-                    db.close();
-                    exportSheet();
-                    finish();
+
+                        //合法时插入Student......item
+                        //向StudentMark表中插入stu_id,test_id,score,total_score
+                        for(Student student : studentList) {
+                            int stu_id = student.getStu_id();
+
+                            Cursor cursor2 = db.query("StudentMark", new String[] {"stu_id, test_id"}, "stu_id = ? AND test_id = ?",
+                                    new String[]{""+stu_id+"", ""+test_id+""}, null, null, null);
+
+                            if(cursor2.getCount() == 0) {
+                                values.clear();
+                                values.put("stu_id", student.getStu_id());
+                                values.put("test_id", test_id);
+                                values.put("score", student.getScore());
+                                values.put("total_score", student.getTotal_score());
+
+                                db.insert("StudentMark", null, values);
+                            } else {
+                                Log.d(Main2Activity.this.getLocalClassName(), "StudentMark表中已存在学号：" + stu_id + " 测试号：" + test_id);
+                            }
+                            cursor2.close();
+                        }
+
+                        db.close();
+                        exportSheet();
+                        finish();
+                    }
                 }
             }
         });
@@ -259,6 +266,9 @@ public class Main2Activity extends AppCompatActivity {
 
                             if(!recyclerView.isComputingLayout()) {
                                 studentAdapter.notifyDataSetChanged();
+
+                                isUpdate = true;
+                                titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
                             }
                         }
                     }
@@ -350,6 +360,10 @@ public class Main2Activity extends AppCompatActivity {
                                                 student.setScore(newMark.getScore());
                                                 student.setTotal_score(newMark.getTotal_score());
                                                 studentAdapter.notifyDataSetChanged();
+
+                                                isUpdate = true;
+                                                titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+
                                                 alertDialog.dismiss();
                                             }
                                         });
@@ -366,6 +380,9 @@ public class Main2Activity extends AppCompatActivity {
 
                                     studentList.add(student);
                                     studentAdapter.notifyDataSetChanged();
+
+                                    isUpdate = true;
+                                    titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
 
 
 
