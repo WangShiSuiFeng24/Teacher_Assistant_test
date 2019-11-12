@@ -122,7 +122,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Recycler_View_Student"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
 
         <ImageView
             android:id="@+id/fab"
