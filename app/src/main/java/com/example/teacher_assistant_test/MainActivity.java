@@ -104,9 +104,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void rightClick() {
+            public void tvRightClick() {
                 //不作处理
 //                Toast.makeText(MainActivity.this,"右边",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void ivRightClick() {
+                //不作处理
             }
         });
 

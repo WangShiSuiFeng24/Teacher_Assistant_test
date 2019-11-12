@@ -72,10 +72,23 @@ public class TitleBarView extends RelativeLayout {
                 mClick.leftClick();
             }
         });
-        layout_right.setOnClickListener(new OnClickListener() {
+//        layout_right.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mClick.rightClick();
+//            }
+//        });
+        tv_right.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
-                mClick.rightClick();
+            public void onClick(View v) {
+                mClick.tvRightClick();
+            }
+        });
+
+        iv_right.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClick.ivRightClick();
             }
         });
 
@@ -160,7 +173,11 @@ public class TitleBarView extends RelativeLayout {
     public interface onViewClick {
         void leftClick();
 
-        void rightClick();
+//        void rightClick();
+
+        void tvRightClick();
+
+        void ivRightClick();
     }
 
 }

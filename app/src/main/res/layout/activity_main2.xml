@@ -15,7 +15,7 @@
         app:leftDrawable="@drawable/ic_back"
         app:leftTextColor="#FFF"
         app:leftText="返回"
-
+        app:rightDrawable="@drawable/ic_export_excel"
         app:rightText="保存"/>
 
 
@@ -123,7 +123,7 @@
             android:id="@+id/Recycler_View_Student"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
 
         <ImageView
             android:id="@+id/fab"

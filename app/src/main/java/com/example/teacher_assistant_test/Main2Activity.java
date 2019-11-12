@@ -129,7 +129,7 @@ public class Main2Activity extends AppCompatActivity {
             }
 
             @Override
-            public void rightClick() {
+            public void tvRightClick() {
                 if(!isUpdate) {
                     //数据没有修改或增添，点击无效，不处理
                 } else {
@@ -172,7 +172,6 @@ public class Main2Activity extends AppCompatActivity {
                     }
 
                     if(isLegal) {
-
                         //更新相同学号stu_id的score和total_score
                         ContentValues values = new ContentValues();
                         Iterator<Student> studentIterator = studentList.iterator();
@@ -223,9 +222,35 @@ public class Main2Activity extends AppCompatActivity {
                         }
 
                         db.close();
-                        exportSheet();
                         finish();
                     }
+                }
+            }
+
+            @Override
+            public void ivRightClick() {
+                if(!isUpdate) {
+                    /**
+                     * 弹出一个AlertDialog,询问是否顺便导出到文件夹，是则导出，否则取消
+                     */
+                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this, "Alarm",
+                            "导出Excel到文件管理的 Record 文件夹?", null, "确定", "取消");
+                    alertDialog.setCanceledOnTouchOutside(false);
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            exportSheet();
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
                 }
             }
         });
@@ -269,6 +294,7 @@ public class Main2Activity extends AppCompatActivity {
 
                                 isUpdate = true;
                                 titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+                                titleBarView.setRightDrawable(R.drawable.ic_export_excel_gray);
                             }
                         }
                     }
@@ -363,6 +389,7 @@ public class Main2Activity extends AppCompatActivity {
 
                                                 isUpdate = true;
                                                 titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+                                                titleBarView.setRightDrawable(R.drawable.ic_export_excel_gray);
 
                                                 alertDialog.dismiss();
                                             }
@@ -383,7 +410,7 @@ public class Main2Activity extends AppCompatActivity {
 
                                     isUpdate = true;
                                     titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
-
+                                    titleBarView.setRightDrawable(R.drawable.ic_export_excel_gray);
 
 
 //                                    Toast.makeText(Main2Activity.this, "没有你想修改的学生id", Toast.LENGTH_SHORT).show();
