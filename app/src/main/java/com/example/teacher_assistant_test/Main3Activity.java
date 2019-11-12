@@ -258,23 +258,15 @@ public class Main3Activity extends AppCompatActivity {
         markAdapter.setOnItemClickListener(new MarkAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final int position) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Main3Activity.this);
-                builder.setCancelable(false)
-                        .setTitle("Alarm")
-                        .setMessage("将要删除学号为:"+markList.get(position).getStu_id()+"条目")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                markAdapter.remove(position);
-                                dialogInterface.dismiss();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        }).show();
+                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main3Activity.this, "Alarm",
+                        "将要删除学号为:"+markList.get(position).getStu_id()+"条目", null, "yes", "no");
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        markAdapter.remove(position);
+                        alertDialog.dismiss();
+                    }
+                });
             }
 
             @Override
