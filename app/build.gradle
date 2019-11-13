@@ -47,6 +47,8 @@ dependencies {
 
     implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
 
+    implementation 'gdut.bsx:share2:0.9.3'
+
 }
 
 

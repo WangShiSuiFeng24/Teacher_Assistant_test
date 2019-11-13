@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -69,6 +70,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.ToDoubleBiFunction;
+
+import gdut.bsx.share2.FileUtil;
+import gdut.bsx.share2.Share2;
+import gdut.bsx.share2.ShareContentType;
 
 public class Main2Activity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
@@ -230,27 +235,43 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void ivRightClick() {
                 if(!isUpdate) {
-                    /**
-                     * 弹出一个AlertDialog,询问是否顺便导出到文件夹，是则导出，否则取消
-                     */
-                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this, "Alarm",
-                            "导出Excel到文件管理的 Record 文件夹?", null, "确定", "取消");
-                    alertDialog.setCanceledOnTouchOutside(false);
 
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            exportSheet();
-                            alertDialog.dismiss();
-                        }
-                    });
+                    exportSheet();
 
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alertDialog.dismiss();
-                        }
-                    });
+                    Uri shareFileUri = FileUtil.getFileUri(Main2Activity.this, ShareContentType.FILE, new File(fileName));
+
+                    new Share2.Builder(Main2Activity.this)
+                            //指定分享的文件类型
+                            .setContentType(ShareContentType.FILE)
+                            //设置要分享的文件Uri
+                            .setShareFileUri(shareFileUri)
+                            //设置分享选择器的标题
+                            .setTitle("Share File")
+                            .build()
+                            //发起分享
+                            .shareBySystem();
+
+//                    /**
+//                     * 弹出一个AlertDialog,询问是否顺便导出到文件夹，是则导出，否则取消
+//                     */
+//                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this, "Alarm",
+//                            "导出Excel到文件管理的 Record 文件夹并分享?", null, "确定", "取消");
+//                    alertDialog.setCanceledOnTouchOutside(false);
+//
+//                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//                            alertDialog.dismiss();
+//                        }
+//                    });
+
+//                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            alertDialog.dismiss();
+//                        }
+//                    });
                 }
             }
         });
