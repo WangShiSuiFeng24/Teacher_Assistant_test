@@ -238,7 +238,6 @@ public class Main3Activity extends AppCompatActivity {
                     mIatDialog.setListener(mRecognizerDialogListener);
 
                     mIatDialog.show();
-
                     TextView txt = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
                     txt.setText(R.string.tip);//更改内容
                     txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);//去下划线

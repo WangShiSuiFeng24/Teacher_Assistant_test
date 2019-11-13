@@ -400,8 +400,25 @@ public class Main2Activity extends AppCompatActivity {
 
                                 if(!flag) {
                                     //语音识别stu_id没有一个相同，这里处理
+
+                                    //先根据学号stu_id查出姓名stu_name和stu_gender
+                                    SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
+                                    Cursor cursor = db.query("Student", new String[]{"stu_name", "stu_gender"}, "stu_id = ?",
+                                            new String[]{""+newMark.getStu_id()+""}, null, null, null);
+                                    String stu_name = null;
+                                    String stu_gender = null;
+                                    while (cursor.moveToNext()) {
+                                        stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
+                                        stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
+                                    }
+                                    cursor.close();
+
                                     Student student = new Student();
                                     student.setStu_id(Integer.parseInt(newMark.getStu_id()));
+
+                                    student.setStu_name(stu_name);
+                                    student.setStu_gender(stu_gender);
+
                                     student.setScore(newMark.getScore());
                                     student.setTotal_score(newMark.getTotal_score());
 
