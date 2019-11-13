@@ -245,6 +245,11 @@ public class MainActivity extends AppCompatActivity {
         testAdapter.notifyDataSetChanged();
     }
 
+    public boolean editStudentInfo(MenuItem item) {
+        EditStudentInfoActivity.actionStart(this);
+        return true;
+    }
+
 
     private void initTest() {
         String sqlSelect = "SELECT StudentTest.test_id,StudentTest.test_name FROM StudentTest";
