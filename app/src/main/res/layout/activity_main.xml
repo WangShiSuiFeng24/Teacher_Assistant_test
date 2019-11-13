@@ -11,7 +11,8 @@
         android:layout_height="48dp"
         android:background="@color/colorAccent"
         app:centerTitle="自定义标题"
-        app:centerTextColor="#FFF" />
+        app:centerTextColor="#FFF"
+        app:rightDrawable="@drawable/ic_more" />
 
 <!--    <include layout="@layout/test_item">-->
 

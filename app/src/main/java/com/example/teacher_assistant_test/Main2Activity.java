@@ -233,7 +233,7 @@ public class Main2Activity extends AppCompatActivity {
             }
 
             @Override
-            public void ivRightClick() {
+            public void ivRightClick(View view) {
                 if(!isUpdate) {
                     //先判断权限是否授予，没有则单独申请，有则继续
                     if(ContextCompat.checkSelfPermission(Main2Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

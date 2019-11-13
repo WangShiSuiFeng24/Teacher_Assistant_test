@@ -38,6 +38,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.adapter.TestAdapter;
@@ -113,8 +114,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void ivRightClick() {
+            public void ivRightClick(View view) {
                 //不作处理
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+                popupMenu.show();
             }
         });
 

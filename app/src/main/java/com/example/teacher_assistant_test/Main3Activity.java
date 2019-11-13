@@ -116,7 +116,7 @@ public class Main3Activity extends AppCompatActivity {
             }
 
             @Override
-            public void ivRightClick() {
+            public void ivRightClick(View view) {
                 //不处理
             }
         });

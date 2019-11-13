@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/edit_student_info"
+        android:title="编辑学生信息"
+        android:onClick="editStudentInfo">
+    </item>
+</menu>
