@@ -202,31 +202,6 @@ public class Main3Activity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Here, thisActivity is the current activity
-                if (ContextCompat.checkSelfPermission(Main3Activity.this,
-                        Manifest.permission.RECORD_AUDIO)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission is not granted
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(Main3Activity.this,
-                            Manifest.permission.RECORD_AUDIO)) {
-                        // Show an explanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
-                    } else {
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(Main3Activity.this,
-                                new String[]{Manifest.permission.RECORD_AUDIO},
-                                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
-                    }
-                } else {
-                    // Permission has already been granted
-
                     //初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
                     //使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
                     mIatDialog = new RecognizerDialog(Main3Activity.this, mInitListener);
@@ -241,7 +216,7 @@ public class Main3Activity extends AppCompatActivity {
                     TextView txt = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
                     txt.setText(R.string.tip);//更改内容
                     txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);//去下划线
-                }
+
             }
         });
 

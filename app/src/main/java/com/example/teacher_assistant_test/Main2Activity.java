@@ -76,7 +76,7 @@ import gdut.bsx.share2.Share2;
 import gdut.bsx.share2.ShareContentType;
 
 public class Main2Activity extends AppCompatActivity {
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+    private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
     private List<Student> studentList = new ArrayList<>();
 
@@ -235,22 +235,25 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void ivRightClick() {
                 if(!isUpdate) {
+                    //先判断权限是否授予，没有则单独申请，有则继续
+                    if(ContextCompat.checkSelfPermission(Main2Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(Main2Activity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION);
+                    } else {
+                        exportSheet();
 
-                    exportSheet();
+                        Uri shareFileUri = FileUtil.getFileUri(Main2Activity.this, ShareContentType.FILE, new File(fileName));
 
-                    Uri shareFileUri = FileUtil.getFileUri(Main2Activity.this, ShareContentType.FILE, new File(fileName));
-
-                    new Share2.Builder(Main2Activity.this)
-                            //指定分享的文件类型
-                            .setContentType(ShareContentType.FILE)
-                            //设置要分享的文件Uri
-                            .setShareFileUri(shareFileUri)
-                            //设置分享选择器的标题
-                            .setTitle("Share File")
-                            .build()
-                            //发起分享
-                            .shareBySystem();
-
+                        new Share2.Builder(Main2Activity.this)
+                                //指定分享的文件类型
+                                .setContentType(ShareContentType.FILE)
+                                //设置要分享的文件Uri
+                                .setShareFileUri(shareFileUri)
+                                //设置分享选择器的标题
+                                .setTitle("Share File")
+                                .build()
+                                //发起分享
+                                .shareBySystem();
+                    }
 //                    /**
 //                     * 弹出一个AlertDialog,询问是否顺便导出到文件夹，是则导出，否则取消
 //                     */
@@ -480,17 +483,6 @@ public class Main2Activity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ContextCompat.checkSelfPermission(Main2Activity.this,
-                        Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                    if(ActivityCompat.shouldShowRequestPermissionRationale(Main2Activity.this,
-                            Manifest.permission.RECORD_AUDIO)) {
-
-                    } else {
-                        ActivityCompat.requestPermissions(Main2Activity.this,
-                                new String[] {Manifest.permission.RECORD_AUDIO},
-                                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-                    }
-                } else {
                     mIatDialog = new RecognizerDialog(Main2Activity.this, mInitListener);
 
                     mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
@@ -504,11 +496,6 @@ public class Main2Activity extends AppCompatActivity {
                     TextView txt = mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
                     txt.setText(R.string.tip);
                     txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);
-                }
-
-
-
-
 
 //                //跳转到语音识别录成绩界面
 //                Intent intent = new Intent(Main2Activity.this, Main3Activity.class);
@@ -517,6 +504,16 @@ public class Main2Activity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_WRITE_STORAGE_PERMISSION) {
+            if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "缺少文件读写权限，可能会造成无法分享文件", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void idSelectSortControl(View v) {

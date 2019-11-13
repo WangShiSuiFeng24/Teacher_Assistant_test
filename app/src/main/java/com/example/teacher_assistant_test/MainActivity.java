@@ -1,5 +1,6 @@
 package com.example.teacher_assistant_test;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -74,6 +75,8 @@ import jxl.read.biff.BiffException;
 
 public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
 
     private List<Test> testList = new ArrayList<>();
     TestAdapter testAdapter;
@@ -171,38 +174,58 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Here, thisActivity is the current activity
-                if (ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.RECORD_AUDIO)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission is not granted
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                            Manifest.permission.RECORD_AUDIO)) {
-                        // Show an explanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
-                    } else {
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.RECORD_AUDIO},
-                                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
-                    }
+                //先判断权限是否授予，没有则单独申请，有则跳转
+                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+//                    request_permissions(MainActivity.this);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
                 } else {
-                    // Permission has already been granted
-                    //跳转到语音识别录成绩界面
                     Main3Activity.actionStart(MainActivity.this);
-
-//                    Intent intent = new Intent(MainActivity.this, Main3Activity.class);
-//                    startActivity(intent);
                 }
             }
         });
+
+        request_permissions(this);
+    }
+
+    private void request_permissions(Context context) {
+        //创建一个权限列表，把需要使用而没有授权的权限存放在这里
+        List<String> permissionList = new ArrayList<>();
+
+        //判断权限是否已经授予，没有就把该权限添加到列表中
+        if(ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.RECORD_AUDIO);
+        }
+
+        if(ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        //如果列表为空，就是全部权限都获取了，不用再次获取了。不为空就去申请权限
+        if(!permissionList.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), 1002);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if(requestCode == 1002) {
+//            // 1002请求码对应的是申请多个权限
+//            if (grantResults.length > 0) {
+//                // 因为是多个权限，所以需要一个循环获取每个权限的获取情况
+//                for (int i = 0; i < grantResults.length; i++) {
+//                    // PERMISSION_DENIED 这个值代表是没有授权，我们可以把被拒绝授权的权限显示出来
+//                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+//                        Toast.makeText(MainActivity.this, permissions[i] + "权限被拒绝了", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        }
+        if(requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "缺少录制音频权限，可能会造成无法语音识别", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     //返回刷新，小技巧是把需要更新的view 可以都放在initview（）中，在resume中调用这个方法即可。
