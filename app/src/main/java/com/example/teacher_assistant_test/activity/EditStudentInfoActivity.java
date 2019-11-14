@@ -1,5 +1,6 @@
 package com.example.teacher_assistant_test.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
@@ -18,6 +20,8 @@ import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.adapter.StudentInfoAdapter;
 import com.example.teacher_assistant_test.bean.StudentInfo;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,11 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private StudentInfoAdapter studentInfoAdapter;
+
+    private FloatingActionMenu fab;
+    private FloatingActionButton fab_insert;
+    private FloatingActionButton fab_delete;
+    private FloatingActionButton fab_update;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,36 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         studentInfoAdapter = new StudentInfoAdapter(studentInfoList);
         recyclerView.setAdapter(studentInfoAdapter);
+
+        fab = findViewById(R.id.fab);
+        fab.setClosedOnTouchOutside(true);//暂无效果
+
+        fab_insert = findViewById(R.id.fab_insert);
+        fab_delete = findViewById(R.id.fab_delete);
+        fab_update = findViewById(R.id.fab_update);
+
+        fab_insert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                showInsetDialog();
+            }
+        });
+
+        fab_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        fab_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
 
 
 

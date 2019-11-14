@@ -49,4 +49,6 @@ dependencies {
 
     implementation 'gdut.bsx:share2:0.9.3'
 
+    implementation 'com.github.clans:fab:1.6.4'
+
 }

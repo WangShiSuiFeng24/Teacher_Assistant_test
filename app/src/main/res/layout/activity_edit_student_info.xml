@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.example.teacher_assistant_test.util.TitleBarView
@@ -79,13 +80,81 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Recycler_View_StudentInfo"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:descendantFocusability="beforeDescendants"
-        android:fastScrollEnabled="false"
-        android:scrollbars="vertical">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent" >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Recycler_View_StudentInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="beforeDescendants"
+            android:fastScrollEnabled="false"
+            android:scrollbars="vertical">
+        </androidx.recyclerview.widget.RecyclerView>
+
+<!--        <ImageView-->
+<!--            android:id="@+id/ic_add"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:background="@drawable/round_solid_selector"-->
+<!--            android:tint="@color/colorAccent"-->
+<!--            android:src="@drawable/ic_add" />-->
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="10dp"
+            app:menu_colorNormal="@color/colorAccent"
+            app:menu_colorPressed="@color/colorAccentDark"
+            app:menu_icon="@drawable/ic_add"
+            app:menu_labels_ellipsize="end"
+            app:menu_labels_singleLine="true"
+            app:layout_anchor="@id/Recycler_View_StudentInfo"
+            app:menu_backgroundColor="@android:color/transparent"
+            android:visibility="visible"
+            >
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_insert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorPressed="@color/colorAccentDark"
+                android:src="@drawable/ic_add"
+                app:fab_size="mini"
+                app:fab_label="增加" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorPressed="@color/colorAccentDark"
+                android:src="@drawable/ic_add"
+                app:fab_size="mini"
+                app:fab_label="删除" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorPressed="@color/colorAccentDark"
+                android:src="@drawable/ic_add"
+                app:fab_size="mini"
+                app:fab_label="修改" />
+
+        </com.github.clans.fab.FloatingActionMenu>
+
+    </RelativeLayout>
 
 </LinearLayout>
