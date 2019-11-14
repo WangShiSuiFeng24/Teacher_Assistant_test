@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -32,6 +34,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -73,6 +76,9 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             public void tvRightClick() {
                 //判断数据是否更新，若未更新，则设置点击无效，不处理
                 //否则，保存更新数据到数据库
+                if(isDataChanged) {
+                    saveDataToDataBase();
+                }
             }
 
             @Override
@@ -118,7 +124,6 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                 showUpdateDialog();
             }
         });
-
 
 
 
@@ -392,6 +397,45 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void saveDataToDataBase() {
+        //更新相同学号的姓名stu_name和性别stu_gender
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
+
+        ContentValues values = new ContentValues();
+        Iterator<StudentInfo> infoIterator = studentInfoList.iterator();
+        while(infoIterator.hasNext()) {
+            StudentInfo studentInfo = infoIterator.next();
+            int stu_id = studentInfo.getStu_id();
+            values.put("stu_name", studentInfo.getStu_name());
+            values.put("stu_gender", studentInfo.getStu_gender());
+
+            db.update("Student", values, "stu_id = ?", new String[]{""+stu_id+""});
+        }
+
+        //插入不相同学号的item
+        for(StudentInfo studentInfo : studentInfoList) {
+            int stu_id = studentInfo.getStu_id();
+            Cursor cursor = db.query("Student", new String[] {"stu_id"}, "stu_id = ?",
+                    new String[]{""+stu_id+""}, null, null, null);
+
+            if(cursor.getCount() == 0) {
+                values.clear();
+                values.put("stu_id", studentInfo.getStu_id());
+                values.put("stu_name", studentInfo.getStu_name());
+                values.put("stu_gender", studentInfo.getStu_gender());
+
+                db.insert("Student", null, values);
+            } else {
+                Log.d("EditStudentInfoActivity", "StudentMark表中已存在学号：" + stu_id);
+            }
+            cursor.close();
+        }
+        db.close();
+
+        Toast.makeText(EditStudentInfoActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     //使用正则表达式判断该字符串是否为数字，第一个\是转义符，\d+表示匹配1个或 //多个连续数字，"+"和"*"类似，"*"表示0个或多个
