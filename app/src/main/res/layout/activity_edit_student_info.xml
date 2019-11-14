@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 app:fab_colorNormal="@color/colorAccent"
                 app:fab_colorPressed="@color/colorAccentDark"
-                android:src="@drawable/ic_add"
+                android:src="@drawable/ic_remove"
                 app:fab_size="mini"
                 app:fab_label="删除" />
 
@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 app:fab_colorNormal="@color/colorAccent"
                 app:fab_colorPressed="@color/colorAccentDark"
-                android:src="@drawable/ic_add"
+                android:src="@drawable/ic_update"
                 app:fab_size="mini"
                 app:fab_label="修改" />
 
