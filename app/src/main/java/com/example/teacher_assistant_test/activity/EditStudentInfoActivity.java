@@ -13,7 +13,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
+import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.util.TitleBarView;
@@ -25,10 +32,14 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class EditStudentInfoActivity extends AppCompatActivity {
 
     private List<StudentInfo> studentInfoList = new ArrayList<>();
+
+    private TitleBarView titleBarView;
 
     private RecyclerView recyclerView;
     private StudentInfoAdapter studentInfoAdapter;
@@ -38,6 +49,8 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     private FloatingActionButton fab_delete;
     private FloatingActionButton fab_update;
 
+    private boolean isDataChanged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +58,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
         ImmersiveStatusBar.setImmersiveStatusBar(EditStudentInfoActivity.this);
 
-        TitleBarView titleBarView = findViewById(R.id.title4);
+        titleBarView = findViewById(R.id.title4);
         titleBarView.setTitleSize(20);
         titleBarView.setTitle("学生基本信息");
         titleBarView.setRightTextColor(Color.parseColor("#808080"));
@@ -75,7 +88,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         recyclerView.setAdapter(studentInfoAdapter);
 
         fab = findViewById(R.id.fab);
-        fab.setClosedOnTouchOutside(true);//暂无效果
+        fab.setClosedOnTouchOutside(true);//可以设置点击蒙版关闭的开关
 
         fab_insert = findViewById(R.id.fab_insert);
         fab_delete = findViewById(R.id.fab_delete);
@@ -84,21 +97,24 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         fab_insert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showInsetDialog();
+                fab.close(true);
+                showInsertDialog();
             }
         });
 
         fab_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fab.close(true);
+                showDeleteDialog();
             }
         });
 
         fab_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fab.close(true);
+                showUpdateDialog();
             }
         });
 
@@ -131,5 +147,152 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             studentInfoList.add(studentInfo);
         }
         cursor.close();
+    }
+
+    private void showInsertDialog() {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText edit_stu_id = new EditText(this);
+        edit_stu_id.setHint("学号");
+        layout.addView(edit_stu_id);
+
+        final EditText edit_stu_name = new EditText(this);
+        edit_stu_name.setHint("姓名");
+        layout.addView(edit_stu_name);
+
+
+//        final RadioGroup gender = new RadioGroup(this);
+//        gender.setOrientation(LinearLayout.HORIZONTAL);
+//
+//        final RadioButton maleRadioButton = new RadioButton(this);
+//        maleRadioButton.setText("男");
+//        gender.addView(maleRadioButton);
+//
+//        final RadioButton femaleRadioButton = new RadioButton(this);
+//        femaleRadioButton.setText("女");
+//        gender.addView(femaleRadioButton);
+//
+//        layout.addView(gender);
+
+
+        final EditText edit_stu_gender = new EditText(this);
+        edit_stu_gender.setHint("性别");
+        layout.addView(edit_stu_gender);
+
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "插入一条学生信息",
+                null, layout, "确定", "取消");
+        alertDialog.setCanceledOnTouchOutside(false);
+
+        edit_stu_id.setFocusable(true);
+        edit_stu_id.setFocusableInTouchMode(true);
+        edit_stu_id.requestFocus();
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                InputMethodManager inputMethodManager = (InputMethodManager) edit_stu_id.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(edit_stu_id, 0);
+            }
+        }, 300);
+
+//        final String stu_gender;
+//        int count = gender.getChildCount();
+//        for(int i = 0 ;i < count;i++){
+//            RadioButton rb = (RadioButton)gender.getChildAt(i);
+//            if(rb.isChecked()){
+//                stu_gender = rb.getTag().toString();
+//                break;
+//            }
+//        }
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * 还没有检查性别 男、女，长度限制等。。。
+                 */
+
+                if(canParseInt(edit_stu_id.getText().toString().trim())) {
+                    int stu_id = Integer.parseInt(edit_stu_id.getText().toString().trim());
+                    String stu_name = edit_stu_name.getText().toString().trim();
+//                     String stu_gender = (maleRadioButton != null ? maleRadioButton.getText() : femaleRadioButton.getText()).toString();
+
+                    String stu_gender = edit_stu_gender.getText().toString().trim();
+
+                    StudentInfo studentInfo = new StudentInfo(stu_id, stu_name, stu_gender);
+                    studentInfoList.add(studentInfo);
+                    studentInfoAdapter.notifyDataSetChanged();
+                    isDataChanged = true;
+                    titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+                    alertDialog.dismiss();
+                } else {
+                    Toast.makeText(EditStudentInfoActivity.this, "学号:"+edit_stu_id.getText().toString().trim()+" 非法", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void showDeleteDialog() {
+        final EditText edit = new EditText(this);
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "请输入要删除的学生的学号", null, edit,
+                "确定", "取消");
+
+        edit.setFocusable(true);
+        edit.setFocusableInTouchMode(true);
+        edit.requestFocus();
+
+        Timer timer = new Timer();
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                InputMethodManager inputMethodManager = (InputMethodManager) edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(edit, 0);
+            }
+        }, 300);
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String input = edit.getText().toString().trim();
+                if(canParseInt(input)) {
+                    //检查studentInfoList中是否有input这个学号
+                    boolean hasInput = false;
+                    for(int i=0; i<studentInfoList.size(); i++) {
+                        int stu_id = studentInfoList.get(i).getStu_id();
+                        if(stu_id == Integer.parseInt(input)) {
+                            studentInfoList.remove(i);
+                            studentInfoAdapter.notifyDataSetChanged();
+                            isDataChanged = true;
+                            titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+                            Toast.makeText(EditStudentInfoActivity.this, "学号为:" + stu_id + "的同学信息已删除", Toast.LENGTH_SHORT).show();
+                            hasInput = true;
+                            break;
+                        }
+                    }
+
+                    if(!hasInput) {
+                        Toast.makeText(EditStudentInfoActivity.this, "没有学号为:" + Integer.parseInt(input) + "的同学信息", Toast.LENGTH_SHORT).show();
+                    }
+                    alertDialog.dismiss();
+                } else {
+                    Toast.makeText(EditStudentInfoActivity.this, "您输入的学号不合法,请重新输入!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void showUpdateDialog() {
+
+    }
+
+    //使用正则表达式判断该字符串是否为数字，第一个\是转义符，\d+表示匹配1个或 //多个连续数字，"+"和"*"类似，"*"表示0个或多个
+    private boolean canParseInt(String string){
+        if(string == null){ //验证是否为空
+            return false;
+        }
+        return string.matches("\\d+");
     }
 }
