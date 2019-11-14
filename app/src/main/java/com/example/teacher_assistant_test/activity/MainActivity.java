@@ -70,28 +70,24 @@ public class MainActivity extends AppCompatActivity {
         titlebarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
-                //不作处理
-//                Toast.makeText(MainActivity.this,"左边", Toast.LENGTH_SHORT).show();
+                //暂不作处理
             }
 
             @Override
             public void tvRightClick() {
-                //不作处理
-//                Toast.makeText(MainActivity.this,"右边",Toast.LENGTH_SHORT).show();
+                //暂不作处理
             }
 
             @Override
             public void ivRightClick(View view) {
-                //不作处理
+                //弹出PopupMenu
                 PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
                 popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
                 popupMenu.show();
             }
         });
 
-//        initTest();
         importSheet();
-//        initDataBase();
 
         RecyclerView recyclerView = findViewById(R.id.Recycler_View_Test);
 
@@ -256,19 +252,4 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-
-
-//    private void initDataBase() {
-//        IDUSTool idusTool = new IDUSTool(MainActivity.this);
-//        idusTool.insertStuDB("1", "Dan", "girl");
-//        idusTool.insertStuDB("2", "Jow", "boy");
-//        idusTool.insertStuDB("3", "Marry", "girl");
-//        idusTool.insertStuDB("4", "Jorge", "boy");
-//        idusTool.insertStuDB("5", "Judy", "girl");
-//        for (int i=1; i<=99; i++) {
-//            idusTool.insertStuDB(""+i+"", "", "");
-//        }
-//    }
-//
 }

@@ -243,40 +243,11 @@ public class ShowAndEditActivity extends AppCompatActivity {
                                 //发起分享
                                 .shareBySystem();
                     }
-//                    /**
-//                     * 弹出一个AlertDialog,询问是否顺便导出到文件夹，是则导出，否则取消
-//                     */
-//                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(ShowAndEditActivity.this, "Alarm",
-//                            "导出Excel到文件管理的 Record 文件夹并分享?", null, "确定", "取消");
-//                    alertDialog.setCanceledOnTouchOutside(false);
-//
-//                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                            alertDialog.dismiss();
-//                        }
-//                    });
-
-//                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            alertDialog.dismiss();
-//                        }
-//                    });
                 }
             }
         });
 
         initStudent();
-
-        //设置标题栏文字
-        setTitle(test_name);
-//        if(studentList.size() != 0) {
-//            String title = studentList.get(0).getTest_name();
-//            Log.i("ShowAndEditActivity", "title:"+title);
-//            if(!TextUtils.isEmpty(title)) setTitle(title);
-//        }
 
         recyclerView = findViewById(R.id.Recycler_View_Student);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -315,30 +286,6 @@ public class ShowAndEditActivity extends AppCompatActivity {
             }
         });
 
-//        clear_score = findViewById(R.id.clear_score);
-//        clear_score.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(ShowAndEditActivity.this,
-//                        "Alarm", "即将清空成绩,慎重!!!", null, "确定清空!",
-//                        "取消清空!");
-//                alertDialog.setCancelable(false);
-//                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        SQLiteDatabase database = MyDatabaseHelper.getInstance(ShowAndEditActivity.this);
-//                        String deleteAll = "DELETE FROM StudentMark";
-//                        database.execSQL(deleteAll);
-//                        studentList.clear();
-//                        studentAdapter.notifyDataSetChanged();
-//                        initStudent();
-//                        alertDialog.dismiss();
-//                        Toast.makeText(ShowAndEditActivity.this, "成绩已清空", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        });
-
         mInitListener = new InitListener() {
             @Override
             public void onInit(int code) {
@@ -375,10 +322,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
 
                             if(studentList.size() == 0) {
                                 //第一次添加
-                                /**
-                                 * 不可能为空^_^
-                                 */
-
+                                //不可能为空
                             } else {
                                 boolean flag = false;
                                 for(int i=0; i<studentList.size(); i++) {

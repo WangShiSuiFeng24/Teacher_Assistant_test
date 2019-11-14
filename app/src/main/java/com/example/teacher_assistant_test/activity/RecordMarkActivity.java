@@ -61,7 +61,6 @@ import java.util.TimerTask;
 
 public class RecordMarkActivity extends AppCompatActivity {
     private static final String TAG = "RecordMarkActivity";
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
     private List<Mark> markList = new ArrayList<>();
     private Button clear_data;
@@ -99,12 +98,12 @@ public class RecordMarkActivity extends AppCompatActivity {
 
             @Override
             public void tvRightClick() {
-                //不处理
+                //暂不处理
             }
 
             @Override
             public void ivRightClick(View view) {
-                //不处理
+                //暂不处理
             }
         });
 
@@ -206,20 +205,6 @@ public class RecordMarkActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
-//        refresh = findViewById(R.id.refresh);
-//        refresh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                markAdapter.notifyDataSetChanged();
-//            }
-//        });
-
 
         markAdapter.setOnItemClickListener(new MarkAdapter.OnItemClickListener() {
             @Override
@@ -530,28 +515,6 @@ public class RecordMarkActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
-
     public void idSortControl(View v) {
         if(!isIdSortPressed) {
             isIdSortPressed = true;
@@ -695,7 +658,6 @@ public class RecordMarkActivity extends AppCompatActivity {
     // 获取点击事件
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        // TODO Auto-generated method stub
         if(ev.getAction() == MotionEvent.ACTION_DOWN) {
             View view = getCurrentFocus();
             if(isHideInput(view, ev)) {
