@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -154,7 +155,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final EditText edit_stu_id = new EditText(this);
-        edit_stu_id.setHint("学号");
+        edit_stu_id.setHint("学号:请输入阿拉伯数字");
         layout.addView(edit_stu_id);
 
         final EditText edit_stu_name = new EditText(this);
@@ -177,7 +178,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
 
         final EditText edit_stu_gender = new EditText(this);
-        edit_stu_gender.setHint("性别");
+        edit_stu_gender.setHint("性别:请输入 \"男\" 或 \"女\"");
         layout.addView(edit_stu_gender);
 
         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "插入一条学生信息",
@@ -215,18 +216,41 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                  */
 
                 if(canParseInt(edit_stu_id.getText().toString().trim())) {
-                    int stu_id = Integer.parseInt(edit_stu_id.getText().toString().trim());
-                    String stu_name = edit_stu_name.getText().toString().trim();
+                    //检查studentInfoList中是否有input这个学号
+                    boolean hasSameId = false;
+                    for(int i=0; i<studentInfoList.size(); i++) {
+                        int stu_id = studentInfoList.get(i).getStu_id();
+                        if(stu_id == Integer.parseInt(edit_stu_id.getText().toString().trim())) {
+                            hasSameId = true;
+                            Toast.makeText(EditStudentInfoActivity.this, "存在相同学号:"+edit_stu_id.getText().toString().trim() + " 请重新输入学号!", Toast.LENGTH_SHORT).show();
+                            edit_stu_id.requestFocus();
+                            break;
+                        }
+                    }
+
+                    if(!hasSameId) {
+                        int stu_id = Integer.parseInt(edit_stu_id.getText().toString().trim());
+                        String stu_name = edit_stu_name.getText().toString().trim();
 //                     String stu_gender = (maleRadioButton != null ? maleRadioButton.getText() : femaleRadioButton.getText()).toString();
 
-                    String stu_gender = edit_stu_gender.getText().toString().trim();
+                        String stu_gender = edit_stu_gender.getText().toString().trim();
 
-                    StudentInfo studentInfo = new StudentInfo(stu_id, stu_name, stu_gender);
-                    studentInfoList.add(studentInfo);
-                    studentInfoAdapter.notifyDataSetChanged();
-                    isDataChanged = true;
-                    titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
-                    alertDialog.dismiss();
+                        if(TextUtils.isEmpty(stu_name) || TextUtils.isEmpty(stu_gender)) {
+                            Toast.makeText(EditStudentInfoActivity.this, "姓名或性别栏为空", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if(isGenderLegal(stu_gender)) {
+                                StudentInfo studentInfo = new StudentInfo(stu_id, stu_name, stu_gender);
+                                studentInfoList.add(studentInfo);
+                                studentInfoAdapter.notifyDataSetChanged();
+                                isDataChanged = true;
+                                titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+                                alertDialog.dismiss();
+                            } else {
+                                Toast.makeText(EditStudentInfoActivity.this, "性别非\"男\" 或 \"女\"", Toast.LENGTH_SHORT).show();
+                                edit_stu_gender.requestFocus();
+                            }
+                        }
+                    }
                 } else {
                     Toast.makeText(EditStudentInfoActivity.this, "学号:"+edit_stu_id.getText().toString().trim()+" 非法", Toast.LENGTH_SHORT).show();
                 }
@@ -285,6 +309,88 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     }
 
     private void showUpdateDialog() {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText edit_stu_id = new EditText(this);
+        edit_stu_id.setHint("学号:请输入阿拉伯数字");
+        layout.addView(edit_stu_id);
+
+        final EditText edit_stu_name = new EditText(this);
+        edit_stu_name.setHint("姓名");
+        layout.addView(edit_stu_name);
+
+        final EditText edit_stu_gender = new EditText(this);
+        edit_stu_gender.setHint("性别:请输入 \"男\" 或 \"女\"");
+        layout.addView(edit_stu_gender);
+
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "请输入需要修改信息的同学学号及修改结果",
+                null, layout, "确定", "取消");
+        alertDialog.setCanceledOnTouchOutside(false);
+
+        edit_stu_id.setFocusable(true);
+        edit_stu_id.setFocusableInTouchMode(true);
+        edit_stu_id.requestFocus();
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                InputMethodManager inputMethodManager = (InputMethodManager) edit_stu_id.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(edit_stu_id, 0);
+            }
+        }, 300);
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * 还没有检查性别 男、女，长度限制等。。。
+                 */
+
+                if(canParseInt(edit_stu_id.getText().toString().trim())) {
+                    //检查studentInfoList中是否有input这个学号
+                    boolean hasSame = false;
+                    for(int i=0; i<studentInfoList.size(); i++) {
+                        int stu_id = studentInfoList.get(i).getStu_id();
+                        if(stu_id == Integer.parseInt(edit_stu_id.getText().toString().trim())) {
+                            hasSame = true;
+                            //修改操作
+                            String stu_name = edit_stu_name.getText().toString().trim();
+                            String stu_gender = edit_stu_gender.getText().toString().trim();
+
+                            if(TextUtils.isEmpty(stu_name) || TextUtils.isEmpty(stu_gender)) {
+                                Toast.makeText(EditStudentInfoActivity.this, "姓名或性别栏为空", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if(isGenderLegal(stu_gender)) {
+                                    studentInfoList.get(i).setStu_name(stu_name);
+                                    studentInfoList.get(i).setStu_gender(stu_gender);
+
+                                    studentInfoAdapter.notifyDataSetChanged();
+                                    isDataChanged = true;
+                                    titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+                                    alertDialog.dismiss();
+                                    Toast.makeText(EditStudentInfoActivity.this, "修改学号为:" + stu_id + " 的同学信息成功!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(EditStudentInfoActivity.this, "性别非\"男\" 或 \"女\"", Toast.LENGTH_SHORT).show();
+                                    edit_stu_gender.requestFocus();
+                                }
+
+                            }
+                        }
+                    }
+
+                    if(!hasSame) {
+                        Toast.makeText(EditStudentInfoActivity.this, "没有您想修改学号为:" + edit_stu_id.getText().toString().trim() + " 的学生信息", Toast.LENGTH_SHORT).show();
+                        edit_stu_id.requestFocus();
+                    }
+                } else {
+                    Toast.makeText(EditStudentInfoActivity.this, "学号:"+edit_stu_id.getText().toString().trim()+" 非法", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
 
     }
 
@@ -294,5 +400,12 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             return false;
         }
         return string.matches("\\d+");
+    }
+
+    private boolean isGenderLegal(String stu_gender) {
+        if(stu_gender.equals("男") || stu_gender.equals("女")) {
+            return true;
+        }
+        return false;
     }
 }
