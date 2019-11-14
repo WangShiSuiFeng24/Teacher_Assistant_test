@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.teacher_assistant_test.TitleBarView
+    <com.example.teacher_assistant_test.util.TitleBarView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="48dp"

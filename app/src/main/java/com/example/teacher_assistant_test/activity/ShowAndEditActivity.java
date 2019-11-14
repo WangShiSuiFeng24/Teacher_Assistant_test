@@ -1,20 +1,16 @@
-package com.example.teacher_assistant_test;
+package com.example.teacher_assistant_test.activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.LayoutInflaterCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -25,19 +21,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.InflateException;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.util.MyDatabaseHelper;
+import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.adapter.StudentAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Student;
@@ -45,7 +37,6 @@ import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.ExcelUtils;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
-import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
@@ -63,19 +54,17 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.function.ToDoubleBiFunction;
 
 import gdut.bsx.share2.FileUtil;
 import gdut.bsx.share2.Share2;
 import gdut.bsx.share2.ShareContentType;
 
-public class Main2Activity extends AppCompatActivity {
+public class ShowAndEditActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
     private List<Student> studentList = new ArrayList<>();
@@ -109,7 +98,7 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_show_and_edit);
 
         ImmersiveStatusBar.setImmersiveStatusBar(this);
 
@@ -121,7 +110,7 @@ public class Main2Activity extends AppCompatActivity {
         Intent intent = getIntent();
         test_id = intent.getLongExtra("test_id", 0);
         test_name = intent.getStringExtra("test_name");
-        Log.i("Main2Activity", "test_id:"+test_id+" test_name:"+test_name);
+        Log.i("ShowAndEditActivity", "test_id:"+test_id+" test_name:"+test_name);
 
         final TitleBarView titleBarView = findViewById(R.id.title2);
         titleBarView.setTitleSize(20);
@@ -145,7 +134,7 @@ public class Main2Activity extends AppCompatActivity {
                     //score只在StudentMark表中。。只更新StudentMark表中的score
 
                     //检查studentList中是否有非法score   //增加检查studentList中是否有非法id
-                    SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
+                    SQLiteDatabase db = MyDatabaseHelper.getInstance(ShowAndEditActivity.this);
                     boolean isLegal = true;
                     for(Student student : studentList) {
 //                    int stu_id = student.getStu_id();
@@ -153,7 +142,7 @@ public class Main2Activity extends AppCompatActivity {
 //                            new String[] {""+stu_id+""}, null, null, null);
 //
 //                    if(cursor1.getCount() == 0) {
-//                        AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this, "Alarm",
+//                        AlertDialog alertDialog = GetAlertDialog.getAlertDialog(ShowAndEditActivity.this, "Alarm",
 //                                "数据库中不存在学号:" + stu_id +"的同学,是否添加该同学", null, "是", "否");
 //                        alertDialog.setCancelable(false);
 //                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -171,7 +160,7 @@ public class Main2Activity extends AppCompatActivity {
 //                    }
 
                         if(!new CheckExpression().checkExpression(student.getScore())) {
-                            Toast.makeText(Main2Activity.this, "成绩:"+student.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShowAndEditActivity.this, "成绩:"+student.getScore()+" 非法", Toast.LENGTH_SHORT).show();
                             isLegal = false;
                         }
                     }
@@ -185,22 +174,22 @@ public class Main2Activity extends AppCompatActivity {
                             int stu_id = student.getStu_id();
                             values.put("score", String.valueOf(student.getScore()));
                             values.put("total_score", student.getTotal_score());
-                            Log.i("Main2Activity", "score:"+student.getScore()+" total_score:"+student.getTotal_score());
+                            Log.i("ShowAndEditActivity", "score:"+student.getScore()+" total_score:"+student.getTotal_score());
                             //该法不会将score算术表达式自动计算成结果更新
                             db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
                                     new String[]{""+test_id+"", ""+stu_id+""});
-                            Toast.makeText(Main2Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShowAndEditActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 
                             //测试
 //                    int i = db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
 //                            new String[]{"1051306716", "2"});
-//                    Log.i("Main2Activity", "update:"+i);
+//                    Log.i("ShowAndEditActivity", "update:"+i);
 
                             //该法可行，但是会将score算术表达式自动计算成结果更新
 //                    String sqlUpdate = "UPDATE StudentMark SET score ="+student.getScore()+", total_score ="+student.getTotal_score()
 //                            +" WHERE test_id = "+test_id+" AND stu_id = "+stu_id+"";
 //                    db.execSQL(sqlUpdate);
-                            Log.i("Main2Activity", "test_id:"+test_id+" stu_id:"+stu_id);
+                            Log.i("ShowAndEditActivity", "test_id:"+test_id+" stu_id:"+stu_id);
                         }
 
 
@@ -221,7 +210,7 @@ public class Main2Activity extends AppCompatActivity {
 
                                 db.insert("StudentMark", null, values);
                             } else {
-                                Log.d(Main2Activity.this.getLocalClassName(), "StudentMark表中已存在学号：" + stu_id + " 测试号：" + test_id);
+                                Log.d(ShowAndEditActivity.this.getLocalClassName(), "StudentMark表中已存在学号：" + stu_id + " 测试号：" + test_id);
                             }
                             cursor2.close();
                         }
@@ -236,14 +225,14 @@ public class Main2Activity extends AppCompatActivity {
             public void ivRightClick(View view) {
                 if(!isUpdate) {
                     //先判断权限是否授予，没有则单独申请，有则继续
-                    if(ContextCompat.checkSelfPermission(Main2Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(Main2Activity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION);
+                    if(ContextCompat.checkSelfPermission(ShowAndEditActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(ShowAndEditActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION);
                     } else {
                         exportSheet();
 
-                        Uri shareFileUri = FileUtil.getFileUri(Main2Activity.this, ShareContentType.FILE, new File(fileName));
+                        Uri shareFileUri = FileUtil.getFileUri(ShowAndEditActivity.this, ShareContentType.FILE, new File(fileName));
 
-                        new Share2.Builder(Main2Activity.this)
+                        new Share2.Builder(ShowAndEditActivity.this)
                                 //指定分享的文件类型
                                 .setContentType(ShareContentType.FILE)
                                 //设置要分享的文件Uri
@@ -257,7 +246,7 @@ public class Main2Activity extends AppCompatActivity {
 //                    /**
 //                     * 弹出一个AlertDialog,询问是否顺便导出到文件夹，是则导出，否则取消
 //                     */
-//                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this, "Alarm",
+//                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(ShowAndEditActivity.this, "Alarm",
 //                            "导出Excel到文件管理的 Record 文件夹并分享?", null, "确定", "取消");
 //                    alertDialog.setCanceledOnTouchOutside(false);
 //
@@ -285,7 +274,7 @@ public class Main2Activity extends AppCompatActivity {
         setTitle(test_name);
 //        if(studentList.size() != 0) {
 //            String title = studentList.get(0).getTest_name();
-//            Log.i("Main2Activity", "title:"+title);
+//            Log.i("ShowAndEditActivity", "title:"+title);
 //            if(!TextUtils.isEmpty(title)) setTitle(title);
 //        }
 
@@ -330,21 +319,21 @@ public class Main2Activity extends AppCompatActivity {
 //        clear_score.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main2Activity.this,
+//                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(ShowAndEditActivity.this,
 //                        "Alarm", "即将清空成绩,慎重!!!", null, "确定清空!",
 //                        "取消清空!");
 //                alertDialog.setCancelable(false);
 //                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
-//                        SQLiteDatabase database = MyDatabaseHelper.getInstance(Main2Activity.this);
+//                        SQLiteDatabase database = MyDatabaseHelper.getInstance(ShowAndEditActivity.this);
 //                        String deleteAll = "DELETE FROM StudentMark";
 //                        database.execSQL(deleteAll);
 //                        studentList.clear();
 //                        studentAdapter.notifyDataSetChanged();
 //                        initStudent();
 //                        alertDialog.dismiss();
-//                        Toast.makeText(Main2Activity.this, "成绩已清空", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ShowAndEditActivity.this, "成绩已清空", Toast.LENGTH_SHORT).show();
 //                    }
 //                });
 //            }
@@ -353,9 +342,9 @@ public class Main2Activity extends AppCompatActivity {
         mInitListener = new InitListener() {
             @Override
             public void onInit(int code) {
-                Log.d(Main2Activity.this.getLocalClassName(), "SpeechRecognizer init() code = " + code);
+                Log.d(ShowAndEditActivity.this.getLocalClassName(), "SpeechRecognizer init() code = " + code);
                 if(code != ErrorCode.SUCCESS) {
-                    Toast.makeText(Main2Activity.this, "初始化失败，错误码：" + code + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ShowAndEditActivity.this, "初始化失败，错误码：" + code + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -368,13 +357,13 @@ public class Main2Activity extends AppCompatActivity {
                 String resultStr = updateResult(results);
 
                 if(isLast) {
-                    Log.d(Main2Activity.this.getLocalClassName(), "recognizer result: " + resultStr);
+                    Log.d(ShowAndEditActivity.this.getLocalClassName(), "recognizer result: " + resultStr);
 
                     List<Mark> newMarkList = StrProcess.StrToMarkList(resultStr);
 
                     if(newMarkList == null) {
                         AlertDialog alertDialog = GetAlertDialog
-                                .getAlertDialog(Main2Activity.this, "Tip",
+                                .getAlertDialog(ShowAndEditActivity.this, "Tip",
                                         "语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照: \"8号 88(+8)分\" 这样效果会更好哦！",
                                         null, "OK", "CANCEL");
                         alertDialog.setCanceledOnTouchOutside(false);
@@ -398,7 +387,7 @@ public class Main2Activity extends AppCompatActivity {
                                     if(newMark.getStu_id().equals(String.valueOf(student.getStu_id()))) {
                                         flag = true;
                                         final AlertDialog alertDialog = GetAlertDialog
-                                                .getAlertDialog(Main2Activity.this,
+                                                .getAlertDialog(ShowAndEditActivity.this,
                                                         "Alarm", "学号:"+newMark.getStu_id()+" 已存在,"+
                                                                 "是否需要更改成绩:"+student.getScore()+"为:"+newMark.getScore(),
                                                         null, "OK", "CANCEL");
@@ -426,7 +415,7 @@ public class Main2Activity extends AppCompatActivity {
                                     //语音识别stu_id没有一个相同，这里处理
 
                                     //先根据学号stu_id查出姓名stu_name和stu_gender
-                                    SQLiteDatabase db = MyDatabaseHelper.getInstance(Main2Activity.this);
+                                    SQLiteDatabase db = MyDatabaseHelper.getInstance(ShowAndEditActivity.this);
                                     Cursor cursor = db.query("Student", new String[]{"stu_name", "stu_gender"}, "stu_id = ?",
                                             new String[]{""+newMark.getStu_id()+""}, null, null, null);
                                     String stu_name = null;
@@ -454,7 +443,7 @@ public class Main2Activity extends AppCompatActivity {
                                     titleBarView.setRightDrawable(R.drawable.ic_export_excel_gray);
 
 
-//                                    Toast.makeText(Main2Activity.this, "没有你想修改的学生id", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(ShowAndEditActivity.this, "没有你想修改的学生id", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
@@ -483,7 +472,7 @@ public class Main2Activity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    mIatDialog = new RecognizerDialog(Main2Activity.this, mInitListener);
+                    mIatDialog = new RecognizerDialog(ShowAndEditActivity.this, mInitListener);
 
                     mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
 
@@ -498,7 +487,7 @@ public class Main2Activity extends AppCompatActivity {
                     txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);
 
 //                //跳转到语音识别录成绩界面
-//                Intent intent = new Intent(Main2Activity.this, Main3Activity.class);
+//                Intent intent = new Intent(ShowAndEditActivity.this, RecordMarkActivity.class);
 //                startActivity(intent);
             }
         });
@@ -573,20 +562,20 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void initStudent() {
-        Log.i("Main2Activity", "开始初始化Student.........");
+        Log.i("ShowAndEditActivity", "开始初始化Student.........");
         String sqlSelect="SELECT StudentMark.stu_id,Student.stu_name,Student.stu_gender,StudentMark.test_id,StudentTest.test_name,StudentMark.score,StudentMark.total_score "
                 + "FROM StudentMark INNER JOIN Student ON StudentMark.stu_id = Student.stu_id "
                 + "INNER JOIN StudentTest ON StudentMark.test_id = StudentTest.test_id";
         //扫描数据库，将信息放入markList
-        SQLiteDatabase sd = MyDatabaseHelper.getInstance(Main2Activity.this);
+        SQLiteDatabase sd = MyDatabaseHelper.getInstance(ShowAndEditActivity.this);
         Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
 
         //打印cursor中的行数
-        Log.i("Main2Activity", "cursor.getCount():"+cursor.getCount());
+        Log.i("ShowAndEditActivity", "cursor.getCount():"+cursor.getCount());
 
         while(cursor.moveToNext()){
             long test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
-            Log.i("Main2Activity", "数据库test_id:"+test_id);
+            Log.i("ShowAndEditActivity", "数据库test_id:"+test_id);
 
             //只有当查询出的条目的test_id等于传入的this.test_id时才将该条目add到List<Student>
             if(test_id == this.test_id) {
@@ -607,7 +596,7 @@ public class Main2Activity extends AppCompatActivity {
     //读取动态修正返回结果
     private String updateResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
-        Log.d(Main2Activity.this.getLocalClassName(), "parseIatResult: " + text);
+        Log.d(ShowAndEditActivity.this.getLocalClassName(), "parseIatResult: " + text);
 
         String sn = null;
         String pgs = null;
@@ -650,7 +639,7 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public static void actionStart(Context context, Long test_id, String test_name) {
-        Intent intent = new Intent(context, Main2Activity.class);
+        Intent intent = new Intent(context, ShowAndEditActivity.class);
         intent.putExtra("test_id", test_id);
         intent.putExtra("test_name",test_name);
         context.startActivity(intent);
@@ -670,7 +659,7 @@ public class Main2Activity extends AppCompatActivity {
         ExcelUtils.initExcel(file.toString() + "/" + test_name + "成绩表.xls", title);//初始化表第一行
         fileName = getSDPath() + "/Record/" + test_name + "成绩表.xls";
 
-        ExcelUtils.writeObjListToExcel(getRecordData(), fileName, Main2Activity.this);//将ObjList写入Excel
+        ExcelUtils.writeObjListToExcel(getRecordData(), fileName, ShowAndEditActivity.this);//将ObjList写入Excel
     }
 
 

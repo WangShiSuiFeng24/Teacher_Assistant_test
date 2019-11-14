@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.teacher_assistant_test.MyDatabaseHelper;
-
 public class IDUSTool {
     private SQLiteDatabase sqLiteDatabase;
 

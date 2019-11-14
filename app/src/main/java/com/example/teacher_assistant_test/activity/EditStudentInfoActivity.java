@@ -1,4 +1,4 @@
-package com.example.teacher_assistant_test;
+package com.example.teacher_assistant_test.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +12,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.teacher_assistant_test.util.MyDatabaseHelper;
+import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.adapter.StudentInfoAdapter;
 import com.example.teacher_assistant_test.bean.StudentInfo;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;

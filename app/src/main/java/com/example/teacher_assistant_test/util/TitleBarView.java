@@ -1,4 +1,4 @@
-package com.example.teacher_assistant_test;
+package com.example.teacher_assistant_test.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;

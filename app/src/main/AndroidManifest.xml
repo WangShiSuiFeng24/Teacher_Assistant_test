@@ -24,12 +24,12 @@
         android:roundIcon="@mipmap/ic_icons"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".EditStudentInfoActivity"></activity>
+        <activity android:name=".activity.EditStudentInfoActivity"></activity>
         <activity
-            android:name=".Main3Activity"
+            android:name=".activity.RecordMarkActivity"
             android:configChanges="keyboardHidden|orientation|locale"></activity>
-        <activity android:name=".Main2Activity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.ShowAndEditActivity" />
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

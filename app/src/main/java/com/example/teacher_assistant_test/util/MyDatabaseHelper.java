@@ -1,10 +1,9 @@
-package com.example.teacher_assistant_test;
+package com.example.teacher_assistant_test.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     /*integer 整型，real 浮点型，primary key 主键，autoincrement 自增长，text 文本类型，blob 二进制数，*/

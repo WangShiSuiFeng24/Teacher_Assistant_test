@@ -1,17 +1,12 @@
-package com.example.teacher_assistant_test;
+package com.example.teacher_assistant_test.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -19,13 +14,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +26,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.util.MyDatabaseHelper;
+import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.adapter.MarkAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.util.Calculator;
@@ -42,8 +38,6 @@ import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerResult;
@@ -56,24 +50,17 @@ import com.iflytek.cloud.ui.RecognizerDialogListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Callable;
 
-import static java.sql.Types.NULL;
-
-public class Main3Activity extends AppCompatActivity {
-    private static final String TAG = "Main3Activity";
+public class RecordMarkActivity extends AppCompatActivity {
+    private static final String TAG = "RecordMarkActivity";
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
     private List<Mark> markList = new ArrayList<>();
@@ -97,7 +84,7 @@ public class Main3Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
+        setContentView(R.layout.activity_record_mark);
 
         ImmersiveStatusBar.setImmersiveStatusBar(this);
 
@@ -132,7 +119,7 @@ public class Main3Activity extends AppCompatActivity {
         //设置分割线
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Main3Activity.this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(RecordMarkActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         markAdapter = new MarkAdapter(markList);
         recyclerView.setAdapter(markAdapter);
@@ -204,7 +191,7 @@ public class Main3Activity extends AppCompatActivity {
             public void onClick(View v) {
                     //初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
                     //使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
-                    mIatDialog = new RecognizerDialog(Main3Activity.this, mInitListener);
+                    mIatDialog = new RecognizerDialog(RecordMarkActivity.this, mInitListener);
 
 //                if(mIatDialog!=null)
                     mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
@@ -237,7 +224,7 @@ public class Main3Activity extends AppCompatActivity {
         markAdapter.setOnItemClickListener(new MarkAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final int position) {
-                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main3Activity.this, "Alarm",
+                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(RecordMarkActivity.this, "Alarm",
                         "将要删除学号为:"+markList.get(position).getStu_id()+"条目", null, "yes", "no");
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -263,7 +250,7 @@ public class Main3Activity extends AppCompatActivity {
             public void onClick(View v) {
                 markList.clear();
                 markAdapter.notifyDataSetChanged();
-                Toast.makeText(Main3Activity.this, "已清空！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RecordMarkActivity.this, "已清空！", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -278,12 +265,12 @@ public class Main3Activity extends AppCompatActivity {
                     for(Mark mark : markList) {
                         if(!canParseInt(mark.getStu_id())) {
                             isLegal = false;
-                            Toast.makeText(Main3Activity.this, "学号:"+mark.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecordMarkActivity.this, "学号:"+mark.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
                             break;
                         }
                         if(!(new CheckExpression().checkExpression(mark.getScore()))) {
                             isLegal = false;
-                            Toast.makeText(Main3Activity.this, "成绩:"+mark.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecordMarkActivity.this, "成绩:"+mark.getScore()+" 非法", Toast.LENGTH_SHORT).show();
                             break;
                         }
                     }
@@ -298,7 +285,7 @@ public class Main3Activity extends AppCompatActivity {
                         // 否则返回false。
                         for(Mark mark : markList) {
                             if(checkList.contains(mark)) {
-                                Toast.makeText(Main3Activity.this, "有重复学号:"+mark.getStu_id(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RecordMarkActivity.this, "有重复学号:"+mark.getStu_id(), Toast.LENGTH_SHORT).show();
                                 flag = true;
                                 break;
                             }
@@ -306,12 +293,12 @@ public class Main3Activity extends AppCompatActivity {
                         }
 
                         if(!flag) {
-                            final EditText edit = new EditText(Main3Activity.this);
+                            final EditText edit = new EditText(RecordMarkActivity.this);
                             //设置EditText的可视最大行数。
                             edit.setMaxLines(1);
                             //先弹出一个可编辑的AlertDialog，可以编辑test_name
                             final AlertDialog alertDialog = GetAlertDialog
-                                    .getAlertDialog(Main3Activity.this,"测验名:",
+                                    .getAlertDialog(RecordMarkActivity.this,"测验名:",
                                             null, edit, "确定", "取消");
                             //给edit设置焦点
                             edit.setFocusable(true);
@@ -338,7 +325,7 @@ public class Main3Activity extends AppCompatActivity {
                                     //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
                                     final long unique_test_id = getCount() + 1;
 
-                                    Log.i("Main3Activity", "unique_test_id:"+unique_test_id);
+                                    Log.i("RecordMarkActivity", "unique_test_id:"+unique_test_id);
                                     if (input.equals("")) {
                                         Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
                                         return;
@@ -346,15 +333,15 @@ public class Main3Activity extends AppCompatActivity {
 //                            String editText = edit.getText().toString().trim();
 
                                         //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
-                                        final SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
+                                        final SQLiteDatabase db = MyDatabaseHelper.getInstance(RecordMarkActivity.this);
                                         //查询数据库中是否存在与将要插入的preMark相同的test_name,若相同，则提示用户test_name已存在重新输入，否则直接新建插入全部数据
                                         String sqlSelect = "SELECT test_name FROM StudentTest";
                                         Cursor cursor = db.rawQuery(sqlSelect, new String[]{});
 
                                         if(cursor.isLast()) {
                                             //StudentTest表为空，第一次更新
-                                            new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, input);
-                                            Toast.makeText(Main3Activity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
+                                            new IDUSTool(RecordMarkActivity.this).insertStuTest(unique_test_id, input);
+                                            Toast.makeText(RecordMarkActivity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
                                         }
 
                                         else {
@@ -366,7 +353,7 @@ public class Main3Activity extends AppCompatActivity {
 
                                                 if(input.equals(test_name)) {
                                                     //StudentTest表中已有相同test_name,提示用户重新输入
-                                                    Toast.makeText(Main3Activity.this, input+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(RecordMarkActivity.this, input+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
 //                                        flag = true;
                                                     return;
                                                 }
@@ -375,8 +362,8 @@ public class Main3Activity extends AppCompatActivity {
                                             //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
 
                                             //先把test_id和test_name插入到StudentTest表中
-                                            new IDUSTool(Main3Activity.this).insertStuTest(unique_test_id, input);
-                                            Log.i("Main3Activity", "向StudentTest表中插入unique_test_id:"+unique_test_id+",input:"+input+"成功");
+                                            new IDUSTool(RecordMarkActivity.this).insertStuTest(unique_test_id, input);
+                                            Log.i("RecordMarkActivity", "向StudentTest表中插入unique_test_id:"+unique_test_id+",input:"+input+"成功");
 
                                             //再向StudentMark表中插入当前页面数据
                                             Iterator<Mark> iterator = markList.iterator();
@@ -388,9 +375,9 @@ public class Main3Activity extends AppCompatActivity {
 //                                    long test_id = unique_test_id;
                                                 String score = preMark.getScore();
                                                 int total_score = preMark.getTotal_score();
-                                                new IDUSTool(Main3Activity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
-                                                Toast.makeText(Main3Activity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                                                Log.i("Main3Activity", "向StudentMark表中插入stu_id:"+stu_id
+                                                new IDUSTool(RecordMarkActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
+                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                                Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id:"+stu_id
                                                         +"\r\nunique_test_id:"+unique_test_id
                                                         +"\r\nscore:"+score
                                                         +"\r\ntotal_score"+total_score+"成功");
@@ -404,11 +391,11 @@ public class Main3Activity extends AppCompatActivity {
 
                                     //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
                                     long long_to_int_test_id = (int) unique_test_id;
-                                    Log.i("Main3Activity", "long转int的unique_test_id:"+long_to_int_test_id);
+                                    Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
 
-                                    Main2Activity.actionStart(Main3Activity.this, long_to_int_test_id, input);
+                                    ShowAndEditActivity.actionStart(RecordMarkActivity.this, long_to_int_test_id, input);
 
-//                                    Intent intent = new Intent(Main3Activity.this, Main2Activity.class);
+//                                    Intent intent = new Intent(RecordMarkActivity.this, ShowAndEditActivity.class);
 //                                    intent.putExtra("test_id", long_to_int_test_id);
 //                                    intent.putExtra("test_name", input);
 //                                    startActivity(intent);
@@ -420,7 +407,7 @@ public class Main3Activity extends AppCompatActivity {
                     }
 
                 } else {
-                    Toast.makeText(Main3Activity.this, "保存数据为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecordMarkActivity.this, "保存数据为空", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -430,9 +417,9 @@ public class Main3Activity extends AppCompatActivity {
         mInitListener = new InitListener() {
             @Override
             public void onInit(int code) {
-                Log.d(Main3Activity.this.getLocalClassName(), "SpeechRecognizer init() code = " + code);
+                Log.d(RecordMarkActivity.this.getLocalClassName(), "SpeechRecognizer init() code = " + code);
                 if (code != ErrorCode.SUCCESS) {
-                    Toast.makeText(Main3Activity.this, "初始化失败，错误码：" + code + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecordMarkActivity.this, "初始化失败，错误码：" + code + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -452,7 +439,7 @@ public class Main3Activity extends AppCompatActivity {
                     if(newMarkList == null) {
                         //处理结果为null，无有效成绩
                         final AlertDialog alertDialog = GetAlertDialog
-                                .getAlertDialog(Main3Activity.this, "Tip",
+                                .getAlertDialog(RecordMarkActivity.this, "Tip",
                                         "语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照: \"8号 88(+8)分\" 这样效果会更好哦！",
                                         null, "OK", "CANCEL");
                         alertDialog.setCanceledOnTouchOutside(false);
@@ -480,7 +467,7 @@ public class Main3Activity extends AppCompatActivity {
                                         //语音识别stu_id相同，这里处理
                                         //弹出dialog,是否更改数据，
                                         flag = true;
-                                        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(Main3Activity.this,
+                                        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(RecordMarkActivity.this,
                                                 "Alarm", "学号:"+newMark.getStu_id()+" 已存在,"+
                                                 "是否需要更改成绩:"+mark.getScore()+"为:"+newMark.getScore(),
                                                 null, "OK", "CANCEL");
@@ -523,7 +510,7 @@ public class Main3Activity extends AppCompatActivity {
                 if (tv_error != null) {
                     tv_error.setText("您好像没有说话哦...");
                 }
-//                Toast.makeText(Main3Activity.this, error.getPlainDescription(true), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(RecordMarkActivity.this, error.getPlainDescription(true), Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -662,7 +649,7 @@ public class Main3Activity extends AppCompatActivity {
     private String updateResult(RecognizerResult results) {
 
         String text = JsonParser.parseIatResult(results.getResultString());
-        Log.d(Main3Activity.this.getLocalClassName(), "parseIatResult：" + text);
+        Log.d(RecordMarkActivity.this.getLocalClassName(), "parseIatResult：" + text);
 
         String sn = null;
         String pgs = null;
@@ -744,7 +731,7 @@ public class Main3Activity extends AppCompatActivity {
 
     //SQLite查询test_id记录总数
     public long getCount() {
-        SQLiteDatabase db = MyDatabaseHelper.getInstance(Main3Activity.this);
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(RecordMarkActivity.this);
         Cursor cursor = db.rawQuery("select count(test_id) from StudentTest",null);
         cursor.moveToFirst();
         Long count = cursor.getLong(0);
@@ -761,7 +748,7 @@ public class Main3Activity extends AppCompatActivity {
     }
 
     public static void actionStart(Context context) {
-        Intent intent = new Intent(context, Main3Activity.class);
+        Intent intent = new Intent(context, RecordMarkActivity.class);
         context.startActivity(intent);
     }
 
