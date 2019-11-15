@@ -41,8 +41,9 @@ public class StudentInfoAdapter extends RecyclerView.Adapter<StudentInfoAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.student_info_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+//        ViewHolder viewHolder = new ViewHolder(view);
+//        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override

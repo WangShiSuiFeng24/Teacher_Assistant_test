@@ -404,7 +404,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
                 /**
                  * 过滤掉没有说话的错误码显示
                  */
-                TextView tv_error = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
+                TextView tv_error = mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
                 if (tv_error != null) {
                     tv_error.setText("您好像没有说话哦。。。");
                 }            }

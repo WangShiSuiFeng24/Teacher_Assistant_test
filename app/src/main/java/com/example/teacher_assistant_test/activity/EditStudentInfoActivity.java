@@ -443,9 +443,6 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     }
 
     private boolean isGenderLegal(String stu_gender) {
-        if(stu_gender.equals("男") || stu_gender.equals("女")) {
-            return true;
-        }
-        return false;
+        return stu_gender.equals("男") || stu_gender.equals("女");
     }
 }

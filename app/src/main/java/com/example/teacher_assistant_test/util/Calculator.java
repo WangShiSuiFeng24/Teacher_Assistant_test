@@ -6,7 +6,7 @@ import java.util.Stack;
 public class Calculator {
     private Stack<String> postfixStack  = new Stack<String>();//后缀式栈
     private Stack<Character> opStack  = new Stack<Character>();//运算符栈
-    private int [] operatPriority  = new int[] {0,3,2,1,-1,1,0,2};//运用运算符ASCII码-40做索引的运算符优先级
+    private int [] operatePriority  = new int[] {0,3,2,1,-1,1,0,2};//运用运算符ASCII码-40做索引的运算符优先级
 //    public static void main(String[] args) {
 //        Scanner sc = new Scanner(System.in);
 //        Calculator cal  = new Calculator();
@@ -100,7 +100,7 @@ public class Calculator {
      */
     public  boolean compare(char cur,char peek) {// 如果是peek优先级高于cur，返回true，默认都是peek优先级要低
         boolean result  = false;
-        if(operatPriority[(peek)-40] >= operatPriority[(cur) - 40]) {
+        if(operatePriority[(peek)-40] >= operatePriority[(cur) - 40]) {
             result = true;
         }
         return result;

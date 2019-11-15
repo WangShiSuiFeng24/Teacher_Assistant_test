@@ -65,14 +65,15 @@ import java.util.List;
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mark_item,parent,false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+//        ViewHolder holder = new ViewHolder(view);
+//        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         //当前holder的position
-        final int currentPosition = position;
+//        final int currentPosition = position;
 
         holder.student_id.setTag(position);
         holder.student_score.setTag(position);
@@ -143,7 +144,7 @@ import java.util.List;
         });
 
 
-//        //当前holder是我们记录下的焦点位置时，我们给当前的ediText设置焦点并设置光标位置
+//        //当前holder是我们记录下的焦点位置时，我们给当前的editText设置焦点并设置光标位置
 //        if (stuIdFocusPos == position) {
 //            holder.student_id.requestFocus();
 //            holder.student_id.setSelection(holder.student_id.getText().length());

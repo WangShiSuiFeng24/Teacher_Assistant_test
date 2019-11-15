@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias = 'ming'
-            keyPassword 'mingandong'
-            storePassword 'mingandong'
-            storeFile file('generateAPK')
-        }
-    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
@@ -18,7 +10,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.config
         multiDexEnabled = false
     }
     buildTypes {

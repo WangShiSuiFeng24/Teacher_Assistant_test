@@ -37,7 +37,7 @@ public class ImmersiveStatusBar {
             window.setStatusBarColor(Color.TRANSPARENT);
 
 
-            ViewGroup mContentView = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+            ViewGroup mContentView = activity.findViewById(Window.ID_ANDROID_CONTENT);
 //        int statusBarHeight = getStatusBarHeight(this);
 
             //获取StatusBar高度

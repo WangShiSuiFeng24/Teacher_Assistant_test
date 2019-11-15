@@ -191,12 +191,12 @@ public class RecordMarkActivity extends AppCompatActivity {
 
 //                if(mIatDialog!=null)
                     mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
-                    ;mIatDialog.setParameter("dwa", "wpgs");
+                    mIatDialog.setParameter("dwa", "wpgs");
 
                     mIatDialog.setListener(mRecognizerDialogListener);
 
                     mIatDialog.show();
-                    TextView txt = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
+                    TextView txt = mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
                     txt.setText(R.string.tip);//更改内容
                     txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);//去下划线
 
@@ -488,7 +488,7 @@ public class RecordMarkActivity extends AppCompatActivity {
                 /**
                  * 过滤掉没有说话的错误码显示
                  */
-                TextView tv_error = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
+                TextView tv_error = mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
                 if (tv_error != null) {
                     tv_error.setText("您好像没有说话哦。。。");
                 }
