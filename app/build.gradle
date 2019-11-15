@@ -28,11 +28,21 @@ android {
         }
     }
 
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                outputFileName = "园丁小帮手_v${defaultConfig.versionName}_${buildType.name}_${releaseTime()}.apk"
+            }
+    }
     sourceSets {
         main {
             jniLibs.srcDir 'libs'
         }
     }
+}
+
+static def releaseTime() {
+    return new Date().format("yyMMdd", TimeZone.getTimeZone("UTC"))
 }
 
 dependencies {
