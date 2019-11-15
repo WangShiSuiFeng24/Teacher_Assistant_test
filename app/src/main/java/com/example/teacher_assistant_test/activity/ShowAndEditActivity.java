@@ -160,7 +160,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
 //                    }
 
                         if(!new CheckExpression().checkExpression(student.getScore())) {
-                            Toast.makeText(ShowAndEditActivity.this, "成绩:"+student.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShowAndEditActivity.this, "成绩："+student.getScore()+" 非法", Toast.LENGTH_SHORT).show();
                             isLegal = false;
                         }
                     }
@@ -174,7 +174,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
                             int stu_id = student.getStu_id();
                             values.put("score", String.valueOf(student.getScore()));
                             values.put("total_score", student.getTotal_score());
-                            Log.i("ShowAndEditActivity", "score:"+student.getScore()+" total_score:"+student.getTotal_score());
+                            Log.i("ShowAndEditActivity", "score："+student.getScore()+" total_score:"+student.getTotal_score());
                             //该法不会将score算术表达式自动计算成结果更新
                             db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
                                     new String[]{""+test_id+"", ""+stu_id+""});
@@ -189,7 +189,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
 //                    String sqlUpdate = "UPDATE StudentMark SET score ="+student.getScore()+", total_score ="+student.getTotal_score()
 //                            +" WHERE test_id = "+test_id+" AND stu_id = "+stu_id+"";
 //                    db.execSQL(sqlUpdate);
-                            Log.i("ShowAndEditActivity", "test_id:"+test_id+" stu_id:"+stu_id);
+                            Log.i("ShowAndEditActivity", "test_id："+test_id+" stu_id："+stu_id);
                         }
 
 
@@ -291,7 +291,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
             public void onInit(int code) {
                 Log.d(ShowAndEditActivity.this.getLocalClassName(), "SpeechRecognizer init() code = " + code);
                 if(code != ErrorCode.SUCCESS) {
-                    Toast.makeText(ShowAndEditActivity.this, "初始化失败，错误码：" + code + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ShowAndEditActivity.this, "初始化失败，错误码：" + code + "，请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -299,19 +299,19 @@ public class ShowAndEditActivity extends AppCompatActivity {
         mRecognizerDialogListener = new RecognizerDialogListener() {
             @Override
             public void onResult(RecognizerResult results, boolean isLast) {
-                Log.d(this.getClass().getName(), "recognizer json result: " + results.getResultString());
+                Log.d(this.getClass().getName(), "recognizer json result：" + results.getResultString());
 
                 String resultStr = updateResult(results);
 
                 if(isLast) {
-                    Log.d(ShowAndEditActivity.this.getLocalClassName(), "recognizer result: " + resultStr);
+                    Log.d(ShowAndEditActivity.this.getLocalClassName(), "recognizer result： " + resultStr);
 
                     List<Mark> newMarkList = StrProcess.StrToMarkList(resultStr);
 
                     if(newMarkList == null) {
                         AlertDialog alertDialog = GetAlertDialog
                                 .getAlertDialog(ShowAndEditActivity.this, "Tip",
-                                        "语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照: \"8号 88(+8)分\" 这样效果会更好哦！",
+                                        "语音识别结果为："+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照： \"8号 88(+8)分\" 这样效果会更好哦！",
                                         null, "OK", "CANCEL");
                         alertDialog.setCanceledOnTouchOutside(false);
                     } else {
@@ -332,8 +332,8 @@ public class ShowAndEditActivity extends AppCompatActivity {
                                         flag = true;
                                         final AlertDialog alertDialog = GetAlertDialog
                                                 .getAlertDialog(ShowAndEditActivity.this,
-                                                        "Alarm", "学号:"+newMark.getStu_id()+" 已存在,"+
-                                                                "是否需要更改成绩:"+student.getScore()+"为:"+newMark.getScore(),
+                                                        "Alarm", "学号："+newMark.getStu_id()+"已存在，"+
+                                                                "是否需要更改成绩："+student.getScore()+"为："+newMark.getScore(),
                                                         null, "OK", "CANCEL");
                                         alertDialog.setCancelable(false);
 
@@ -404,7 +404,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
                  */
                 TextView tv_error = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
                 if (tv_error != null) {
-                    tv_error.setText("您好像没有说话哦...");
+                    tv_error.setText("您好像没有说话哦。。。");
                 }            }
         };
         // 将“12345678”替换成您申请的 APPID，申请地址：http://www.xfyun.cn
@@ -506,7 +506,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
     }
 
     private void initStudent() {
-        Log.i("ShowAndEditActivity", "开始初始化Student.........");
+        Log.i("ShowAndEditActivity", "开始初始化Student。。。。。。");
         String sqlSelect="SELECT StudentMark.stu_id,Student.stu_name,Student.stu_gender,StudentMark.test_id,StudentTest.test_name,StudentMark.score,StudentMark.total_score "
                 + "FROM StudentMark INNER JOIN Student ON StudentMark.stu_id = Student.stu_id "
                 + "INNER JOIN StudentTest ON StudentMark.test_id = StudentTest.test_id";
@@ -515,11 +515,11 @@ public class ShowAndEditActivity extends AppCompatActivity {
         Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
 
         //打印cursor中的行数
-        Log.i("ShowAndEditActivity", "cursor.getCount():"+cursor.getCount());
+        Log.i("ShowAndEditActivity", "cursor.getCount()："+cursor.getCount());
 
         while(cursor.moveToNext()){
             long test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
-            Log.i("ShowAndEditActivity", "数据库test_id:"+test_id);
+            Log.i("ShowAndEditActivity", "数据库test_id："+test_id);
 
             //只有当查询出的条目的test_id等于传入的this.test_id时才将该条目add到List<Student>
             if(test_id == this.test_id) {
@@ -540,7 +540,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
     //读取动态修正返回结果
     private String updateResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
-        Log.d(ShowAndEditActivity.this.getLocalClassName(), "parseIatResult: " + text);
+        Log.d(ShowAndEditActivity.this.getLocalClassName(), "parseIatResult： " + text);
 
         String sn = null;
         String pgs = null;
@@ -552,7 +552,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
             sn = resultJson.optString("sn");
             pgs = resultJson.optString("pgs");
             rg = resultJson.optString("rg");
-            Log.d(this.getLocalClassName(), "sn:" + sn + "\r\npgs:" + pgs + "\r\nrg:" + rg);
+            Log.d(this.getLocalClassName(), "sn：" + sn + "\r\npgs：" + pgs + "\r\nrg：" + rg);
         } catch (JSONException e) {
             e.printStackTrace();
             return "";
@@ -560,19 +560,19 @@ public class ShowAndEditActivity extends AppCompatActivity {
 
         //如果pgs是rpl就在已有的结果中删除掉要覆盖的sn部分
         if(pgs.equals("rpl")) {
-            Log.d(this.getLocalClassName(), "recognizer result replace: " + results.getResultString());
+            Log.d(this.getLocalClassName(), "recognizer result replace： " + results.getResultString());
 
             String[] strings = rg.replace("[", "").replace("]", "").split(",");
             int begin = Integer.parseInt(strings[0]);
             int end = Integer.parseInt(strings[1]);
             for (int i=begin; i<=end; i++) {
                 mIatResults.remove(i+"");
-                Log.d(this.getClass().getName(), "修正mIatResults" + mIatResults.toString());
+                Log.d(this.getClass().getName(), "修正mIatResults：" + mIatResults.toString());
             }
         }
 
         mIatResults.put(sn, text);
-        Log.d(this.getClass().getName(), "mIatResults" + mIatResults.toString());
+        Log.d(this.getClass().getName(), "mIatResults：" + mIatResults.toString());
         StringBuffer resultBuffer = new StringBuffer();
 
         for(String key : mIatResults.keySet()) {

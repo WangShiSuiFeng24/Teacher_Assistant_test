@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">园丁小帮手</string>
-    <string name="tip">语音录成绩格式请参照: \"8号 88(+8)分\" 这样效果会更好哦！</string>
+    <string name="tip">语音录成绩格式请参照："8号 88(+8)分" 这样效果会更好哦！</string>
 </resources>

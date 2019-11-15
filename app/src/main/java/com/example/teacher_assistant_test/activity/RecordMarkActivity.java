@@ -210,7 +210,7 @@ public class RecordMarkActivity extends AppCompatActivity {
             @Override
             public void onItemClick(final int position) {
                 final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(RecordMarkActivity.this, "Alarm",
-                        "将要删除学号为:"+markList.get(position).getStu_id()+"条目", null, "yes", "no");
+                        "将要删除学号为："+markList.get(position).getStu_id()+"的条目", null, "yes", "no");
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -250,12 +250,12 @@ public class RecordMarkActivity extends AppCompatActivity {
                     for(Mark mark : markList) {
                         if(!canParseInt(mark.getStu_id())) {
                             isLegal = false;
-                            Toast.makeText(RecordMarkActivity.this, "学号:"+mark.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecordMarkActivity.this, "学号："+mark.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
                             break;
                         }
                         if(!(new CheckExpression().checkExpression(mark.getScore()))) {
                             isLegal = false;
-                            Toast.makeText(RecordMarkActivity.this, "成绩:"+mark.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecordMarkActivity.this, "成绩："+mark.getScore()+" 非法", Toast.LENGTH_SHORT).show();
                             break;
                         }
                     }
@@ -270,7 +270,7 @@ public class RecordMarkActivity extends AppCompatActivity {
                         // 否则返回false。
                         for(Mark mark : markList) {
                             if(checkList.contains(mark)) {
-                                Toast.makeText(RecordMarkActivity.this, "有重复学号:"+mark.getStu_id(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RecordMarkActivity.this, "有重复学号："+mark.getStu_id(), Toast.LENGTH_SHORT).show();
                                 flag = true;
                                 break;
                             }
@@ -283,7 +283,7 @@ public class RecordMarkActivity extends AppCompatActivity {
                             edit.setMaxLines(1);
                             //先弹出一个可编辑的AlertDialog，可以编辑test_name
                             final AlertDialog alertDialog = GetAlertDialog
-                                    .getAlertDialog(RecordMarkActivity.this,"测验名:",
+                                    .getAlertDialog(RecordMarkActivity.this,"测验名：",
                                             null, edit, "确定", "取消");
                             //给edit设置焦点
                             edit.setFocusable(true);
@@ -348,7 +348,7 @@ public class RecordMarkActivity extends AppCompatActivity {
 
                                             //先把test_id和test_name插入到StudentTest表中
                                             new IDUSTool(RecordMarkActivity.this).insertStuTest(unique_test_id, input);
-                                            Log.i("RecordMarkActivity", "向StudentTest表中插入unique_test_id:"+unique_test_id+",input:"+input+"成功");
+                                            Log.i("RecordMarkActivity", "向StudentTest表中插入unique_test_id:"+unique_test_id+"，input:"+input+"成功");
 
                                             //再向StudentMark表中插入当前页面数据
                                             Iterator<Mark> iterator = markList.iterator();
@@ -362,9 +362,9 @@ public class RecordMarkActivity extends AppCompatActivity {
                                                 int total_score = preMark.getTotal_score();
                                                 new IDUSTool(RecordMarkActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
                                                 Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                                                Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id:"+stu_id
-                                                        +"\r\nunique_test_id:"+unique_test_id
-                                                        +"\r\nscore:"+score
+                                                Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id："+stu_id
+                                                        +"\r\nunique_test_id："+unique_test_id
+                                                        +"\r\nscore："+score
                                                         +"\r\ntotal_score"+total_score+"成功");
 
                                             }
@@ -404,7 +404,7 @@ public class RecordMarkActivity extends AppCompatActivity {
             public void onInit(int code) {
                 Log.d(RecordMarkActivity.this.getLocalClassName(), "SpeechRecognizer init() code = " + code);
                 if (code != ErrorCode.SUCCESS) {
-                    Toast.makeText(RecordMarkActivity.this, "初始化失败，错误码：" + code + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecordMarkActivity.this, "初始化失败，错误码：" + code + "，请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -425,7 +425,7 @@ public class RecordMarkActivity extends AppCompatActivity {
                         //处理结果为null，无有效成绩
                         final AlertDialog alertDialog = GetAlertDialog
                                 .getAlertDialog(RecordMarkActivity.this, "Tip",
-                                        "语音识别结果为:"+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照: \"8号 88(+8)分\" 这样效果会更好哦！",
+                                        "语音识别结果为："+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照: \"8号 88(+8)分\" 这样效果会更好哦！",
                                         null, "OK", "CANCEL");
                         alertDialog.setCanceledOnTouchOutside(false);
 
@@ -453,8 +453,8 @@ public class RecordMarkActivity extends AppCompatActivity {
                                         //弹出dialog,是否更改数据，
                                         flag = true;
                                         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(RecordMarkActivity.this,
-                                                "Alarm", "学号:"+newMark.getStu_id()+" 已存在,"+
-                                                "是否需要更改成绩:"+mark.getScore()+"为:"+newMark.getScore(),
+                                                "Alarm", "学号："+newMark.getStu_id()+"已存在，"+
+                                                "是否需要更改成绩："+mark.getScore()+"为："+newMark.getScore(),
                                                 null, "OK", "CANCEL");
                                         alertDialog.setCancelable(false);
 
@@ -493,7 +493,7 @@ public class RecordMarkActivity extends AppCompatActivity {
                  */
                 TextView tv_error = (TextView) mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
                 if (tv_error != null) {
-                    tv_error.setText("您好像没有说话哦...");
+                    tv_error.setText("您好像没有说话哦。。。");
                 }
 //                Toast.makeText(RecordMarkActivity.this, error.getPlainDescription(true), Toast.LENGTH_SHORT).show();
             }
@@ -623,7 +623,7 @@ public class RecordMarkActivity extends AppCompatActivity {
             sn = resultJson.optString("sn");
             pgs = resultJson.optString("pgs");
             rg = resultJson.optString("rg");
-            Log.d(this.getClass().getName(), "sn:"+sn+"\r\npgs:"+pgs+"\r\nrg:"+rg);
+            Log.d(this.getClass().getName(), "sn："+sn+"\r\npgs："+pgs+"\r\nrg："+rg);
         } catch (JSONException e) {
             e.printStackTrace();
             return "";
@@ -638,7 +638,7 @@ public class RecordMarkActivity extends AppCompatActivity {
             int end = Integer.parseInt(strings[1]);
             for (int i = begin; i <= end; i++) {
                 mIatResults.remove(i+"");
-                Log.d(this.getClass().getName(), "修正mIatResults"+mIatResults.toString());
+                Log.d(this.getClass().getName(), "修正mIatResults："+mIatResults.toString());
             }
         }
 

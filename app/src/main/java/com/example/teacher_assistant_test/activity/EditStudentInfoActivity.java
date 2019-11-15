@@ -160,11 +160,11 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final EditText edit_stu_id = new EditText(this);
-        edit_stu_id.setHint("学号:请输入阿拉伯数字");
+        edit_stu_id.setHint("学号：请输入阿拉伯数字");
         layout.addView(edit_stu_id);
 
         final EditText edit_stu_name = new EditText(this);
-        edit_stu_name.setHint("姓名");
+        edit_stu_name.setHint("姓名：");
         layout.addView(edit_stu_name);
 
 
@@ -183,7 +183,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
 
         final EditText edit_stu_gender = new EditText(this);
-        edit_stu_gender.setHint("性别:请输入 \"男\" 或 \"女\"");
+        edit_stu_gender.setHint("性别：请输入 \"男\" 或 \"女\"");
         layout.addView(edit_stu_gender);
 
         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "插入一条学生信息",
@@ -217,7 +217,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /**
-                 * 还没有检查性别 男、女，长度限制等。。。
+                 * 还没有检查长度限制等
                  */
 
                 if(canParseInt(edit_stu_id.getText().toString().trim())) {
@@ -227,7 +227,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                         int stu_id = studentInfoList.get(i).getStu_id();
                         if(stu_id == Integer.parseInt(edit_stu_id.getText().toString().trim())) {
                             hasSameId = true;
-                            Toast.makeText(EditStudentInfoActivity.this, "存在相同学号:"+edit_stu_id.getText().toString().trim() + " 请重新输入学号!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditStudentInfoActivity.this, "存在相同学号："+edit_stu_id.getText().toString().trim() + " 请重新输入学号！", Toast.LENGTH_SHORT).show();
                             edit_stu_id.requestFocus();
                             break;
                         }
@@ -257,7 +257,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    Toast.makeText(EditStudentInfoActivity.this, "学号:"+edit_stu_id.getText().toString().trim()+" 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStudentInfoActivity.this, "学号："+edit_stu_id.getText().toString().trim()+" 非法", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -296,18 +296,18 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                             studentInfoAdapter.notifyDataSetChanged();
                             isDataChanged = true;
                             titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
-                            Toast.makeText(EditStudentInfoActivity.this, "学号为:" + stu_id + "的同学信息已删除", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditStudentInfoActivity.this, "学号为：" + stu_id + "的学生信息已删除", Toast.LENGTH_SHORT).show();
                             hasInput = true;
                             break;
                         }
                     }
 
                     if(!hasInput) {
-                        Toast.makeText(EditStudentInfoActivity.this, "没有学号为:" + Integer.parseInt(input) + "的同学信息", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditStudentInfoActivity.this, "没有学号为：" + Integer.parseInt(input) + "的学生信息", Toast.LENGTH_SHORT).show();
                     }
                     alertDialog.dismiss();
                 } else {
-                    Toast.makeText(EditStudentInfoActivity.this, "您输入的学号不合法,请重新输入!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStudentInfoActivity.this, "您输入的学号不合法，请重新输入！", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -318,18 +318,18 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final EditText edit_stu_id = new EditText(this);
-        edit_stu_id.setHint("学号:请输入阿拉伯数字");
+        edit_stu_id.setHint("学号：请输入阿拉伯数字");
         layout.addView(edit_stu_id);
 
         final EditText edit_stu_name = new EditText(this);
-        edit_stu_name.setHint("姓名");
+        edit_stu_name.setHint("姓名：");
         layout.addView(edit_stu_name);
 
         final EditText edit_stu_gender = new EditText(this);
-        edit_stu_gender.setHint("性别:请输入 \"男\" 或 \"女\"");
+        edit_stu_gender.setHint("性别：请输入 \"男\" 或 \"女\"");
         layout.addView(edit_stu_gender);
 
-        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "请输入需要修改信息的同学学号及修改结果",
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "请输入需要修改信息的学生学号及修改结果",
                 null, layout, "确定", "取消");
         alertDialog.setCanceledOnTouchOutside(false);
 
@@ -350,7 +350,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /**
-                 * 还没有检查性别 男、女，长度限制等。。。
+                 * 还没有检查长度限制等
                  */
 
                 if(canParseInt(edit_stu_id.getText().toString().trim())) {
@@ -375,7 +375,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                                     isDataChanged = true;
                                     titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
                                     alertDialog.dismiss();
-                                    Toast.makeText(EditStudentInfoActivity.this, "修改学号为:" + stu_id + " 的同学信息成功!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditStudentInfoActivity.this, "修改学号为：" + stu_id + " 的学生信息成功！", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(EditStudentInfoActivity.this, "性别非\"男\" 或 \"女\"", Toast.LENGTH_SHORT).show();
                                     edit_stu_gender.requestFocus();
@@ -386,11 +386,11 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                     }
 
                     if(!hasSame) {
-                        Toast.makeText(EditStudentInfoActivity.this, "没有您想修改学号为:" + edit_stu_id.getText().toString().trim() + " 的学生信息", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditStudentInfoActivity.this, "没有您想修改学号为：" + edit_stu_id.getText().toString().trim() + " 的学生信息", Toast.LENGTH_SHORT).show();
                         edit_stu_id.requestFocus();
                     }
                 } else {
-                    Toast.makeText(EditStudentInfoActivity.this, "学号:"+edit_stu_id.getText().toString().trim()+" 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStudentInfoActivity.this, "学号："+edit_stu_id.getText().toString().trim()+" 非法", Toast.LENGTH_SHORT).show();
                 }
             }
         });

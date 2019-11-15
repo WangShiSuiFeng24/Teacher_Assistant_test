@@ -42,8 +42,6 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
-
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
 
     private List<Test> testList = new ArrayList<>();
@@ -122,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemLongClick(final int position) {
                 //长按则删除
                 final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
-                        "Alarm", "将要删除TEST为:"+testList.get(position).getTest_name()+"条目",
+                        "Alarm", "将要删除测试名为："+testList.get(position).getTest_name()+"的条目",
                         null, "Yes", "No");
 
                 alertDialog.setCancelable(false);
