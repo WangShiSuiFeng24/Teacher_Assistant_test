@@ -425,7 +425,7 @@ public class RecordMarkActivity extends AppCompatActivity {
                         //处理结果为null，无有效成绩
                         final AlertDialog alertDialog = GetAlertDialog
                                 .getAlertDialog(RecordMarkActivity.this, "Tip",
-                                        "语音识别结果为："+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照: \"8号 88(+8)分\" 这样效果会更好哦！",
+                                        "语音识别结果为："+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照：＂8号 88(+8)分＂这样效果会更好哦！",
                                         null, "OK", "CANCEL");
                         alertDialog.setCanceledOnTouchOutside(false);
 

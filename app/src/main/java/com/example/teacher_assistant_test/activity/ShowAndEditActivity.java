@@ -114,7 +114,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
         test_id = intent.getLongExtra("test_id", 0);
         test_name = intent.getStringExtra("test_name");
-        Log.i("ShowAndEditActivity", "test_id:"+test_id+" test_name:"+test_name);
+        Log.i("ShowAndEditActivity", "test_id："+test_id+" test_name："+test_name);
 
         final TitleBarView titleBarView = findViewById(R.id.title2);
         titleBarView.setTitleSize(20);
@@ -315,7 +315,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
                     if(newMarkList == null) {
                         AlertDialog alertDialog = GetAlertDialog
                                 .getAlertDialog(ShowAndEditActivity.this, "Tip",
-                                        "语音识别结果为："+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照： \"8号 88(+8)分\" 这样效果会更好哦！",
+                                        "语音识别结果为："+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照：＂8号 88(+8)分＂这样效果会更好哦！",
                                         null, "OK", "CANCEL");
                         alertDialog.setCanceledOnTouchOutside(false);
                     } else {
