@@ -45,13 +45,9 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
     private TitleBarView titleBarView;
 
-    private RecyclerView recyclerView;
     private StudentInfoAdapter studentInfoAdapter;
 
     private FloatingActionMenu fab;
-    private FloatingActionButton fab_insert;
-    private FloatingActionButton fab_delete;
-    private FloatingActionButton fab_update;
 
     private boolean isDataChanged = false;
 
@@ -88,7 +84,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         });
 
         initStudentInfo();
-        recyclerView = findViewById(R.id.Recycler_View_StudentInfo);
+        RecyclerView recyclerView = findViewById(R.id.Recycler_View_StudentInfo);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         studentInfoAdapter = new StudentInfoAdapter(studentInfoList);
@@ -97,9 +93,9 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         fab.setClosedOnTouchOutside(true);//可以设置点击蒙版关闭的开关
 
-        fab_insert = findViewById(R.id.fab_insert);
-        fab_delete = findViewById(R.id.fab_delete);
-        fab_update = findViewById(R.id.fab_update);
+        FloatingActionButton fab_insert = findViewById(R.id.fab_insert);
+        FloatingActionButton fab_delete = findViewById(R.id.fab_delete);
+        FloatingActionButton fab_update = findViewById(R.id.fab_update);
 
         fab_insert.setOnClickListener(new View.OnClickListener() {
             @Override

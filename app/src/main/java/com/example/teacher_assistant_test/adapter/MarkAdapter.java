@@ -143,13 +143,13 @@ import java.util.List;
         });
 
 
-//        //当前holder是我们记录下的焦点位置时，我们给当前的editext设置焦点并设置光标位置
+//        //当前holder是我们记录下的焦点位置时，我们给当前的ediText设置焦点并设置光标位置
 //        if (stuIdFocusPos == position) {
 //            holder.student_id.requestFocus();
 //            holder.student_id.setSelection(holder.student_id.getText().length());
 //        }
 //
-//        //我们给当前holder中的edittext添加touch事件监听，在action_up手指抬起时，记录下焦点position
+//        //我们给当前holder中的editText添加touch事件监听，在action_up手指抬起时，记录下焦点position
 //        holder.student_id.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {

@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private List<Test> testList = new ArrayList<>();
     TestAdapter testAdapter;
 
-    private ImageView fab;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fab = findViewById(R.id.fab);
+        ImageView fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //返回刷新，小技巧是把需要更新的view 可以都放在initview（）中，在resume中调用这个方法即可。
+    //返回刷新，小技巧是把需要更新的view 可以都放在initView（）中，在resume中调用这个方法即可。
     @Override
     protected void onResume() {
         Log.d("MainActivity", "onResume()");

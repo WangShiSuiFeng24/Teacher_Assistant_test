@@ -63,15 +63,11 @@ public class RecordMarkActivity extends AppCompatActivity {
     private static final String TAG = "RecordMarkActivity";
 
     private List<Mark> markList = new ArrayList<>();
-    private Button clear_data;
-    private Button save_to_db;
 
     private RecognizerDialog mIatDialog = null;
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
     private InitListener mInitListener;
     private RecognizerDialogListener mRecognizerDialogListener;
-//    private FloatingActionButton fab;
-    private ImageView fab;
 
     private MarkAdapter markAdapter;
 
@@ -157,7 +153,7 @@ public class RecordMarkActivity extends AppCompatActivity {
 //                            },1000);
 
                             //在一个ViewHolder.onBind()里面用通过bus发消息去通知刷新列表notifyDataSetChanged()，
-                            // 这个时候刚好列表在滚动或者在la yout()，那么就会报错。
+                            // 这个时候刚好列表在滚动或者在layout()，那么就会报错。
                             // Caused by java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing
                             //此法原理：
                             //主线程刷新UI是通过消息队列，当列表正在滚动或者layout时调用notifyDataSetChanged()，
@@ -183,7 +179,8 @@ public class RecordMarkActivity extends AppCompatActivity {
             }
         });
 
-        fab = findViewById(R.id.fab);
+        //    private FloatingActionButton fab;
+        ImageView fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,8 +223,8 @@ public class RecordMarkActivity extends AppCompatActivity {
             }
         });
 
-        clear_data = findViewById(R.id.clear_data);
-        save_to_db = findViewById(R.id.save_to_db);
+        Button clear_data = findViewById(R.id.clear_data);
+        Button save_to_db = findViewById(R.id.save_to_db);
 
         //清除当前页面数据
         clear_data.setOnClickListener(new View.OnClickListener() {
@@ -300,7 +297,7 @@ public class RecordMarkActivity extends AppCompatActivity {
                                 }
                             },300);
 
-                            //拿到按钮并判断是否是POSITIVEBUTTON，然后我们自己实现监听
+                            //拿到按钮并判断是否是POSITIVE_BUTTON，然后我们自己实现监听
                             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

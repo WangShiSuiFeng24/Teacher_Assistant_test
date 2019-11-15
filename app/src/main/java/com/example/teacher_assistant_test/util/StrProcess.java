@@ -38,7 +38,7 @@ public class StrProcess {
         String pattern = "[^。，！？.,!?号]+号[^号]*[。，！？.,!?]";
         //创建Pattern对象
         Pattern r = Pattern.compile(pattern);
-        //创建Macher对象
+        //创建Matcher对象
         Matcher matcher = r.matcher(str);
 //        Log.i("StrProcess", "m:"+ matcher.toString());
 
@@ -60,7 +60,7 @@ public class StrProcess {
             String rulePattern = "[1-9][0-9]?号[。，！？.,!?]{0,2}[0-9]{1,3}([\\+]([0-9]{1,2}))*";
             //创建Pattern对象
             Pattern ruleR = Pattern.compile(rulePattern);
-            //创建Macher对象
+            //创建Matcher对象
             Matcher ruleMatcher = ruleR.matcher(list.get(i));
 
             //将匹配结果存入一个List<String>

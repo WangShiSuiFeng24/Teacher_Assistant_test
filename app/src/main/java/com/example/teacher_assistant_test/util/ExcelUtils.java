@@ -108,7 +108,7 @@ public class ExcelUtils {
     @SuppressWarnings("unchecked")
     public static <T> void writeObjListToExcel(List<T> objList, String fileName, Context c) {
         if(objList != null && objList.size() > 0) {
-            WritableWorkbook writebook = null;
+            WritableWorkbook writeBook = null;
             InputStream in = null;
             try {
                 WorkbookSettings setEncode = new WorkbookSettings();
@@ -117,8 +117,8 @@ public class ExcelUtils {
                 in = new FileInputStream(new File(fileName));
 
                 Workbook workbook = Workbook.getWorkbook(in);
-                writebook = Workbook.createWorkbook(new File(fileName), workbook);
-                WritableSheet sheet = writebook.getSheet(0);
+                writeBook = Workbook.createWorkbook(new File(fileName), workbook);
+                WritableSheet sheet = writeBook.getSheet(0);
 
                 //i:列（Column)，j:行(Row)。
                 for(int j=0; j<objList.size(); j++) {
@@ -134,14 +134,14 @@ public class ExcelUtils {
                     sheet.setRowView(j+1, 350);
                 }
 
-                writebook.write();
+                writeBook.write();
                 Toast.makeText(c, "导出到手机中文件夹Record成功", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if(writebook != null) {
+                if(writeBook != null) {
                     try {
-                        writebook.close();
+                        writeBook.close();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -34,33 +34,33 @@ public class TitleBarView extends RelativeLayout {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.layout_title, this);
         initView();
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TitlebarView, defStyleAttr, 0);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TitleBarView, defStyleAttr, 0);
         int count = array.getIndexCount();
         for (int i = 0; i < count; i++) {
             int attr = array.getIndex(i);
             switch (attr) {
-                case R.styleable.TitlebarView_leftTextColor:
+                case R.styleable.TitleBarView_leftTextColor:
                     tv_left.setTextColor(array.getColor(attr, Color.BLACK));
                     break;
-                case R.styleable.TitlebarView_leftDrawable:
+                case R.styleable.TitleBarView_leftDrawable:
                     iv_left.setImageResource(array.getResourceId(attr, 0));
                     break;
-                case R.styleable.TitlebarView_leftText:
+                case R.styleable.TitleBarView_leftText:
                     tv_left.setText(array.getString(attr));
                     break;
-                case R.styleable.TitlebarView_centerTextColor:
+                case R.styleable.TitleBarView_centerTextColor:
                     tv_title.setTextColor(array.getColor(attr, Color.BLACK));
                     break;
-                case R.styleable.TitlebarView_centerTitle:
+                case R.styleable.TitleBarView_centerTitle:
                     tv_title.setText(array.getString(attr));
                     break;
-                case R.styleable.TitlebarView_rightDrawable:
+                case R.styleable.TitleBarView_rightDrawable:
                     iv_right.setImageResource(array.getResourceId(attr, 0));
                     break;
-                case R.styleable.TitlebarView_rightText:
+                case R.styleable.TitleBarView_rightText:
                     tv_right.setText(array.getString(attr));
                     break;
-                case R.styleable.TitlebarView_rightTextColor:
+                case R.styleable.TitleBarView_rightTextColor:
                     tv_right.setTextColor(array.getColor(attr, Color.BLACK));
                     break;
             }
