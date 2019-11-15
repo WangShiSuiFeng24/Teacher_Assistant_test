@@ -456,7 +456,7 @@ public class RecordMarkActivity extends AppCompatActivity {
                                                 "Alarm", "学号："+newMark.getStu_id()+"已存在，"+
                                                 "是否需要更改成绩："+mark.getScore()+"为："+newMark.getScore(),
                                                 null, "OK", "CANCEL");
-                                        alertDialog.setCancelable(false);
+                                        alertDialog.setCanceledOnTouchOutside(false);
 
                                         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -661,7 +661,7 @@ public class RecordMarkActivity extends AppCompatActivity {
         if(ev.getAction() == MotionEvent.ACTION_DOWN) {
             View view = getCurrentFocus();
             if(isHideInput(view, ev)) {
-                HideSoftInput(view.getWindowToken());
+                hideSoftInput(view.getWindowToken());
             }
         }
         return super.dispatchTouchEvent(ev);
@@ -683,7 +683,7 @@ public class RecordMarkActivity extends AppCompatActivity {
         return false;
     }
     // 隐藏软键盘
-    private void HideSoftInput(IBinder token) {
+    private void hideSoftInput(IBinder token) {
         if(token != null) {
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(token,
