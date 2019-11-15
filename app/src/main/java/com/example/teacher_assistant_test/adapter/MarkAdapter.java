@@ -3,7 +3,6 @@ package com.example.teacher_assistant_test.adapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -14,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.bean.Mark;
-import com.example.teacher_assistant_test.util.Calculator;
-import com.example.teacher_assistant_test.util.CheckExpression;
 
 import java.util.List;
 

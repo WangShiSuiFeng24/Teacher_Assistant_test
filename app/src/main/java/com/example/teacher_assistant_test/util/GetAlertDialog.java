@@ -2,11 +2,8 @@ package com.example.teacher_assistant_test.util;
 
 import androidx.appcompat.app.AlertDialog;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.example.teacher_assistant_test.R;

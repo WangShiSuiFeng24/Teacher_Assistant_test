@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 public class CheckExpression {
     /**
      * 检查表达式是否合法，合法返回true
-     * @param expression
-     * @return
+     * @param expression 传入的一个表达式
+     * @return 是算术表达式返回true，否则返回false
      */
     public boolean checkExpression(String expression) {
         //去除空格

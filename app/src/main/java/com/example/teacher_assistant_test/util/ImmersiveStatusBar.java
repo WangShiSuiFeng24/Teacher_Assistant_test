@@ -1,7 +1,6 @@
 package com.example.teacher_assistant_test.util;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
