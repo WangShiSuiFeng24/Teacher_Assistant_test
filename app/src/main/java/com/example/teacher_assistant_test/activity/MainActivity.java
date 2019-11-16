@@ -125,7 +125,11 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        long test_id = testList.get(position).getTest_id();
                         testAdapter.remove(position);
+                        SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+                        db.delete("StudentTest", "test_id = ?", new String[]{""+test_id+""});
+                        db.delete("StudentMark", "test_id = ?", new String[]{""+test_id+""});
                         alertDialog.dismiss();
                     }
                 });
