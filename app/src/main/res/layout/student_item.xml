@@ -45,7 +45,8 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:textSize="15sp"
-        android:text="成绩" />
+        android:text="成绩"
+        android:hint="@null"/>
 
     <TextView
         android:id="@+id/stu_total_score"

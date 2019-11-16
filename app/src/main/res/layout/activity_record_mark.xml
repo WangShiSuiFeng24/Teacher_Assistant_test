@@ -48,7 +48,8 @@
                     android:src="@drawable/ic_drop_down"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:onClick="idSortControl"/>
+                    android:onClick="idSortControl"
+                    android:contentDescription="@null" />
 
             </RelativeLayout>
 
@@ -81,7 +82,8 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="45dp"
-                    android:onClick="scoreSortControl"/>
+                    android:onClick="scoreSortControl"
+                    android:contentDescription="@null" />
 
             </RelativeLayout>
 

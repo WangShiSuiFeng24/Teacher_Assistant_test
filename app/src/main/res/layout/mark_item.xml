@@ -12,7 +12,8 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:textSize="15sp"
-        android:background="@null"/>
+        android:background="@null"
+        android:hint="@null"/>
 <!--    <TextView-->
 <!--    android:id="@+id/student_score"-->
 <!--    android:layout_width="0dp"-->
@@ -30,7 +31,8 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:textSize="15sp"
-        android:background="@null" />
+        android:background="@null"
+        android:hint="@null"/>
 
     <TextView
         android:id="@+id/total_score"
