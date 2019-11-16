@@ -44,6 +44,7 @@ import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
+import com.github.clans.fab.FloatingActionButton;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerResult;
@@ -413,7 +414,9 @@ public class ShowAndEditActivity extends AppCompatActivity {
         // 请勿在“=”与 appid 之间添加任务空字符或者转义符
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5db04b35");
 
-        ImageView fab = findViewById(R.id.fab);
+//        ImageView fab = findViewById(R.id.fab);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

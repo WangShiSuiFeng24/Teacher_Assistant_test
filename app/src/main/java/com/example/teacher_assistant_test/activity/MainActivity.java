@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -31,6 +30,7 @@ import com.example.teacher_assistant_test.adapter.TestAdapter;
 import com.example.teacher_assistant_test.bean.Test;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
+import com.github.clans.fab.FloatingActionButton;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -132,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView fab = findViewById(R.id.fab);
+//        ImageView fab = findViewById(R.id.fab);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

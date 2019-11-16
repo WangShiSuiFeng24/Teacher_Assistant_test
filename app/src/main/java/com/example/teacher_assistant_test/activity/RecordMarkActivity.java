@@ -37,6 +37,7 @@ import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.StrProcess;
+import com.github.clans.fab.FloatingActionButton;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerResult;
@@ -179,7 +180,7 @@ public class RecordMarkActivity extends AppCompatActivity {
         });
 
         //    private FloatingActionButton fab;
-        ImageView fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

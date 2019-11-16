@@ -125,16 +125,27 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
 
-        <ImageView
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/round_solid_selector"
-            android:tint="@color/colorAccent"
-            android:src="@android:drawable/ic_btn_speak_now" />
+            android:src="@drawable/ic_btn_speak_now"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccentDark" />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/fab"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:background="@drawable/round_solid_selector"-->
+<!--            android:tint="@color/colorAccent"-->
+<!--            android:src="@android:drawable/ic_btn_speak_now" />-->
 
     </RelativeLayout>
 
