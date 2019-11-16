@@ -47,6 +47,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_drop_down"
                     android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:onClick="idSortControl"
                     android:contentDescription="@null" />
@@ -80,6 +81,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_drop_down"
                     android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="45dp"
                     android:onClick="scoreSortControl"
@@ -109,14 +111,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.example.teacher_assistant_test.util.RecyclerViewEmptySupport
                 android:id="@+id/Recycler_View_Mark"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:descendantFocusability="beforeDescendants"
                 android:fastScrollEnabled="false"
-                android:scrollbars="vertical">
-            </androidx.recyclerview.widget.RecyclerView>
+                android:scrollbars="vertical" />
+
+            <include layout="@layout/empty_view" />
+
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab"

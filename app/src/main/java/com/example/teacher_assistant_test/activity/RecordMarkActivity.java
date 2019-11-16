@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
 import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.adapter.MarkAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
@@ -109,13 +110,17 @@ public class RecordMarkActivity extends AppCompatActivity {
         isScoreSortPressed = false;
         score_sort = findViewById(R.id.score_sort);
 
-        final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
-
+//        final RecyclerView recyclerView = findViewById(R.id.Recycler_View_Mark);
+        final RecyclerViewEmptySupport recyclerView = findViewById(R.id.Recycler_View_Mark);
+        View emptyView = findViewById(R.id.empty_view);
+        TextView emptyMessage = findViewById(R.id.empty_message);
+        emptyMessage.setText("暂无成绩数据，请点击下方录音按钮创建新成绩。");
         //设置分割线
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(RecordMarkActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setEmptyView(emptyView);
         markAdapter = new MarkAdapter(markList);
         recyclerView.setAdapter(markAdapter);
 
