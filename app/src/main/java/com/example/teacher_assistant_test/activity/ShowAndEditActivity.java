@@ -181,7 +181,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
                             //该法不会将score算术表达式自动计算成结果更新
                             db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
                                     new String[]{""+test_id+"", ""+stu_id+""});
-                            Toast.makeText(ShowAndEditActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(ShowAndEditActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 
                             //测试
 //                    int i = db.update("StudentMark", values, "test_id = ? AND stu_id = ?",
@@ -219,6 +219,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
                         }
 
                         db.close();
+                        Toast.makeText(ShowAndEditActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }
