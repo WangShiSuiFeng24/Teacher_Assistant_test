@@ -127,7 +127,7 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
 
-        <com.github.clans.fab.FloatingActionButton
+        <com.example.teacher_assistant_test.util.MovableFloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -137,6 +137,18 @@
             android:src="@drawable/ic_btn_speak_now"
             app:fab_colorNormal="@color/colorAccent"
             app:fab_colorPressed="@color/colorAccentDark" />
+
+
+<!--        <com.github.clans.fab.FloatingActionButton-->
+<!--            android:id="@+id/fab"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:src="@drawable/ic_btn_speak_now"-->
+<!--            app:fab_colorNormal="@color/colorAccent"-->
+<!--            app:fab_colorPressed="@color/colorAccentDark" />-->
 
 <!--        <ImageView-->
 <!--            android:id="@+id/fab"-->
