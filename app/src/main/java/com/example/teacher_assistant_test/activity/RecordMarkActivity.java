@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -190,21 +191,24 @@ public class RecordMarkActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    //初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
-                    //使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
-                    mIatDialog = new RecognizerDialog(RecordMarkActivity.this, mInitListener);
+                //初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
+                //使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
+                mIatDialog = new RecognizerDialog(RecordMarkActivity.this, mInitListener);
 
 //                if(mIatDialog!=null)
-                    mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
-                    mIatDialog.setParameter("dwa", "wpgs");
+                mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
+                mIatDialog.setParameter("dwa", "wpgs");
 
-                    mIatDialog.setListener(mRecognizerDialogListener);
+                mIatDialog.setListener(mRecognizerDialogListener);
 
-                    mIatDialog.show();
-                    TextView txt = mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
-                    txt.setText(R.string.tip);//更改内容
-                    txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);//去下划线
+                mIatDialog.show();
+                TextView txt = mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
+                txt.setText(R.string.tip);//更改内容
+                txt.setTextColor(Color.WHITE);
+                txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);//去下划线
 
+                TextView title = mIatDialog.getWindow().getDecorView().findViewWithTag("title");
+                title.setTextColor(Color.WHITE);
             }
         });
 
@@ -497,6 +501,9 @@ public class RecordMarkActivity extends AppCompatActivity {
                 if (tv_error != null) {
                     tv_error.setText("您好像没有说话哦。。。");
                 }
+
+//                View view = mIatDialog.getWindow().getDecorView().findViewWithTag("errview");
+//                view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 //                Toast.makeText(RecordMarkActivity.this, error.getPlainDescription(true), Toast.LENGTH_SHORT).show();
             }
         };
