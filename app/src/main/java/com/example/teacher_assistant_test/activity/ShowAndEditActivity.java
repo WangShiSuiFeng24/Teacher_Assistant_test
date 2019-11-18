@@ -421,19 +421,23 @@ public class ShowAndEditActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    mIatDialog = new RecognizerDialog(ShowAndEditActivity.this, mInitListener);
+                mIatDialog = new RecognizerDialog(ShowAndEditActivity.this, mInitListener);
 
-                    mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
+                mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
 
-                    mIatDialog.setParameter("dwa", "wpgs");
+                mIatDialog.setParameter("dwa", "wpgs");
 
-                    mIatDialog.setListener(mRecognizerDialogListener);
+                mIatDialog.setListener(mRecognizerDialogListener);
 
-                    mIatDialog.show();
+                mIatDialog.show();
 
-                    TextView txt = mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
-                    txt.setText(R.string.tip);
-                    txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);
+                TextView txt = mIatDialog.getWindow().getDecorView().findViewWithTag("textlink");
+                txt.setText(R.string.tip);
+                txt.setTextColor(Color.WHITE);
+                txt.getPaint().setFlags(Paint.SUBPIXEL_TEXT_FLAG);
+
+                TextView title = mIatDialog.getWindow().getDecorView().findViewWithTag("title");
+                title.setTextColor(Color.WHITE);
 
 //                //跳转到语音识别录成绩界面
 //                Intent intent = new Intent(ShowAndEditActivity.this, RecordMarkActivity.class);
