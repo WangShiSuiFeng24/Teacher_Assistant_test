@@ -367,13 +367,14 @@ public class RecordMarkActivity extends AppCompatActivity {
                                                 String score = preMark.getScore();
                                                 int total_score = preMark.getTotal_score();
                                                 new IDUSTool(RecordMarkActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
-                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                                 Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id："+stu_id
                                                         +"\r\nunique_test_id："+unique_test_id
                                                         +"\r\nscore："+score
                                                         +"\r\ntotal_score"+total_score+"成功");
 
                                             }
+                                            Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                         }
                                         cursor.close();
                                         //让AlertDialog消失
