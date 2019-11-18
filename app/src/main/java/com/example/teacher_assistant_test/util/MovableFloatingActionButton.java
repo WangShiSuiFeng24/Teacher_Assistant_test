@@ -34,6 +34,10 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
         setOnTouchListener(this);
     }
 
+    //重写View的onTouchEvent(MotionEvent event)方法时
+    // android会把触摸事件封装成MotionEvent成提供给开发者，MotionEvent提供了两组用于获取用户点击点坐标的方法：
+    //getX()和getY()获取到的是相对于当前View左上角的坐标；
+    //getRawX和getRawY()获取的是相对于屏幕左上角的坐标。
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
