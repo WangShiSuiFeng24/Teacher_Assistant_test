@@ -72,7 +72,17 @@ public class StrProcess {
 
                 //不符合规则，此处打印
                 Log.i("SrtProcess", "开始打印不符合规则的item:");
-                String[] buff = list.get(i).split("号");
+
+                String s = list.get(i);
+
+                //不符合规则再区分是否包含数字，包含则去标点符号打印，不包含则直接打印
+                if(isContainNumber(s)) {
+                    s = s.replaceAll("[。，！？.,!?]", "");
+                }
+
+//                String[] buff = list.get(i).split("号");
+
+                String[] buff = s.split("号");
 
                 String stu_id = buff[0];
                 Log.i("SrtProcess", "不符合规则stu_id:"+stu_id);
@@ -110,5 +120,15 @@ public class StrProcess {
             }
         }
         return markList;
+    }
+
+    public static boolean isContainNumber(String company) {
+
+        Pattern p = Pattern.compile("[0-9]");
+        Matcher m = p.matcher(company);
+        if (m.find()) {
+            return true;
+        }
+        return false;
     }
 }
