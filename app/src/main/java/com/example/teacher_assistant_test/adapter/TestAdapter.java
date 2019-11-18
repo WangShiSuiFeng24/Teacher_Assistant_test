@@ -27,7 +27,7 @@ public class TestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        TextView test_id;
         TextView test_name;
 
-        public ViewHolder(@NonNull View itemView) {
+         ViewHolder(@NonNull View itemView) {
             super(itemView);
 //            test_id = itemView.findViewById(R.id.test_id);
             test_name = itemView.findViewById(R.id.test_name);
@@ -73,9 +73,9 @@ public class TestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder recyclerviewHolder, int position) {
-        if(recyclerviewHolder instanceof ViewHolder) {
-            final ViewHolder holder = (ViewHolder) recyclerviewHolder;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder recyclerViewHolder, int position) {
+        if(recyclerViewHolder instanceof ViewHolder) {
+            final ViewHolder holder = (ViewHolder) recyclerViewHolder;
             Test test = mList.get(position);
 //        holder.test_id.setText(String.valueOf(test.getTest_id()));
             holder.test_name.setText(test.getTest_name());
