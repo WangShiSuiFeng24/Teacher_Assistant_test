@@ -45,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
 
     private List<Test> testList = new ArrayList<>();
-    TestAdapter testAdapter;
+    private TestAdapter testAdapter;
+    private RecyclerView recyclerView;
+    private DividerItemDecoration dividerItemDecoration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         importSheet();
 
-        RecyclerView recyclerView = findViewById(R.id.Recycler_View_Test);
+        recyclerView = findViewById(R.id.Recycler_View_Test);
 
         //添加自定义分割线
 //        DividerItemDecoration divider = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
@@ -96,8 +98,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         testAdapter = new TestAdapter(testList);
         recyclerView.setAdapter(testAdapter);
-        //添加Android自带的分割线
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        dividerItemDecoration = new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL);
+//
+//        if(testList.size() != 0) {
+//            //添加Android自带的分割线
+//            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        }
 
         testAdapter.setOnItemClickListener(new TestAdapter.OnItemClickListener() {
             @Override
@@ -130,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
                         SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
                         db.delete("StudentTest", "test_id = ?", new String[]{""+test_id+""});
                         db.delete("StudentMark", "test_id = ?", new String[]{""+test_id+""});
+
+                        //先去掉分割线，后看情况添加
+                        recyclerView.removeItemDecoration(dividerItemDecoration);
+                        onResume();
+
                         alertDialog.dismiss();
                     }
                 });
@@ -206,6 +218,13 @@ public class MainActivity extends AppCompatActivity {
         testList.clear();
         //再重新add数据到testList
         initTest();
+
+
+        if(testList.size() != 0 ) {
+            //添加Android自带的分割线
+            recyclerView.addItemDecoration(dividerItemDecoration);
+        }
+
         //通知RecyclerView，告诉它Adapter的数据发生了变化
         testAdapter.notifyDataSetChanged();
     }
