@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         //再重新add数据到testList
         initTest();
 
-
+        recyclerView.removeItemDecoration(dividerItemDecoration);
         if(testList.size() != 0 ) {
             //添加Android自带的分割线
             recyclerView.addItemDecoration(dividerItemDecoration);
