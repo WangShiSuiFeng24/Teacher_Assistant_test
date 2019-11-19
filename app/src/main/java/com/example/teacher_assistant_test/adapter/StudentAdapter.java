@@ -81,6 +81,23 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                 }
             }
         });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = holder.getLayoutPosition();
+                onItemClickListener.onItemClick(pos);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int pos = holder.getLayoutPosition();
+                onItemClickListener.onItemLongClick(pos);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -101,5 +118,23 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 
     public void setOnScoreFillListener(OnScoreFillListener onScoreFillListener) {
         this.onScoreFillListener = onScoreFillListener;
+    }
+
+    public void remove(int i) {
+        studentList.remove(i);
+        notifyItemRemoved(i);
+        notifyDataSetChanged();
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    //自定义接口回调设置事件
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+        void onItemLongClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 }

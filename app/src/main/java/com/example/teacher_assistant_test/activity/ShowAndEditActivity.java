@@ -259,6 +259,29 @@ public class ShowAndEditActivity extends AppCompatActivity {
         studentAdapter = new StudentAdapter(studentList);
         recyclerView.setAdapter(studentAdapter);
 
+        studentAdapter.setOnItemClickListener(new StudentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //单击不处理
+            }
+
+            @Override
+            public void onItemLongClick(final int position) {
+                //长按则删除
+                //只先从当前页面删除，后面还有保存按钮把关
+                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(ShowAndEditActivity.this,
+                        "alarm", "将要删除学号为：" + studentList.get(position).getStu_id() + "的条目",
+                        null, "yes", "no");
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        studentAdapter.remove(position);
+                        alertDialog.dismiss();
+                    }
+                });
+            }
+        });
+
         studentAdapter.setOnScoreFillListener(new StudentAdapter.OnScoreFillListener() {
             @Override
             public void onScoreFill(int position, String score) {
