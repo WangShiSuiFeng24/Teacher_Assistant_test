@@ -84,18 +84,33 @@ public class StrProcess {
 
                 String[] buff = s.split("号");
 
-                String stu_id = buff[0];
-                Log.i("SrtProcess", "不符合规则stu_id:"+stu_id);
+                if(buff.length == 2) {
+                    String stu_id = buff[0];
+                    Log.i("SrtProcess", "不符合规则stu_id:"+stu_id);
 
-                String score = buff[1];
-                Log.i("StrProcess", "不符合规则score:"+score);
+                    String score = buff[1];
+                    Log.i("StrProcess", "不符合规则score:"+score);
 
-                int total_score = 0;
-                Log.i("StrProcess", "不符合规则total_score:"+total_score);
+                    int total_score = 0;
+                    Log.i("StrProcess", "不符合规则total_score:"+total_score);
 
-                Mark mark = new Mark(stu_id, score, total_score);
-                markList.add(mark);
+                    Mark mark = new Mark(stu_id, score, total_score);
+                    markList.add(mark);
+                }
 
+                if(buff.length == 1) {
+                    String stu_id = buff[0];
+                    Log.i("SrtProcess", "不符合规则stu_id:"+stu_id);
+
+                    String score = "";
+                    Log.i("StrProcess", "不符合规则score:"+score);
+
+                    int total_score = 0;
+                    Log.i("StrProcess", "不符合规则total_score:"+total_score);
+
+                    Mark mark = new Mark(stu_id, score, total_score);
+                    markList.add(mark);
+                }
 
             } else {
 

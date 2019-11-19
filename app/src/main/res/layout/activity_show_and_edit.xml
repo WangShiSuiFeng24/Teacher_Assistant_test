@@ -117,50 +117,76 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/Recycler_View_Student"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:layout_height="match_parent" >
 
-        <com.example.teacher_assistant_test.util.MovableFloatingActionButton
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/Recycler_View_Student"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+
+            <!--        <com.example.teacher_assistant_test.util.MovableFloatingActionButton-->
+            <!--            android:id="@+id/fab"-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:layout_alignParentBottom="true"-->
+            <!--            android:layout_centerInParent="true"-->
+            <!--            android:layout_marginBottom="20dp"-->
+            <!--            android:src="@drawable/ic_btn_speak_now"-->
+            <!--            app:fab_colorNormal="@color/colorAccent"-->
+            <!--            app:fab_colorPressed="@color/colorAccentDark" />-->
+
+
+            <!--        <com.github.clans.fab.FloatingActionButton-->
+            <!--            android:id="@+id/fab"-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:layout_alignParentBottom="true"-->
+            <!--            android:layout_centerInParent="true"-->
+            <!--            android:layout_marginBottom="20dp"-->
+            <!--            android:src="@drawable/ic_btn_speak_now"-->
+            <!--            app:fab_colorNormal="@color/colorAccent"-->
+            <!--            app:fab_colorPressed="@color/colorAccentDark" />-->
+
+            <!--        <ImageView-->
+            <!--            android:id="@+id/fab"-->
+            <!--            android:layout_width="60dp"-->
+            <!--            android:layout_height="60dp"-->
+            <!--            android:layout_alignParentBottom="true"-->
+            <!--            android:layout_centerInParent="true"-->
+            <!--            android:layout_marginBottom="20dp"-->
+            <!--            android:background="@drawable/round_solid_selector"-->
+            <!--            android:tint="@color/colorAccent"-->
+            <!--            android:src="@android:drawable/ic_btn_speak_now" />-->
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="20dp"
             android:src="@drawable/ic_btn_speak_now"
             app:fab_colorNormal="@color/colorAccent"
             app:fab_colorPressed="@color/colorAccentDark" />
 
+    </LinearLayout>
 
-<!--        <com.github.clans.fab.FloatingActionButton-->
-<!--            android:id="@+id/fab"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:layout_marginBottom="20dp"-->
-<!--            android:src="@drawable/ic_btn_speak_now"-->
-<!--            app:fab_colorNormal="@color/colorAccent"-->
-<!--            app:fab_colorPressed="@color/colorAccentDark" />-->
 
-<!--        <ImageView-->
-<!--            android:id="@+id/fab"-->
-<!--            android:layout_width="60dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:layout_marginBottom="20dp"-->
-<!--            android:background="@drawable/round_solid_selector"-->
-<!--            android:tint="@color/colorAccent"-->
-<!--            android:src="@android:drawable/ic_btn_speak_now" />-->
-
-    </RelativeLayout>
 
 </LinearLayout>

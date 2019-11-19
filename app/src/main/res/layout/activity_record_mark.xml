@@ -121,16 +121,16 @@
 
             <include layout="@layout/empty_view" />
 
-            <com.example.teacher_assistant_test.util.MovableFloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/ic_btn_speak_now"
-                app:fab_colorNormal="@color/colorAccent"
-                app:fab_colorPressed="@color/colorAccentDark" />
+<!--            <com.example.teacher_assistant_test.util.MovableFloatingActionButton-->
+<!--                android:id="@+id/fab"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentBottom="true"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:src="@drawable/ic_btn_speak_now"-->
+<!--                app:fab_colorNormal="@color/colorAccent"-->
+<!--                app:fab_colorPressed="@color/colorAccentDark" />-->
 
 <!--            <com.github.clans.fab.FloatingActionButton-->
 <!--                android:id="@+id/fab"-->
@@ -164,21 +164,33 @@
 
         <Button
             android:id="@+id/clear_data"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="清空" />
+            android:text="清空"
+            android:layout_gravity="bottom"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_btn_speak_now"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccentDark" />
 
         <Button
             android:id="@+id/save_to_db"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="保存" />
+            android:text="保存"
+            android:layout_gravity="bottom"/>
 
     </LinearLayout>
 
