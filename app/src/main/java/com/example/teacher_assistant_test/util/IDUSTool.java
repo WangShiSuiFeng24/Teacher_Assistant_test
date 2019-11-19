@@ -37,6 +37,7 @@ public class IDUSTool {
      * 向sqLiteDatabase数据库中插入StudentMark表项
      *
      * @param stu_id  学号
+     * @param test_id 测试号
      * @param score  成绩
      * @param total_score  总成绩
      */

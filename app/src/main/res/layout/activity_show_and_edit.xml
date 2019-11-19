@@ -126,12 +126,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <androidx.recyclerview.widget.RecyclerView
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+            <com.example.teacher_assistant_test.util.RecyclerViewEmptySupport
                 android:id="@+id/Recycler_View_Student"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical" />
 
+            <include layout="@layout/empty_view" />
             <!--        <com.example.teacher_assistant_test.util.MovableFloatingActionButton-->
             <!--            android:id="@+id/fab"-->
             <!--            android:layout_width="wrap_content"-->

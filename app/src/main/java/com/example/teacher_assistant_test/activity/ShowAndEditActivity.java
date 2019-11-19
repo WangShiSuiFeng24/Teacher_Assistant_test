@@ -31,8 +31,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
 import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.adapter.StudentAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
@@ -74,11 +76,14 @@ public class ShowAndEditActivity extends AppCompatActivity {
 
     private List<Student> studentList = new ArrayList<>();
 
+    //备份，即使当前页面被编辑后，students始终保存刚进入页面时的数据
+    private List<Student> backUpStudentList = new ArrayList<>();
+
     private long test_id;
     private String test_name;
 
     private StudentAdapter studentAdapter;
-    private RecyclerView recyclerView;
+    private RecyclerViewEmptySupport recyclerView;
 
     private boolean isIdSelectSortPressed;
     private ImageView id_select_sort;
@@ -169,6 +174,23 @@ public class ShowAndEditActivity extends AppCompatActivity {
                     }
 
                     if(isLegal) {
+                        //先删除数据库同studentList中学号的学生，再将studentList直接插入数据库
+                        for(int i=0; i<backUpStudentList.size(); i++) {
+                            int delete_stu_id = backUpStudentList.get(i).getStu_id();
+                            db.delete("StudentMark", "stu_id = ?", new String[]{""+delete_stu_id+""});
+                        }//先删
+                        for(Student student : studentList) {
+                            String stu_id = String.valueOf(student.getStu_id());
+
+                            String score= student.getScore();
+                            int total_score = student.getTotal_score();
+                            new IDUSTool(ShowAndEditActivity.this).insertStuMarkDB(stu_id, test_id, score, total_score);
+                        }//再插入
+                        db.close();
+                        Toast.makeText(ShowAndEditActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                        finish();
+
+                        /*
                         //更新相同学号stu_id的score和total_score
                         ContentValues values = new ContentValues();
                         Iterator<Student> studentIterator = studentList.iterator();
@@ -217,10 +239,10 @@ public class ShowAndEditActivity extends AppCompatActivity {
                             }
                             cursor2.close();
                         }
-
                         db.close();
                         Toast.makeText(ShowAndEditActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                         finish();
+                        */
                     }
                 }
             }
@@ -254,8 +276,15 @@ public class ShowAndEditActivity extends AppCompatActivity {
         initStudent();
 
         recyclerView = findViewById(R.id.Recycler_View_Student);
+        View emptyView = findViewById(R.id.empty_view);
+        TextView emptyMessage = findViewById(R.id.empty_message);
+        emptyMessage.setText("成绩数据为空，请 点击下方按钮创建学生成绩数据。");
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        recyclerView.setEmptyView(emptyView);
+
         studentAdapter = new StudentAdapter(studentList);
         recyclerView.setAdapter(studentAdapter);
 
@@ -279,6 +308,10 @@ public class ShowAndEditActivity extends AppCompatActivity {
                         alertDialog.dismiss();
                     }
                 });
+
+                isUpdate = true;
+                titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+                titleBarView.setRightDrawable(R.drawable.ic_export_excel_gray);
             }
         });
 
@@ -349,7 +382,34 @@ public class ShowAndEditActivity extends AppCompatActivity {
 
                             if(studentList.size() == 0) {
                                 //第一次添加
-                                //不可能为空
+                                //先根据学号stu_id查出姓名stu_name和stu_gender
+                                SQLiteDatabase db = MyDatabaseHelper.getInstance(ShowAndEditActivity.this);
+                                Cursor cursor = db.query("Student", new String[]{"stu_name", "stu_gender"}, "stu_id = ?",
+                                        new String[]{""+newMark.getStu_id()+""}, null, null, null);
+                                String stu_name = null;
+                                String stu_gender = null;
+                                while (cursor.moveToNext()) {
+                                    stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
+                                    stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
+                                }
+                                cursor.close();
+
+                                Student student = new Student();
+                                student.setStu_id(Integer.parseInt(newMark.getStu_id()));
+
+                                student.setStu_name(stu_name);
+                                student.setStu_gender(stu_gender);
+
+                                student.setScore(newMark.getScore());
+                                student.setTotal_score(newMark.getTotal_score());
+
+                                studentList.add(student);
+                                studentAdapter.notifyDataSetChanged();
+
+                                isUpdate = true;
+                                titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
+                                titleBarView.setRightDrawable(R.drawable.ic_export_excel_gray);
+
                             } else {
                                 boolean flag = false;
                                 for(int i=0; i<studentList.size(); i++) {
@@ -565,6 +625,7 @@ public class ShowAndEditActivity extends AppCompatActivity {
 
                 Student student = new Student(stu_id, stu_name, stu_gender, test_name, score, total_score);
                 studentList.add(student);
+                backUpStudentList.add(student);
             }
         }
         cursor.close();
