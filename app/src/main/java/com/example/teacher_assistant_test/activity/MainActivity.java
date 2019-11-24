@@ -16,21 +16,27 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
 import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.adapter.TestAdapter;
 import com.example.teacher_assistant_test.bean.Test;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.jokar.floatmenu.FloatMenu;
+import com.github.jokar.floatmenu.OnMenuItemClickListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     private TestAdapter testAdapter;
     private RecyclerView recyclerView;
     private DividerItemDecoration dividerItemDecoration;
+
+    private Point point = new Point();
+    private FloatMenu floatMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,39 +121,47 @@ public class MainActivity extends AppCompatActivity {
                 //单击则查询
                 Test test = testList.get(position);
                 ShowAndEditActivity.actionStart(MainActivity.this, test.getTest_id(), test.getTest_name());
-
-//                Intent intent = new Intent(MainActivity.this, ShowAndEditActivity.class);
-//                Test test = testList.get(position);
-//                Log.i("MainActivity", "test_id:"+test.getTest_id());
-//                intent.putExtra("test_id", test.getTest_id());
-//                intent.putExtra("test_name", test.getTest_name());
-//                startActivity(intent);
             }
 
             @Override
-            public void onItemLongClick(final int position) {
-                //长按则删除
-                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
-                        "Alarm", "将要删除测试名为："+testList.get(position).getTest_name()+"的条目",
-                        null, "Yes", "No");
+            public void onItemLongClick(final int position, View view) {
 
-                alertDialog.setCancelable(false);
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                floatMenu = new FloatMenu(MainActivity.this);
+
+                floatMenu.inflate(R.menu.menu_chat);
+
+                floatMenu.setMOnMenuItemClickListener(new OnMenuItemClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        long test_id = testList.get(position).getTest_id();
-                        testAdapter.remove(position);
-                        SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
-                        db.delete("StudentTest", "test_id = ?", new String[]{""+test_id+""});
-                        db.delete("StudentMark", "test_id = ?", new String[]{""+test_id+""});
-
-                        //先去掉分割线，后看情况添加
-                        recyclerView.removeItemDecoration(dividerItemDecoration);
-                        onResume();
-
-                        alertDialog.dismiss();
+                    public void onMenuItemClick(MenuItem menuItem) {
+                        //这里设置Menu的item点击事件
+                        showDeleteDialog(position);
                     }
                 });
+
+                floatMenu.show(view, point.x, point.y);
+
+//                //长按则删除
+//                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
+//                        "Alarm", "将要删除测试名为："+testList.get(position).getTest_name()+"的条目",
+//                        null, "Yes", "No");
+//
+//                alertDialog.setCancelable(false);
+//                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        long test_id = testList.get(position).getTest_id();
+//                        testAdapter.remove(position);
+//                        SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+//                        db.delete("StudentTest", "test_id = ?", new String[]{""+test_id+""});
+//                        db.delete("StudentMark", "test_id = ?", new String[]{""+test_id+""});
+//
+//                        //先去掉分割线，后看情况添加
+//                        recyclerView.removeItemDecoration(dividerItemDecoration);
+//                        onResume();
+//
+//                        alertDialog.dismiss();
+//                    }
+//                });
             }
         });
 
@@ -233,6 +250,41 @@ public class MainActivity extends AppCompatActivity {
         EditStudentInfoActivity.actionStart(this);
         return true;
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(ev.getAction() == MotionEvent.ACTION_DOWN) {
+            point.x = (int)ev.getRawX();
+            point.y = (int)ev.getRawY();
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private void showDeleteDialog(final int position) {
+        //长按则删除
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
+                "Alarm", "将要删除测试名为："+testList.get(position).getTest_name()+"的条目",
+                null, "Yes", "No");
+
+        alertDialog.setCancelable(false);
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long test_id = testList.get(position).getTest_id();
+                testAdapter.remove(position);
+                SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+                db.delete("StudentTest", "test_id = ?", new String[]{""+test_id+""});
+                db.delete("StudentMark", "test_id = ?", new String[]{""+test_id+""});
+
+                //先去掉分割线，后看情况添加
+                recyclerView.removeItemDecoration(dividerItemDecoration);
+                onResume();
+
+                alertDialog.dismiss();
+            }
+        });
+    }
+
 
 
     private void initTest() {

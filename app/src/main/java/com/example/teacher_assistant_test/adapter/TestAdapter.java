@@ -45,7 +45,7 @@ public class TestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //自定义接口回调设置点击事件
     public interface OnItemClickListener{
         void onItemClick(int position);
-        void onItemLongClick(int position);
+        void onItemLongClick(int position, View view);
     }
 
     private OnItemClickListener mOnItemClickListener;
@@ -92,7 +92,7 @@ public class TestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public boolean onLongClick(View v) {
                     int ps = holder.getLayoutPosition();
-                    mOnItemClickListener.onItemLongClick(ps);
+                    mOnItemClickListener.onItemLongClick(ps, v);
                     return false;
                 }
             });

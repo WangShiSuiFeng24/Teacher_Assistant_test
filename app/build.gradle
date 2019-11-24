@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.teacher_assistant_test"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -52,4 +52,5 @@ dependencies {
 
     implementation 'com.github.clans:fab:1.6.4'
 
+    implementation 'com.github.jokar:FloatMenu:0.0.3'
 }
