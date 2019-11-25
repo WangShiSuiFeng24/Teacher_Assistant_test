@@ -115,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton record_fab;
 
+    private boolean inRecordUI = false;
+
+    private View include;
+    private LinearLayout test_recycle;
+    private LinearLayout test_fab;
 
 
 
@@ -241,13 +246,16 @@ public class MainActivity extends AppCompatActivity {
 //                    request_permissions(MainActivity.this);
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
                 } else {
-                    final View include = findViewById(R.id.record_mark);
-                    final LinearLayout test_recycle = findViewById(R.id.test_recycle);
-                    final LinearLayout test_fab = findViewById(R.id.test_fab);
+                    include = findViewById(R.id.record_mark);
+                    test_recycle = findViewById(R.id.test_recycle);
+                    test_fab = findViewById(R.id.test_fab);
 
                     test_recycle.setVisibility(View.GONE);
                     test_fab.setVisibility(View.GONE);
                     include.setVisibility(View.VISIBLE);
+
+                    inRecordUI = true;
+
                     //已进入当前页面就执行点击事件
                     record_fab.performClick();
 
@@ -520,7 +528,7 @@ public class MainActivity extends AppCompatActivity {
 //                                    intent.putExtra("test_name", input);
 //                                    startActivity(intent);
 
-                                    finish();
+//                                    finish();
                                 }
                             });
                         }
@@ -731,6 +739,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean editStudentInfo(MenuItem item) {
         EditStudentInfoActivity.actionStart(this);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(inRecordUI) {
+            inRecordUI = false;
+            test_recycle.setVisibility(View.VISIBLE);
+            test_fab.setVisibility(View.VISIBLE);
+            include.setVisibility(View.GONE);
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
