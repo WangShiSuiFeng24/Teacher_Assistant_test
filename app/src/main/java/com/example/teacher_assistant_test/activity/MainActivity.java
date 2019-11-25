@@ -529,6 +529,12 @@ public class MainActivity extends AppCompatActivity {
 //                                    startActivity(intent);
 
 //                                    finish();
+                                    if(inRecordUI) {
+                                        inRecordUI = false;
+                                        test_recycle.setVisibility(View.VISIBLE);
+                                        test_fab.setVisibility(View.VISIBLE);
+                                        include.setVisibility(View.GONE);
+                                    }
                                 }
                             });
                         }
