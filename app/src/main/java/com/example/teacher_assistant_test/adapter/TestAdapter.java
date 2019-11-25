@@ -93,7 +93,7 @@ public class TestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public boolean onLongClick(View v) {
                     int ps = holder.getLayoutPosition();
                     mOnItemClickListener.onItemLongClick(ps, v);
-                    return false;
+                    return true;
                 }
             });
         }
