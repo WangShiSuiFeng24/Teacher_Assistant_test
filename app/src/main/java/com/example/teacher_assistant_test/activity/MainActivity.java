@@ -19,6 +19,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -295,6 +296,17 @@ public class MainActivity extends AppCompatActivity {
             point.y = (int)ev.getRawY();
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            if(floatMenu != null && floatMenu.isShowing()) {
+                floatMenu.dismiss();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void showDeleteDialog(final int position) {
