@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
@@ -42,6 +43,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private Point point = new Point();
     private FloatMenu floatMenu;
 
+    private boolean isFloatMenuShowing;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 //            getSupportActionBar().hide();
 //        }
 
-        TitleBarView titlebarView= findViewById(R.id.title);
+        final TitleBarView titlebarView= findViewById(R.id.title);
         titlebarView.setTitleSize(20);
         titlebarView.setTitle("园丁小帮手");
         titlebarView.setOnViewClick(new TitleBarView.onViewClick() {
@@ -117,14 +122,31 @@ public class MainActivity extends AppCompatActivity {
 
         testAdapter.setOnItemClickListener(new TestAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
-                //单击则查询
-                Test test = testList.get(position);
-                ShowAndEditActivity.actionStart(MainActivity.this, test.getTest_id(), test.getTest_name());
+            public void onItemClick(final int position) {
+                //拿适配器调用适配器内部自定义好的setThisPosition方法（参数写点击事件的参数的position）
+                testAdapter.setThisPosition(position);
+                testAdapter.notifyDataSetChanged();
+
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        //单击则查询
+                        Test test = testList.get(position);
+                        ShowAndEditActivity.actionStart(MainActivity.this, test.getTest_id(), test.getTest_name());
+                    }
+                },100);
+
+//                //单击则查询
+//                Test test = testList.get(position);
+//                ShowAndEditActivity.actionStart(MainActivity.this, test.getTest_id(), test.getTest_name());
             }
 
             @Override
             public void onItemLongClick(final int position, View view) {
+
+                //拿适配器调用适配器内部自定义好的setThisPosition方法（参数写点击事件的参数的position）
+                testAdapter.setThisPosition(position);
+                testAdapter.notifyDataSetChanged();
 
                 floatMenu = new FloatMenu(MainActivity.this);
 
@@ -139,6 +161,20 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 floatMenu.show(view, point.x, point.y);
+
+                floatMenu.setFocusable(true);
+                floatMenu.setOutsideTouchable(false);
+
+                floatMenu.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        floatMenu.dismiss();
+                        onResume();
+                    }
+                });
+
+
+
 
 //                //长按则删除
 //                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
@@ -241,7 +277,8 @@ public class MainActivity extends AppCompatActivity {
             //添加Android自带的分割线
             recyclerView.addItemDecoration(dividerItemDecoration);
         }
-
+        //返回时重新设置thisPosition
+        testAdapter.setThisPosition(-1);
         //通知RecyclerView，告诉它Adapter的数据发生了变化
         testAdapter.notifyDataSetChanged();
     }
@@ -278,6 +315,16 @@ public class MainActivity extends AppCompatActivity {
 
                 //先去掉分割线，后看情况添加
                 recyclerView.removeItemDecoration(dividerItemDecoration);
+                onResume();
+
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //同时通过AlertDialog源码或者Toast源码我们都可以发现它们实现的原理都是WindowManager.addView()来添加的，
+                // 它们都是一个个view ,因此不会对activity的生命周期有任何影响。
                 onResume();
 
                 alertDialog.dismiss();

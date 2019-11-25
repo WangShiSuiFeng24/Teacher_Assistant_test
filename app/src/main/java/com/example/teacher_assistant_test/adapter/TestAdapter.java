@@ -1,5 +1,6 @@
 package com.example.teacher_assistant_test.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,21 @@ public class TestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mOnItemClickListener = onItemClickListener;
     }
 
+    //点击变色
+    //先声明一个int成员变量
+    private int thisPosition = -1;
+
+    //再定义一个int类型的返回值方法
+    public int getThisPosition() {
+        return thisPosition;
+    }
+
+    //然后定义一个方法用来绑定当前参数值的方法
+    //此方法是在调用此适配器的地方调用的，此适配器内不会被调用到
+    public void setThisPosition(int thisPosition) {
+        this.thisPosition = thisPosition;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -79,6 +95,13 @@ public class TestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Test test = mList.get(position);
 //        holder.test_id.setText(String.valueOf(test.getTest_id()));
             holder.test_name.setText(test.getTest_name());
+
+            //点击变色
+            if(position == getThisPosition()) {
+                holder.itemView.setBackgroundColor(Color.parseColor("#DCDCDC"));
+            } else {
+                holder.itemView.setBackgroundColor(Color.WHITE);
+            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
