@@ -125,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ImageView check_box;
 
-    private Button clear_data;
+//    private Button clear_data;
+    private Button share_by_excel;
     private Button save_to_db;
 
     private LinearLayout record_title;
@@ -276,7 +277,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     test_fab.setVisibility(View.GONE);
                     include.setVisibility(View.VISIBLE);
                     save_to_db.setVisibility(View.GONE);
-                    clear_data.setVisibility(View.GONE);
+//                    clear_data.setVisibility(View.GONE);
+                    share_by_excel.setVisibility(View.GONE);
 
                     record_title.setVisibility(View.GONE);
 
@@ -286,7 +288,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         titlebarView.setRightText("编辑");
 
                         save_to_db.setVisibility(View.VISIBLE);
-                        clear_data.setVisibility(View.VISIBLE);
+//                        clear_data.setVisibility(View.VISIBLE);
+                        share_by_excel.setVisibility(View.VISIBLE);
+
 
                         record_title.setVisibility(View.VISIBLE);
                     }
@@ -440,21 +444,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         record_title = findViewById(R.id.record_title);
 
-        clear_data = findViewById(R.id.clear_data);
+//        clear_data = findViewById(R.id.clear_data);
+        share_by_excel = findViewById(R.id.share_by_excel);
         save_to_db = findViewById(R.id.save_to_db);
 
-        //清除当前页面数据
-        clear_data.setOnClickListener(new View.OnClickListener() {
+        share_by_excel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordList.clear();
-                recordAdapter.notifyDataSetChanged();
-
-                titlebarView.setRightText("");
-
-                Toast.makeText(MainActivity.this, "已清空！", Toast.LENGTH_SHORT).show();
+//                save_to_db.performClick();
             }
         });
+
+
+
+        //清除当前页面数据
+//        clear_data.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                recordList.clear();
+//                recordAdapter.notifyDataSetChanged();
+//
+//                titlebarView.setRightText("");
+//
+//                Toast.makeText(MainActivity.this, "已清空！", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         //保存当前页面数据到数据库
         save_to_db.setOnClickListener(new View.OnClickListener() {
@@ -694,7 +708,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 titlebarView.setRightTextColor(Color.WHITE);
 
                                 save_to_db.setVisibility(View.VISIBLE);
-                                clear_data.setVisibility(View.VISIBLE);
+//                                clear_data.setVisibility(View.VISIBLE);
+                                share_by_excel.setVisibility(View.VISIBLE);
+
 
                                 record_title.setVisibility(View.VISIBLE);
 
@@ -736,7 +752,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     titlebarView.setRightTextColor(Color.WHITE);
 
                                     save_to_db.setVisibility(View.VISIBLE);
-                                    clear_data.setVisibility(View.VISIBLE);
+//                                    clear_data.setVisibility(View.VISIBLE);
+                                    share_by_excel.setVisibility(View.VISIBLE);
+
 
                                     record_title.setVisibility(View.VISIBLE);
 
@@ -849,7 +867,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 my_collection_bottom_dialog.setVisibility(View.GONE);
 
                 save_to_db.setVisibility(View.VISIBLE);
-                clear_data.setVisibility(View.VISIBLE);
+//                clear_data.setVisibility(View.VISIBLE);
+                share_by_excel.setVisibility(View.VISIBLE);
                 record_fab.setVisibility(View.VISIBLE);
 
                 return;
@@ -1259,7 +1278,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     my_collection_bottom_dialog.setVisibility(View.GONE);
 
                     save_to_db.setVisibility(View.GONE);
-                    clear_data.setVisibility(View.GONE);
+//                    clear_data.setVisibility(View.GONE);
+                    share_by_excel.setVisibility(View.GONE);
 
                     record_title.setVisibility(View.GONE);
 
@@ -1287,7 +1307,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             check_box.setVisibility(View.VISIBLE);
 
             save_to_db.setVisibility(View.GONE);
-            clear_data.setVisibility(View.GONE);
+//            clear_data.setVisibility(View.GONE);
+            share_by_excel.setVisibility(View.GONE);
             record_fab.setVisibility(View.GONE);
 
             editorStatus = true;
@@ -1298,7 +1319,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             check_box.setVisibility(View.GONE);
 
             save_to_db.setVisibility(View.VISIBLE);
-            clear_data.setVisibility(View.VISIBLE);
+//            clear_data.setVisibility(View.VISIBLE);
+            share_by_excel.setVisibility(View.VISIBLE);
             record_fab.setVisibility(View.VISIBLE);
 
             editorStatus = false;

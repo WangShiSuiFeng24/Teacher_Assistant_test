@@ -166,13 +166,13 @@
             app:fab_colorPressed="@color/colorAccentDark" />
 
         <Button
-            android:id="@+id/clear_data"
+            android:id="@+id/share_by_excel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="清空"
+            android:text="分享"
             android:layout_gravity="bottom"/>
 
     </LinearLayout>
