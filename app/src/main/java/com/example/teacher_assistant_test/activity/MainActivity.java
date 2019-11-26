@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button clear_data;
     private Button save_to_db;
 
+    private LinearLayout record_title;
 
     private static final int RECORD_MODE_CHECK = 0;
     private static final int RECORD_MODE_EDIT = 1;
@@ -274,11 +275,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     test_recycle.setVisibility(View.GONE);
                     test_fab.setVisibility(View.GONE);
                     include.setVisibility(View.VISIBLE);
+                    save_to_db.setVisibility(View.GONE);
+                    clear_data.setVisibility(View.GONE);
+
+                    record_title.setVisibility(View.GONE);
 
                     titlebarView.setRightDrawable(0);
 
                     if (recordList.size() != 0) {
                         titlebarView.setRightText("编辑");
+
+                        save_to_db.setVisibility(View.VISIBLE);
+                        clear_data.setVisibility(View.VISIBLE);
+
+                        record_title.setVisibility(View.VISIBLE);
                     }
 
 //                    titlebarView.setRightText("编辑");
@@ -427,6 +437,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         check_box = findViewById(R.id.check_box);
+
+        record_title = findViewById(R.id.record_title);
 
         clear_data = findViewById(R.id.clear_data);
         save_to_db = findViewById(R.id.save_to_db);
@@ -681,6 +693,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 titlebarView.setRightText("编辑");
                                 titlebarView.setRightTextColor(Color.WHITE);
 
+                                save_to_db.setVisibility(View.VISIBLE);
+                                clear_data.setVisibility(View.VISIBLE);
+
+                                record_title.setVisibility(View.VISIBLE);
+
                             } else {
                                 //flag初始设为false,代表学号不相同
                                 boolean flag = false;
@@ -717,6 +734,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                     titlebarView.setRightText("编辑");
                                     titlebarView.setRightTextColor(Color.WHITE);
+
+                                    save_to_db.setVisibility(View.VISIBLE);
+                                    clear_data.setVisibility(View.VISIBLE);
+
+                                    record_title.setVisibility(View.VISIBLE);
 
                                 }
                             }
@@ -1232,12 +1254,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 selectNum.setText(String.valueOf(0));
                 setDeleteBtnBackground(index);
                 if (recordList.size() == 0) {
+                    updateEditMode();
+
                     my_collection_bottom_dialog.setVisibility(View.GONE);
 
-                    save_to_db.setVisibility(View.VISIBLE);
-                    clear_data.setVisibility(View.VISIBLE);
+                    save_to_db.setVisibility(View.GONE);
+                    clear_data.setVisibility(View.GONE);
+
+                    record_title.setVisibility(View.GONE);
+
                     record_fab.setVisibility(View.VISIBLE);
-                    updateEditMode();
+
                     titlebarView.setRightText("");
 
                 }
