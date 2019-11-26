@@ -124,9 +124,9 @@ public class TitleBarView extends RelativeLayout {
 
     //设置右标题
     public void setRightText(String title) {
-        if (!TextUtils.isEmpty(title)) {
+//        if (!TextUtils.isEmpty(title)) {
             tv_right.setText(title);
-        }
+//        }
     }
 
     //设置标题大小

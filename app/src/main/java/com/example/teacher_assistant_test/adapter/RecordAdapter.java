@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,10 @@ import java.util.List;
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
     private List<Record> mList;
 
+    //默认editMode为RECORD_MODE_CHECK=0
+    private static final int RECORD_MODE_CHECK = 0;
+    int editMode = RECORD_MODE_CHECK;
+
 //    //editText的焦点，我们可以通过一个int变量记录他在adapter中的位置
 //    int stuIdFocusPos = -1;
 //    int scoreFocusPos = -1;
@@ -32,6 +37,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         TextView student_name;
         TextView student_gender;
 
+        ImageView checkBox;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             student_id = itemView.findViewById(R.id.student_id);
@@ -40,6 +47,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
             student_name = itemView.findViewById(R.id.student_name);
             student_gender = itemView.findViewById(R.id.student_gender);
+
+            checkBox = itemView.findViewById(R.id.check_box);
         }
     }
 
@@ -89,6 +98,21 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
         holder.student_name.setText(record.getStu_name());
         holder.student_gender.setText(record.getStu_gender());
+
+        //根据adapter.setEditMode(int editMode)传入的editMode设置checkBox是否可见，默认不可见
+        if(editMode == RECORD_MODE_CHECK) {
+            holder.checkBox.setVisibility(View.GONE);
+        } else {
+            holder.checkBox.setVisibility(View.VISIBLE);
+
+            //根据isSelect()选中状态设置checkBox图片样式
+            if(record.isSelect()) {
+                holder.checkBox.setImageResource(R.mipmap.ic_checked);
+            } else {
+                holder.checkBox.setImageResource(R.mipmap.ic_uncheck);
+            }
+        }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,38 +173,16 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 }
             }
         });
-
-
-//        //当前holder是我们记录下的焦点位置时，我们给当前的editText设置焦点并设置光标位置
-//        if (stuIdFocusPos == position) {
-//            holder.student_id.requestFocus();
-//            holder.student_id.setSelection(holder.student_id.getText().length());
-//        }
-//
-//        //我们给当前holder中的editText添加touch事件监听，在action_up手指抬起时，记录下焦点position
-//        holder.student_id.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    etFocusPos = position;
-//                }
-//                return false;
-//            }
-//        });
-//
-//        holder.student_score.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    etFocusPos = position;
-//                }
-//                return false;
-//            }
-//        });
     }
 
-    private MarkAdapter.OnStuIdFillListener onStuIdFillListener;
-    private MarkAdapter.OnScoreFillListener onScoreFillListener;
+    //设置编辑模式，编辑或取消？
+    public void setEditMode(int editMode) {
+        this.editMode = editMode;
+        notifyDataSetChanged();
+    }
+
+    private RecordAdapter.OnStuIdFillListener onStuIdFillListener;
+    private RecordAdapter.OnScoreFillListener onScoreFillListener;
 
     public interface OnStuIdFillListener {
         void onStuIdFill(int position, String stu_id);
@@ -190,11 +192,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         void onScoreFill(int position, String score);
     }
 
-    public void setOnStuIdFillListener(MarkAdapter.OnStuIdFillListener onStuIdFillListener) {
+    public void setOnStuIdFillListener(RecordAdapter.OnStuIdFillListener onStuIdFillListener) {
         this.onStuIdFillListener = onStuIdFillListener;
     }
 
-    public void setOnScoreFillListener(MarkAdapter.OnScoreFillListener onScoreFillListener) {
+    public void setOnScoreFillListener(RecordAdapter.OnScoreFillListener onScoreFillListener) {
         this.onScoreFillListener = onScoreFillListener;
     }
 

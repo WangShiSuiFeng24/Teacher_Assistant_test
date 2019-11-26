@@ -8,6 +8,8 @@ public class Record {
     private String score;
     private int total_score;
 
+    private boolean isSelect;
+
     public Record() {}
     public Record(String stu_id, String stu_name, String stu_gender, String test_name, String score, int total_score) {
         this.stu_id = stu_id;
@@ -40,4 +42,7 @@ public class Record {
 
     public int getTotal_score() { return total_score; }
     public void setTotal_score(int total_score) { this.total_score = total_score;}
+
+    public boolean isSelect() { return isSelect; }
+    public void setSelect(boolean isSelect) { this.isSelect = isSelect; }
 }
