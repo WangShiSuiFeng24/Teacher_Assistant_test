@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //处理讯飞语音听写返回的结果，将处理结果存入recordList,并更新adapter和相关控件的显示隐藏
                 updateRecordListByRecognizer(results, isLast);
 
+
             }
 
             @Override
