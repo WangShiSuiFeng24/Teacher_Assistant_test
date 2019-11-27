@@ -965,7 +965,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                                 +"\r\ntotal_score"+total_score+"成功");
 
                                     }
-                                    Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 }
                                 cursor.close();
                                 //让AlertDialog消失
