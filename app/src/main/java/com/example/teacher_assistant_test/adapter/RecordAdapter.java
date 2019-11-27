@@ -68,10 +68,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         void onItemLongClick(int position);
     }
 
-    private MarkAdapter.OnItemClickListener mOnItemClickListener;
+    private RecordAdapter.OnItemClickListener mOnItemClickListener;
 
-    public void setOnItemClickListener(MarkAdapter.OnItemClickListener onItemClickListener){
-        mOnItemClickListener=onItemClickListener;
+    public void setOnItemClickListener(RecordAdapter.OnItemClickListener onItemClickListener){
+        mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull

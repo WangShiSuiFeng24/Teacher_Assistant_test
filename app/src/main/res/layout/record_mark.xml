@@ -127,7 +127,7 @@
             android:layout_height="match_parent" >
 
             <com.example.teacher_assistant_test.util.RecyclerViewEmptySupport
-                android:id="@+id/Recycler_View_Mark"
+                android:id="@+id/Recycler_View_Record"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:descendantFocusability="beforeDescendants"
