@@ -19,6 +19,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.TextUtils;
@@ -43,6 +44,7 @@ import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Record;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
+import com.example.teacher_assistant_test.util.ExportSheet;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
@@ -70,9 +72,12 @@ import org.apache.log4j.chainsaw.Main;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -81,6 +86,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import gdut.bsx.share2.FileUtil;
+import gdut.bsx.share2.Share2;
+import gdut.bsx.share2.ShareContentType;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -451,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         share_by_excel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                save_to_db.performClick();
+                shareExcel();
             }
         });
 
@@ -474,164 +482,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         save_to_db.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                //检查markList是否为空
-                if(recordList.size() != 0) {
-                    //检查markList中是否有非法stu_id或非法score
-                    boolean isLegal = true;
-                    for(Record record : recordList) {
-                        if(!canParseInt(record.getStu_id())) {
-                            isLegal = false;
-                            Toast.makeText(MainActivity.this, "学号："+record.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
-                            break;
-                        }
-                        if(!(new CheckExpression().checkExpression(record.getScore()))) {
-                            isLegal = false;
-                            Toast.makeText(MainActivity.this, "成绩："+record.getScore()+" 非法", Toast.LENGTH_SHORT).show();
-                            break;
-                        }
-                    }
-
-                    if(isLegal) {
-                        //检查markList中是否有重复stu_id
-                        boolean flag = false;
-                        List<Record> checkList = new ArrayList<>();
-
-                        //list.contains(o)，系统会对list中的每个元素e调用o.equals(e)方法，假如list中有n个元素，
-                        // 那么会调用n次o.equals(e)，只要有一次o.equals(e)返回了true，那么list.contains(o)返回true，
-                        // 否则返回false。
-                        for(Record record : recordList) {
-                            if(checkList.contains(record)) {
-                                Toast.makeText(MainActivity.this, "有重复学号："+record.getStu_id(), Toast.LENGTH_SHORT).show();
-                                flag = true;
-                                break;
-                            }
-                            checkList.add(record);
-                        }
-
-                        if(!flag) {
-                            final EditText edit = new EditText(MainActivity.this);
-                            //设置EditText的可视最大行数。
-                            edit.setMaxLines(1);
-                            //先弹出一个可编辑的AlertDialog，可以编辑test_name
-                            final AlertDialog alertDialog = GetAlertDialog
-                                    .getAlertDialog(MainActivity.this,"测验名：",
-                                            null, edit, "确定", "取消");
-                            //给edit设置焦点
-                            edit.setFocusable(true);
-                            edit.setFocusableInTouchMode(true);
-                            edit.requestFocus();
-                            //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
-                            Timer timer = new Timer();
-                            timer.schedule(new TimerTask()
-                            {
-                                public void run()
-                                {
-                                    InputMethodManager inputManager =(InputMethodManager)edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    inputManager.showSoftInput(edit, 0);
-                                }
-                            },300);
-
-                            //拿到按钮并判断是否是POSITIVE_BUTTON，然后我们自己实现监听
-                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    String input = edit.getText().toString().trim();
-                                    //生成唯一id
-//                                final long unique_test_id = new Date().getTime();//太长
-                                    //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
-                                    final long unique_test_id = getCount() + 1;
-
-                                    Log.i("RecordMarkActivity", "unique_test_id:"+unique_test_id);
-                                    if (input.equals("")) {
-                                        Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
-                                        return;
-                                    } else {
-//                            String editText = edit.getText().toString().trim();
-
-                                        //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
-                                        final SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
-                                        //查询数据库中是否存在与将要插入的preMark相同的test_name,若相同，则提示用户test_name已存在重新输入，否则直接新建插入全部数据
-                                        String sqlSelect = "SELECT test_name FROM StudentTest";
-                                        Cursor cursor = db.rawQuery(sqlSelect, new String[]{});
-
-                                        if(cursor.isLast()) {
-                                            //StudentTest表为空，第一次更新
-                                            new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, input);
-                                            Toast.makeText(MainActivity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
-                                        }
-
-                                        else {
-                                            //StudentTest表不为空
-//                                //flag初始设为false,代表StudentTest表中有没相同的test_name
-//                                boolean flag = false;
-                                            while(cursor.moveToNext()) {
-                                                String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
-
-                                                if(input.equals(test_name)) {
-                                                    //StudentTest表中已有相同test_name,提示用户重新输入
-                                                    Toast.makeText(MainActivity.this, input+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
-//                                        flag = true;
-                                                    return;
-                                                }
-                                            }
-
-                                            //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
-
-                                            //先把test_id和test_name插入到StudentTest表中
-                                            new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, input);
-                                            Log.i("RecordMarkActivity", "向StudentTest表中插入unique_test_id:"+unique_test_id+"，input:"+input+"成功");
-
-                                            //再向StudentMark表中插入当前页面数据
-                                            Iterator<Record> iterator = recordList.iterator();
-                                            while(iterator.hasNext()) {
-                                                //先用preMark保存当前页面mark条目
-                                                final Record preRecord = iterator.next();
-
-                                                String stu_id = preRecord.getStu_id();
-//                                    long test_id = unique_test_id;
-                                                String score = preRecord.getScore();
-                                                int total_score = preRecord.getTotal_score();
-                                                new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
-//                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                                                Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id："+stu_id
-                                                        +"\r\nunique_test_id："+unique_test_id
-                                                        +"\r\nscore："+score
-                                                        +"\r\ntotal_score"+total_score+"成功");
-
-                                            }
-                                            Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                                        }
-                                        cursor.close();
-                                        //让AlertDialog消失
-                                        alertDialog.cancel();
-                                    }
-
-                                    //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
-                                    long long_to_int_test_id = (int) unique_test_id;
-                                    Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
-
-                                    ShowAndEditActivity.actionStart(MainActivity.this, long_to_int_test_id, input);
-
-//                                    Intent intent = new Intent(RecordMarkActivity.this, ShowAndEditActivity.class);
-//                                    intent.putExtra("test_id", long_to_int_test_id);
-//                                    intent.putExtra("test_name", input);
-//                                    startActivity(intent);
-
-//                                    finish();
-                                    if(inRecordUI) {
-                                        inRecordUI = false;
-                                        test_recycle.setVisibility(View.VISIBLE);
-                                        test_fab.setVisibility(View.VISIBLE);
-                                        include.setVisibility(View.GONE);
-                                    }
-                                }
-                            });
-                        }
-                    }
-
-                } else {
-                    Toast.makeText(MainActivity.this, "保存数据为空", Toast.LENGTH_SHORT).show();
-                }
+                saveDataToDatabase();
             }
         });
 
@@ -915,6 +766,284 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onKeyDown(keyCode, event);
     }
 
+    private void shareExcel() {
+
+        if (checkRecordListLegality()) {
+            //生成唯一id
+//          final long unique_test_id = new Date().getTime();//太长
+            //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
+//          final long unique_test_id = getCount() + 1;
+
+            final long unique_test_id = getTest_idMax() + 1;
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String the_only_test_name = dateFormat.format(Calendar.getInstance().getTime());
+
+            //将时间戳生成的the_only_test_name,unique_test_id和当前页面数据一起保存到数据库中
+            final SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+
+            //先把test_id和test_name插入到StudentTest表中
+            new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, the_only_test_name);
+
+            //再向StudentMark表中插入当前页面数据
+            Iterator<Record> iterator = recordList.iterator();
+            while(iterator.hasNext()) {
+                //先用preMark保存当前页面mark条目
+                final Record preRecord = iterator.next();
+
+                String stu_id = preRecord.getStu_id();
+//                                    long test_id = unique_test_id;
+                String score = preRecord.getScore();
+                int total_score = preRecord.getTotal_score();
+                new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
+//                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id："+stu_id
+                        +"\r\nunique_test_id："+unique_test_id
+                        +"\r\nscore："+score
+                        +"\r\ntotal_score"+total_score+"成功");
+
+            }
+            Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+
+            //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
+            long long_to_int_test_id = (int) unique_test_id;
+            Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
+
+            //导出Excel
+            ExportSheet exportSheet = new ExportSheet(MainActivity.this, the_only_test_name, recordList);
+
+            exportSheet.exportSheet();
+
+            try {
+                File file = new File(exportSheet.getFileName());
+
+                Uri shareFileUri = FileUtil.getFileUri(MainActivity.this, ShareContentType.FILE, file);
+
+                new Share2.Builder(MainActivity.this)
+                        //指定分享的文件类型
+                        .setContentType(ShareContentType.FILE)
+                        //设置要分享的文件Uri
+                        .setShareFileUri(shareFileUri)
+                        //设置分享选择器的标题
+                        .setTitle("Share File")
+                        .build()
+                        //发起分享
+                        .shareBySystem();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void saveDataToDatabase() {
+//        //检查markList是否为空
+//        if(recordList.size() != 0) {
+//            //检查markList中是否有非法stu_id或非法score
+//            boolean isLegal = true;
+//            for(Record record : recordList) {
+//                if(!canParseInt(record.getStu_id())) {
+//                    isLegal = false;
+//                    Toast.makeText(MainActivity.this, "学号："+record.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
+//                if(!(new CheckExpression().checkExpression(record.getScore()))) {
+//                    isLegal = false;
+//                    Toast.makeText(MainActivity.this, "成绩："+record.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
+//            }
+//
+//            if(isLegal) {
+//                //检查markList中是否有重复stu_id
+//                boolean flag = false;
+//                List<Record> checkList = new ArrayList<>();
+//
+//                //list.contains(o)，系统会对list中的每个元素e调用o.equals(e)方法，假如list中有n个元素，
+//                // 那么会调用n次o.equals(e)，只要有一次o.equals(e)返回了true，那么list.contains(o)返回true，
+//                // 否则返回false。
+//                for(Record record : recordList) {
+//                    if(checkList.contains(record)) {
+//                        Toast.makeText(MainActivity.this, "有重复学号："+record.getStu_id(), Toast.LENGTH_SHORT).show();
+//                        flag = true;
+//                        break;
+//                    }
+//                    checkList.add(record);
+//                }
+
+
+                if (checkRecordListLegality()) {
+//                if(!flag) {
+                    final EditText edit = new EditText(MainActivity.this);
+                    //设置EditText的可视最大行数。
+                    edit.setMaxLines(1);
+                    //先弹出一个可编辑的AlertDialog，可以编辑test_name
+                    final AlertDialog alertDialog = GetAlertDialog
+                            .getAlertDialog(MainActivity.this,"测验名：",
+                                    null, edit, "确定", "取消");
+                    //给edit设置焦点
+                    edit.setFocusable(true);
+                    edit.setFocusableInTouchMode(true);
+                    edit.requestFocus();
+                    //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask()
+                    {
+                        public void run()
+                        {
+                            InputMethodManager inputManager =(InputMethodManager)edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputManager.showSoftInput(edit, 0);
+                        }
+                    },300);
+
+                    //拿到按钮并判断是否是POSITIVE_BUTTON，然后我们自己实现监听
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String input = edit.getText().toString().trim();
+                            //生成唯一id
+//                                final long unique_test_id = new Date().getTime();//太长
+                            //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
+//                            final long unique_test_id = getCount() + 1;
+
+                            final long unique_test_id = getTest_idMax() + 1;
+
+                            Log.i("RecordMarkActivity", "unique_test_id:"+unique_test_id);
+                            if (input.equals("")) {
+                                Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+//                            String editText = edit.getText().toString().trim();
+
+                                //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
+                                final SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+                                //查询数据库中是否存在与将要插入的preMark相同的test_name,若相同，则提示用户test_name已存在重新输入，否则直接新建插入全部数据
+                                String sqlSelect = "SELECT test_name FROM StudentTest";
+                                Cursor cursor = db.rawQuery(sqlSelect, new String[]{});
+
+                                if(cursor.isLast()) {
+                                    //StudentTest表为空，第一次更新
+                                    new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, input);
+                                    Toast.makeText(MainActivity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
+                                }
+
+                                else {
+                                    //StudentTest表不为空
+//                                //flag初始设为false,代表StudentTest表中有没相同的test_name
+//                                boolean flag = false;
+                                    while(cursor.moveToNext()) {
+                                        String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
+
+                                        if(input.equals(test_name)) {
+                                            //StudentTest表中已有相同test_name,提示用户重新输入
+                                            Toast.makeText(MainActivity.this, input+" 已存在，请重新输入", Toast.LENGTH_SHORT).show();
+//                                        flag = true;
+                                            return;
+                                        }
+                                    }
+
+                                    //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
+
+                                    //先把test_id和test_name插入到StudentTest表中
+                                    new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, input);
+                                    Log.i("RecordMarkActivity", "向StudentTest表中插入unique_test_id:"+unique_test_id+"，input:"+input+"成功");
+
+                                    //再向StudentMark表中插入当前页面数据
+                                    Iterator<Record> iterator = recordList.iterator();
+                                    while(iterator.hasNext()) {
+                                        //先用preMark保存当前页面mark条目
+                                        final Record preRecord = iterator.next();
+
+                                        String stu_id = preRecord.getStu_id();
+//                                    long test_id = unique_test_id;
+                                        String score = preRecord.getScore();
+                                        int total_score = preRecord.getTotal_score();
+                                        new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
+//                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                        Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id："+stu_id
+                                                +"\r\nunique_test_id："+unique_test_id
+                                                +"\r\nscore："+score
+                                                +"\r\ntotal_score"+total_score+"成功");
+
+                                    }
+                                    Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                }
+                                cursor.close();
+                                //让AlertDialog消失
+                                alertDialog.cancel();
+                            }
+
+                            //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
+                            long long_to_int_test_id = (int) unique_test_id;
+                            Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
+
+                            ShowAndEditActivity.actionStart(MainActivity.this, long_to_int_test_id, input);
+
+                            if(inRecordUI) {
+                                inRecordUI = false;
+                                test_recycle.setVisibility(View.VISIBLE);
+                                test_fab.setVisibility(View.VISIBLE);
+                                include.setVisibility(View.GONE);
+                                titlebarView.setRightText("");
+                            }
+                        }
+                    });
+                }
+//            }
+
+//        } else {
+//            Toast.makeText(MainActivity.this, "保存数据为空", Toast.LENGTH_SHORT).show();
+//        }
+    }
+
+    private boolean checkRecordListLegality() {
+        if (recordList.size() == 0) {
+            Toast.makeText(MainActivity.this, "数据为空，保存失败", Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            //检查recordList中是否有非法stu_id或非法score
+            boolean isStu_idAndScoreLegal = true;
+            for(Record record : recordList) {
+                if(!canParseInt(record.getStu_id())) {
+                    isStu_idAndScoreLegal = false;
+                    Toast.makeText(MainActivity.this, "学号："+record.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                if(!(new CheckExpression().checkExpression(record.getScore()))) {
+                    isStu_idAndScoreLegal = false;
+                    Toast.makeText(MainActivity.this, "成绩："+record.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+
+            if(!isStu_idAndScoreLegal) {
+                return false;
+            } else {
+                //检查markList中是否有重复stu_id
+                boolean hasSameStu_id = false;
+                List<Record> checkList = new ArrayList<>();
+
+                //list.contains(o)，系统会对list中的每个元素e调用o.equals(e)方法，假如list中有n个元素，
+                // 那么会调用n次o.equals(e)，只要有一次o.equals(e)返回了true，那么list.contains(o)返回true，
+                // 否则返回false。
+                for (Record record : recordList) {
+                    if (checkList.contains(record)) {
+                        Toast.makeText(MainActivity.this, "有重复学号：" + record.getStu_id(), Toast.LENGTH_SHORT).show();
+                        hasSameStu_id = true;
+                        break;
+                    }
+                    checkList.add(record);
+                }
+
+                if(hasSameStu_id) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+        }
+    }
+
     private void showDeleteDialog(final int position) {
         //长按则删除
         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
@@ -1142,6 +1271,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Long count = cursor.getLong(0);
         cursor.close();
         return count;
+    }
+
+    //SQLite查询test_id最大值
+    public long getTest_idMax() {
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+        Cursor cursor = db.rawQuery("select max(test_id) from StudentTest", null);
+        cursor.moveToNext();
+        Long maxTest_id = cursor.getLong(0);
+        cursor.close();
+        return maxTest_id;
     }
 
     //使用正则表达式判断该字符串是否为数字，第一个\是转义符，\d+表示匹配1个或 //多个连续数字，"+"和"*"类似，"*"表示0个或多个

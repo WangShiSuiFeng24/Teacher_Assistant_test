@@ -1,5 +1,7 @@
 package com.example.teacher_assistant_test.bean;
 
+import androidx.annotation.Nullable;
+
 public class Record {
     private String stu_id;
     private String stu_name;
@@ -45,4 +47,17 @@ public class Record {
 
     public boolean isSelect() { return isSelect; }
     public void setSelect(boolean isSelect) { this.isSelect = isSelect; }
+
+    //去重关键,重写equals方法
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Record record = (Record) obj;
+        return record.stu_id.equals(stu_id);
+    }
+
+    //去重关键,把User的id当做对象的哈希表值返回
+    @Override
+    public int hashCode() {
+        return stu_id.hashCode();
+    }
 }

@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.util.ExportSheet;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.R;
@@ -254,9 +255,13 @@ public class ShowAndEditActivity extends AppCompatActivity {
                     if(ContextCompat.checkSelfPermission(ShowAndEditActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(ShowAndEditActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION);
                     } else {
-                        exportSheet();
+//                        exportSheet();
 
-                        Uri shareFileUri = FileUtil.getFileUri(ShowAndEditActivity.this, ShareContentType.FILE, new File(fileName));
+                        ExportSheet exportSheet = new ExportSheet(ShowAndEditActivity.this, test_name, studentList);
+
+                        exportSheet.exportSheet();
+
+                        Uri shareFileUri = FileUtil.getFileUri(ShowAndEditActivity.this, ShareContentType.FILE, new File(exportSheet.getFileName()));
 
                         new Share2.Builder(ShowAndEditActivity.this)
                                 //指定分享的文件类型
@@ -681,65 +686,6 @@ public class ShowAndEditActivity extends AppCompatActivity {
         intent.putExtra("test_id", test_id);
         intent.putExtra("test_name",test_name);
         context.startActivity(intent);
-    }
-
-
-    /**
-     * 导出Excel
-     * @param
-     */
-    private void exportSheet() {
-        file = new File(getSDPath() + "/Record");
-        makeDir(file);
-//        ExcelUtils.initExcel(file.toString() + "/成绩表.xls", title);
-//        fileName = getSDPath() + "/Record/成绩表.xls";
-
-        ExcelUtils.initExcel(file.toString() + "/" + test_name + "成绩表.xls", title);//初始化表第一行
-        fileName = getSDPath() + "/Record/" + test_name + "成绩表.xls";
-
-        ExcelUtils.writeObjListToExcel(getRecordData(), fileName, ShowAndEditActivity.this);//将ObjList写入Excel
-    }
-
-
-    /**
-     * 将数据集合 转化为ArrayList<ArrayList<String>>
-     * @return ArrayList<ArrayList<ArrayList>>
-     */
-    private ArrayList<ArrayList<String>> getRecordData() {
-        recordList = new ArrayList<>();
-        for(int i=0; i<studentList.size(); i++) {
-            Student student = studentList.get(i);
-            ArrayList<String> beanList = new ArrayList<>();
-            beanList.add(String.valueOf(student.getStu_id()));
-            beanList.add(student.getStu_name());
-            beanList.add(student.getStu_gender());
-            beanList.add(student.getScore());
-            beanList.add(String.valueOf(student.getTotal_score()));
-            recordList.add(beanList);
-        }
-        return recordList;
-    }
-
-    /**
-     * 获取sd卡路径
-     * @return
-     */
-    private String getSDPath() {
-        File sdDir = null;
-        //getExternalStorageState(),返回File 获取外部内存当前状态
-        boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);//判断sd卡是否存在，MEDIA_MOUNTED，返回getExternalStorageState() ，表明对象是否存在并具有读/写权限
-        if(sdCardExist) {
-            sdDir = Environment.getExternalStorageDirectory();//获取根目录
-        }
-
-        return sdDir.toString();
-    }
-
-    private void makeDir(File dir) {
-        if(!dir.getParentFile().exists()) {
-            makeDir(dir.getParentFile());
-        }
-        dir.mkdir();
     }
 
     //获取点击事件
