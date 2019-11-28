@@ -58,7 +58,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         titleBarView = findViewById(R.id.title4);
         titleBarView.setTitleSize(20);
         titleBarView.setTitle("学生基本信息");
-        titleBarView.setRightTextColor(Color.parseColor("#808080"));
+        titleBarView.setRightTextColor(Color.parseColor("#b7b8bd"));
         titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
