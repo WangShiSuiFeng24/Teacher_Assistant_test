@@ -21,7 +21,9 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -102,6 +104,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //在recordUI则为true,初始为false(不在)
     private boolean inRecordUI = false;
 
+    //打开一个test则为true，初始为false
+    private boolean isOpenATest = false;
+
+    //当前点击test_id
+    private long current_test_id = -1;
+
+    //当前点击test_name
+    private String current_test_name;
+
     //testUI
     //recordUI中Visibility随需求改变的控件
     private LinearLayout test_recycle;
@@ -111,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Test> testList = new ArrayList<>();
     private TestAdapter testAdapter;
     private RecyclerView testRecyclerView;
-    private DividerItemDecoration dividerItemDecoration;
+    private DividerItemDecoration testDividerItemDecoration;
 
     //仿微信长按popupWindow
     private Point point = new Point();
@@ -145,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerViewEmptySupport recordRecyclerView;
     private FloatingActionButton record_fab;
 
+    private DividerItemDecoration recordDividerItemDecoration;
+
     private List<Record> recordList = new ArrayList<>();
     private RecordAdapter recordAdapter;
 
@@ -163,6 +176,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isSelectAll = false;
     private boolean editorStatus = false;
     private int index = 0;
+
+
+//    private static final int COMPLETED = 0;
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(@NonNull Message msg) {
+//            if(msg.what == COMPLETED) {
+//                testUI_to_recordUI();
+//            }
+//        }
+//    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,7 +304,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //返回刷新，小技巧是把需要更新的view 可以都放在initView（）中，在resume中调用这个方法即可。
+    /**
+     * 返回刷新，小技巧是把需要更新的view 可以都放在initView（）中，在resume中调用这个方法即可。
+     */
     @Override
     protected void onResume() {
         Log.d("MainActivity", "onResume()");
@@ -287,12 +314,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //先清空testList
         testList.clear();
         //再重新add数据到testList
-        initTest();
+        initTestList();
 
-        testRecyclerView.removeItemDecoration(dividerItemDecoration);
+        testRecyclerView.removeItemDecoration(testDividerItemDecoration);
         if(testList.size() != 0 ) {
             //添加Android自带的分割线
-            testRecyclerView.addItemDecoration(dividerItemDecoration);
+            testRecyclerView.addItemDecoration(testDividerItemDecoration);
         }
         //返回时重新设置thisPosition
         testAdapter.setThisPosition(-1);
@@ -303,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 初始化testList数据
      */
-    private void initTest() {
+    private void initTestList() {
         String sqlSelect = "SELECT StudentTest.test_id,StudentTest.test_name FROM StudentTest";
         SQLiteDatabase database = MyDatabaseHelper.getInstance(MainActivity.this);
         Cursor cursor = database.rawQuery(sqlSelect, new String[]{});
@@ -313,6 +340,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Test test = new Test(test_id, test_name);
             testList.add(test);
+        }
+        cursor.close();
+    }
+
+    /**
+     *点击testItem,初始化recordList
+     */
+    private void initRecordList() {
+        //先清空，在添加
+        recordList.clear();
+
+        Log.i("ShowAndEditActivity", "开始初始化Student。。。。。。");
+        String sqlSelect="SELECT StudentMark.stu_id,Student.stu_name,Student.stu_gender,StudentMark.test_id,StudentTest.test_name,StudentMark.score,StudentMark.total_score "
+                + "FROM StudentMark INNER JOIN Student ON StudentMark.stu_id = Student.stu_id "
+                + "INNER JOIN StudentTest ON StudentMark.test_id = StudentTest.test_id";
+        //扫描数据库，将信息放入markList
+        SQLiteDatabase sd = MyDatabaseHelper.getInstance(MainActivity.this);
+        Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
+
+        //打印cursor中的行数
+        Log.i("ShowAndEditActivity", "cursor.getCount()："+cursor.getCount());
+
+        while(cursor.moveToNext()){
+            long test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
+            Log.i("ShowAndEditActivity", "数据库test_id："+test_id);
+
+            //只有当查询出的条目的test_id等于传入的this.test_id时才将该条目add到List<Student>
+            if(test_id == current_test_id) {
+                String stu_id = String.valueOf(cursor.getInt(cursor.getColumnIndex("stu_id")));
+                String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
+                String stu_gender = cursor.getString(cursor.getColumnIndex("stu_gender"));
+                String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
+                String score = cursor.getString(cursor.getColumnIndex("score"));
+                int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
+
+                Record record = new Record(stu_id, stu_name, stu_gender, test_name, score, total_score);
+                recordList.add(record);
+
+
+//                Student student = new Student(stu_id, stu_name, stu_gender, test_name, score, total_score);
+//                studentList.add(student);
+//                backUpStudentList.add(student);
+            }
         }
         cursor.close();
     }
@@ -386,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         testRecyclerView.setAdapter(testAdapter);
 
-        dividerItemDecoration = new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL);
+        testDividerItemDecoration = new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL);
     }
 
     /**
@@ -421,14 +491,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         testAdapter.setThisPosition(position);
         testAdapter.notifyDataSetChanged();
 
-        new Timer().schedule(new TimerTask() {
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                //单击则查询
+//                Test test = testList.get(position);
+//                ShowAndEditActivity.actionStart(MainActivity.this, test.getTest_id(), test.getTest_name());
+//            }
+//        },100);
+        //设置打开recordUI方式isOpenATest为true
+        isOpenATest = true;
+        //设置当前点击的test_id以及test_name
+        current_test_id = testList.get(position).getTest_id();
+        current_test_name = testList.get(position).getTest_name();
+
+
+        //Android系统中的视图组件并不是线程安全的，如果要更新视图，必须在主线程中更新，不可以在子线程中执行更新的操作。
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                //处理比较耗时的操作
+//                //处理完成后给handler发送消息
+//                Message msg = new Message();
+//                msg.what = COMPLETED;
+//                handler.sendMessage(msg);
+//            }
+//        }).start();
+
+        //运行在主线程中
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                //单击则查询
-                Test test = testList.get(position);
-                ShowAndEditActivity.actionStart(MainActivity.this, test.getTest_id(), test.getTest_name());
+                testUI_to_recordUI();
             }
-        },100);
+        }, 300);
     }
 
     /**
@@ -479,6 +575,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         test_recycle = findViewById(R.id.test_recycle);
         test_fab = findViewById(R.id.test_fab);
 
+
+        //如果isOpenATest为true，则为点击testRecyclerView的item进入，于是初始化recordList
+        if (isOpenATest) {
+            initRecordList();
+            titlebarView.setTitle(current_test_name);
+        }
+
         //初始化recordUI
         initRecordUI();
 
@@ -511,8 +614,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //inRecordUI设置为true，表明现在recordUI
         inRecordUI = true;
 
-        //一进入当前页面就执行点击事件
-        record_fab.performClick();
+        //判断打开recordUI方式，若非点击testItem打开，则执行record_fab.performClick()
+        if (!isOpenATest) record_fab.performClick();
     }
 
     /**
@@ -550,7 +653,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         emptyMessage.setText("暂无成绩数据，请点击下方录音按钮创建新成绩。");
 
         //设置分割线
-        recordRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recordDividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recordRecyclerView.addItemDecoration(recordDividerItemDecoration);
 
         LinearLayoutManager record_linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         recordRecyclerView.setLayoutManager(record_linearLayoutManager);
@@ -906,6 +1010,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    /**
+     * 按back键时根据各种状态自定义返回效果
+     */
     @Override
     public void onBackPressed() {
         if (inRecordUI) {
@@ -928,6 +1035,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 titlebarView.setRightText("");
                 titlebarView.setRightDrawable(R.drawable.ic_more);
+
+                //返回设置移除recordRecyclerView分割线
+                recordRecyclerView.removeItemDecoration(recordDividerItemDecoration);
+                //返回设置标题
+                titlebarView.setTitle("园丁小帮手");
+                //返回时重新设置thisPosition
+                testAdapter.setThisPosition(-1);
+                //通知RecyclerView，告诉它Adapter的数据发生了变化
+                testAdapter.notifyDataSetChanged();
+
                 return;
             }
         }
@@ -1065,7 +1182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 db.delete("StudentMark", "test_id = ?", new String[]{""+test_id+""});
 
                 //先去掉分割线，后看情况添加
-                testRecyclerView.removeItemDecoration(dividerItemDecoration);
+                testRecyclerView.removeItemDecoration(testDividerItemDecoration);
                 onResume();
 
                 alertDialog.dismiss();
