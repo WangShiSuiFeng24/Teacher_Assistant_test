@@ -40,7 +40,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teacher_assistant_test.adapter.MarkAdapter;
 import com.example.teacher_assistant_test.adapter.RecordAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Record;
@@ -601,6 +600,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (recordList.size() != 0) {
             titlebarView.setRightText("编辑");
+            titlebarView.setRightTextColor(Color.WHITE);
 
             record_title.setVisibility(View.VISIBLE);
 
@@ -615,7 +615,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         inRecordUI = true;
 
         //判断打开recordUI方式，若非点击testItem打开，则执行record_fab.performClick()
-        if (!isOpenATest) record_fab.performClick();
+        if (!isOpenATest) {
+            recordList.clear();
+            record_fab.performClick();
+        }
     }
 
     /**
@@ -803,7 +806,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 保存当前页面数据到数据库
      */
     private void saveDataToDatabase() {
-
         if (checkRecordListLegality()) {
 //                if(!flag) {
             final EditText edit = new EditText(MainActivity.this);
@@ -1036,10 +1038,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 titlebarView.setRightText("");
                 titlebarView.setRightDrawable(R.drawable.ic_more);
 
+                //返回设置isOpenATest
+                isOpenATest = false;
                 //返回设置移除recordRecyclerView分割线
                 recordRecyclerView.removeItemDecoration(recordDividerItemDecoration);
                 //返回设置标题
                 titlebarView.setTitle("园丁小帮手");
+                //返回设置清空recordList
+                recordList.clear();
                 //返回时重新设置thisPosition
                 testAdapter.setThisPosition(-1);
                 //通知RecyclerView，告诉它Adapter的数据发生了变化
@@ -1378,7 +1384,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return string.matches("\\d+");
     }
-
 
     /**
      * 根据选择的数量是否为0来判断按钮的是否可点击
