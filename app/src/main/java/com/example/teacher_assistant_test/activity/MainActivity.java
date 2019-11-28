@@ -352,6 +352,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initRecordList() {
         //先清空，在添加
         recordList.clear();
+        backUpRecordList.clear();
 
         Log.i("ShowAndEditActivity", "开始初始化Student。。。。。。");
         String sqlSelect="SELECT StudentMark.stu_id,Student.stu_name,Student.stu_gender,StudentMark.test_id,StudentTest.test_name,StudentMark.score,StudentMark.total_score "
@@ -621,6 +622,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //判断打开recordUI方式，若非点击testItem打开，则执行record_fab.performClick()
         if (!isOpenATest) {
             recordList.clear();
+            backUpRecordList.clear();
             record_fab.performClick();
         }
     }
@@ -817,10 +819,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //通过testItem点击进入recordUI
             if(isOpenATest) {
-                //先删除数据库同studentList中学号的学生，再将studentList直接插入数据库
+                //先删除数据库同backupRecordList中学号的学生，再将recordList直接插入数据库
                 for (int i = 0; i < backUpRecordList.size(); i++) {
                     String delete_stu_id = backUpRecordList.get(i).getStu_id();
-                    db.delete("StudentMark", "stu_id = ?", new String[]{"" + delete_stu_id + ""});
+                    db.delete("StudentMark", "stu_id = ? AND test_id = ?", new String[]{"" + delete_stu_id + "", ""+current_test_id+""});
                 }//先删
                 for (Record record : recordList) {
                     String stu_id = record.getStu_id();
@@ -1077,8 +1079,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 recordRecyclerView.removeItemDecoration(recordDividerItemDecoration);
                 //返回设置标题
                 titlebarView.setTitle("园丁小帮手");
-                //返回设置清空recordList
+                //返回设置清空recordList,backUpRecordList
                 recordList.clear();
+                backUpRecordList.clear();
+
+                //返回设置current_test_id,current_test_name为默认
+                current_test_id = -1;
+                current_test_name = "";
+
+                ////返回设置index为默认
+                index = 0;
+
                 //返回时重新设置thisPosition
                 testAdapter.setThisPosition(-1);
                 //通知RecyclerView，告诉它Adapter的数据发生了变化
@@ -1163,10 +1174,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @return 合法返回true,不合法返回false
      */
     private boolean checkRecordListLegality() {
-        if (recordList.size() == 0) {
-            Toast.makeText(MainActivity.this, "数据为空，保存失败", Toast.LENGTH_LONG).show();
-            return false;
-        } else {
+//        if (recordList.size() == 0) {
+//            Toast.makeText(MainActivity.this, "数据为空，保存失败", Toast.LENGTH_LONG).show();
+//            return false;
+//        } else {
             //检查recordList中是否有非法stu_id或非法score
             boolean isStu_idAndScoreLegal = true;
             for(Record record : recordList) {
@@ -1202,7 +1213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 return !hasSameStu_id;
             }
-        }
+//        }
     }
 
     /**
@@ -1448,7 +1459,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_delete:
-                deleteVideo();
+                deleteRecordItem();
                 break;
             case R.id.select_all:
                 selectAllItem();
@@ -1488,7 +1499,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 删除按钮逻辑
      */
-    private void deleteVideo() {
+    private void deleteRecordItem() {
         if (index == 0) {
             btnDelete.setEnabled(false);
             return;
@@ -1522,16 +1533,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     my_collection_bottom_dialog.setVisibility(View.GONE);
 
-                    save_to_db.setVisibility(View.GONE);
+                    if (isOpenATest) {
 
-                    share_by_excel.setVisibility(View.GONE);
+                        save_to_db.setVisibility(View.VISIBLE);
 
-                    record_title.setVisibility(View.GONE);
+                        share_by_excel.setVisibility(View.VISIBLE);
 
-                    record_fab.setVisibility(View.VISIBLE);
+                        record_title.setVisibility(View.GONE);
 
-                    titlebarView.setRightText("");
+                        record_fab.setVisibility(View.VISIBLE);
 
+                    } else {
+
+                        save_to_db.setVisibility(View.GONE);
+
+                        share_by_excel.setVisibility(View.GONE);
+
+                        record_title.setVisibility(View.GONE);
+
+                        record_fab.setVisibility(View.VISIBLE);
+
+                        titlebarView.setRightText("");
+                    }
                 }
                 recordAdapter.notifyDataSetChanged();
                 alertDialog.dismiss();
