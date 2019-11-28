@@ -400,7 +400,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titlebarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
-                //暂不作处理
+                //由recordUI返回testUI
+                if(inRecordUI) {
+                    recordUI_to_testUI();
+                }
             }
 
             @Override
@@ -568,12 +571,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 由testUI界面变为RecordUI界面
+     * 由testUI界面变为recordUI界面
      */
     private void testUI_to_recordUI() {
 
         //设置标题栏右图片隐藏
         titlebarView.setRightDrawable(0);
+
+        titlebarView.setLeftDrawable(R.drawable.ic_back);
+        titlebarView.setLeftText("返回");
+        titlebarView.setLeftTextColor(Color.WHITE);
 
         //绑定testUI Visibility随需求改变的控件
         test_recycle = findViewById(R.id.test_recycle);
@@ -625,6 +632,88 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             backUpRecordList.clear();
             record_fab.performClick();
         }
+    }
+
+    /**
+     * 由recordUI界面变为testUI界面
+     */
+    private void recordUI_to_testUI() {
+        //隐藏recordUI
+        save_to_db.setVisibility(View.VISIBLE);
+        share_by_excel.setVisibility(View.VISIBLE);
+        record_fab.setVisibility(View.VISIBLE);
+
+        include.setVisibility(View.GONE);
+
+        my_collection_bottom_dialog.setVisibility(View.GONE);
+
+
+        /**
+         * 恢复recordUI默认设置
+         */
+
+        selectNum.setText(String.valueOf(0));
+        selectAll.setText("全选");
+        setDeleteBtnBackground(0);
+
+        isIdSortPressed = false;
+        isScoreSortPressed = false;
+
+        //返回设置inRecordUI
+        inRecordUI = false;
+        //返回设置isOpenATest
+        isOpenATest = false;
+
+        //当前点击test_id
+        current_test_id = -1;
+        //当前点击test_name
+        current_test_name = "";
+
+        //返回设置移除recordRecyclerView分割线
+        recordRecyclerView.removeItemDecoration(recordDividerItemDecoration);
+
+        //返回设置清空recordList,backUpRecordList
+        recordList.clear();
+        backUpRecordList.clear();
+
+        //返回时重新设置thisPosition
+        testAdapter.setThisPosition(-1);
+        //通知RecyclerView，告诉它Adapter的数据发生了变化
+        testAdapter.notifyDataSetChanged();
+
+
+        //返回设置editorStatus
+        editMode = RECORD_MODE_CHECK;
+
+        //返回设置isSelectAll
+        isSelectAll = false;
+        //返回设置editorStatus
+        editorStatus = false;
+
+        //返回设置index
+        index = 0;
+
+
+
+        //显示testUI
+        test_recycle.setVisibility(View.VISIBLE);
+        test_fab.setVisibility(View.VISIBLE);
+
+
+        //恢复标题栏设置
+        titlebarView.setLeftDrawable(0);
+        titlebarView.setLeftText("");
+
+        titlebarView.setTitle("园丁小帮手");
+
+        titlebarView.setRightText("");
+        titlebarView.setRightDrawable(0);
+
+
+        //返回设置先清空testList
+        testList.clear();
+        //再重新add数据到testList
+        initTestList();
     }
 
     /**
@@ -1065,40 +1154,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 return;
             } else {
-                inRecordUI = false;
-                test_recycle.setVisibility(View.VISIBLE);
-                test_fab.setVisibility(View.VISIBLE);
-                include.setVisibility(View.GONE);
 
-                titlebarView.setRightText("");
-                titlebarView.setRightDrawable(R.drawable.ic_more);
+                recordUI_to_testUI();
 
-                //返回设置isOpenATest
-                isOpenATest = false;
-                //返回设置移除recordRecyclerView分割线
-                recordRecyclerView.removeItemDecoration(recordDividerItemDecoration);
-                //返回设置标题
-                titlebarView.setTitle("园丁小帮手");
-                //返回设置清空recordList,backUpRecordList
-                recordList.clear();
-                backUpRecordList.clear();
-
-                //返回设置current_test_id,current_test_name为默认
-                current_test_id = -1;
-                current_test_name = "";
-
-                ////返回设置index为默认
-                index = 0;
-
-                //返回时重新设置thisPosition
-                testAdapter.setThisPosition(-1);
-                //通知RecyclerView，告诉它Adapter的数据发生了变化
-                testAdapter.notifyDataSetChanged();
-
-                //返回设置先清空testList
-                testList.clear();
-                //再重新add数据到testList
-                initTestList();
+//                inRecordUI = false;
+//                test_recycle.setVisibility(View.VISIBLE);
+//                test_fab.setVisibility(View.VISIBLE);
+//                include.setVisibility(View.GONE);
+//
+//                titlebarView.setRightText("");
+//                titlebarView.setRightDrawable(R.drawable.ic_more);
+//
+//                //返回设置isOpenATest
+//                isOpenATest = false;
+//                //返回设置移除recordRecyclerView分割线
+//                recordRecyclerView.removeItemDecoration(recordDividerItemDecoration);
+//                //返回设置标题
+//                titlebarView.setTitle("园丁小帮手");
+//
+//                //返回设置左标题和左图标
+//                titlebarView.setLeftDrawable(0);
+//                titlebarView.setLeftText("");
+//
+//                //返回设置清空recordList,backUpRecordList
+//                recordList.clear();
+//                backUpRecordList.clear();
+//
+//                //返回设置current_test_id,current_test_name为默认
+//                current_test_id = -1;
+//                current_test_name = "";
+//
+//                //返回设置index为默认
+//                index = 0;
+//
+//                //返回时重新设置thisPosition
+//                testAdapter.setThisPosition(-1);
+//                //通知RecyclerView，告诉它Adapter的数据发生了变化
+//                testAdapter.notifyDataSetChanged();
+//
+//                //返回设置先清空testList
+//                testList.clear();
+//                //再重新add数据到testList
+//                initTestList();
 
                 return;
             }

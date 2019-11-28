@@ -117,9 +117,9 @@ public class TitleBarView extends RelativeLayout {
 
     //设置左标题
     public void setLeftText(String title) {
-        if (!TextUtils.isEmpty(title)) {
+//        if (!TextUtils.isEmpty(title)) {
             tv_left.setText(title);
-        }
+//        }
     }
 
     //设置右标题
@@ -143,6 +143,13 @@ public class TitleBarView extends RelativeLayout {
         }
     }
 
+    //设置左标题颜色
+    public void setLeftTextColor(int color) {
+        if(tv_left != null) {
+            tv_left.setTextColor(color);
+        }
+    }
+
     //设置右标题大小
     public void setRightTextSize(int size) {
         if (tv_right != null) {
@@ -150,6 +157,7 @@ public class TitleBarView extends RelativeLayout {
         }
     }
 
+    //设置右标题颜色
     public void setRightTextColor(int color) {
         if(tv_right != null) {
             tv_right.setTextColor(color);
