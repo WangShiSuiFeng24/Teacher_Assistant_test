@@ -97,6 +97,7 @@ import jxl.read.biff.BiffException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
+    private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
     //标题栏
     private TitleBarView titlebarView;
@@ -302,6 +303,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
             if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "缺少录制音频权限，可能会造成无法语音识别", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(requestCode == REQUEST_WRITE_STORAGE_PERMISSION) {
+            if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "缺少文件读写权限，可能会造成无法分享文件", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -707,13 +714,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titlebarView.setTitle("园丁小帮手");
 
         titlebarView.setRightText("");
-        titlebarView.setRightDrawable(0);
+        titlebarView.setRightDrawable(R.drawable.ic_more);
 
 
         //返回设置先清空testList
         testList.clear();
         //再重新add数据到testList
         initTestList();
+
+        if (testList.size() != 0) {
+            testRecyclerView.removeItemDecoration(testDividerItemDecoration);
+            testRecyclerView.addItemDecoration(testDividerItemDecoration);
+        }
     }
 
     /**
@@ -1054,16 +1066,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void shareExcel() {
 
-        if (checkRecordListLegality()) {
-            //生成唯一id
+        //先判断权限是否授予，没有则单独申请，有则继续
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION);
+        } else {
+            if (checkRecordListLegality()) {
+                //生成唯一id
 //          final long unique_test_id = new Date().getTime();//太长
-            //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
+                //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
 //          final long unique_test_id = getCount() + 1;
 
-            final long unique_test_id = getTest_idMax() + 1;
+                final long unique_test_id = getTest_idMax() + 1;
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String the_only_test_name = dateFormat.format(Calendar.getInstance().getTime());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String the_only_test_name = dateFormat.format(Calendar.getInstance().getTime());
+
+
+                //导出Excel
+                ExportSheet exportSheet = new ExportSheet(MainActivity.this, the_only_test_name, recordList);
+
+                exportSheet.exportSheet();
+
+                try {
+                    File file = new File(exportSheet.getFileName());
+
+                    Uri shareFileUri = FileUtil.getFileUri(MainActivity.this, ShareContentType.FILE, file);
+
+                    new Share2.Builder(MainActivity.this)
+                            //指定分享的文件类型
+                            .setContentType(ShareContentType.FILE)
+                            //设置要分享的文件Uri
+                            .setShareFileUri(shareFileUri)
+                            //设置分享选择器的标题
+                            .setTitle("Share File")
+                            .build()
+                            //发起分享
+                            .shareBySystem();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
 
             //将时间戳生成的the_only_test_name,unique_test_id和当前页面数据一起保存到数据库中
 
@@ -1093,31 +1138,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
 //            long long_to_int_test_id = (int) unique_test_id;
 //            Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
-
-            //导出Excel
-            ExportSheet exportSheet = new ExportSheet(MainActivity.this, the_only_test_name, recordList);
-
-            exportSheet.exportSheet();
-
-            try {
-                File file = new File(exportSheet.getFileName());
-
-                Uri shareFileUri = FileUtil.getFileUri(MainActivity.this, ShareContentType.FILE, file);
-
-                new Share2.Builder(MainActivity.this)
-                        //指定分享的文件类型
-                        .setContentType(ShareContentType.FILE)
-                        //设置要分享的文件Uri
-                        .setShareFileUri(shareFileUri)
-                        //设置分享选择器的标题
-                        .setTitle("Share File")
-                        .build()
-                        //发起分享
-                        .shareBySystem();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     /**
