@@ -1067,7 +1067,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void shareExcel() {
 
         //先判断权限是否授予，没有则单独申请，有则继续
-        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION);
         } else {
             if (checkRecordListLegality()) {
@@ -1075,12 +1075,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //          final long unique_test_id = new Date().getTime();//太长
                 //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
 //          final long unique_test_id = getCount() + 1;
-
                 final long unique_test_id = getTest_idMax() + 1;
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String the_only_test_name = dateFormat.format(Calendar.getInstance().getTime());
 
+                if (isOpenATest) {
+                    the_only_test_name = current_test_name;
+                }
 
                 //导出Excel
                 ExportSheet exportSheet = new ExportSheet(MainActivity.this, the_only_test_name, recordList);
