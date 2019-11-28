@@ -979,31 +979,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //将时间戳生成的the_only_test_name,unique_test_id和当前页面数据一起保存到数据库中
 
             //先把test_id和test_name插入到StudentTest表中
-            new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, the_only_test_name);
-
-            //再向StudentMark表中插入当前页面数据
-            Iterator<Record> iterator = recordList.iterator();
-            while(iterator.hasNext()) {
-                //先用preMark保存当前页面mark条目
-                final Record preRecord = iterator.next();
-
-                String stu_id = preRecord.getStu_id();
-//                                    long test_id = unique_test_id;
-                String score = preRecord.getScore();
-                int total_score = preRecord.getTotal_score();
-                new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
-//                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id："+stu_id
-                        +"\r\nunique_test_id："+unique_test_id
-                        +"\r\nscore："+score
-                        +"\r\ntotal_score"+total_score+"成功");
-
-            }
-//            Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-
-            //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
-            long long_to_int_test_id = (int) unique_test_id;
-            Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
+//            new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, the_only_test_name);
+//
+//            //再向StudentMark表中插入当前页面数据
+//            Iterator<Record> iterator = recordList.iterator();
+//            while(iterator.hasNext()) {
+//                //先用preMark保存当前页面mark条目
+//                final Record preRecord = iterator.next();
+//
+//                String stu_id = preRecord.getStu_id();
+////                                    long test_id = unique_test_id;
+//                String score = preRecord.getScore();
+//                int total_score = preRecord.getTotal_score();
+//                new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
+////                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+//                Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id："+stu_id
+//                        +"\r\nunique_test_id："+unique_test_id
+//                        +"\r\nscore："+score
+//                        +"\r\ntotal_score"+total_score+"成功");
+//
+//            }
+////            Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+//
+//            //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
+//            long long_to_int_test_id = (int) unique_test_id;
+//            Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
 
             //导出Excel
             ExportSheet exportSheet = new ExportSheet(MainActivity.this, the_only_test_name, recordList);
