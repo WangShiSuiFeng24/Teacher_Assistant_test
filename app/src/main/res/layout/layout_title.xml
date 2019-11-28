@@ -49,13 +49,13 @@
         android:layout_alignParentRight="true"
         android:gravity="center"
         android:paddingLeft="@dimen/size_8"
-        android:paddingRight="@dimen/size_8">
+        android:paddingRight="7dp">
 
         <TextView
             android:id="@+id/tv_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="15dp"
+            android:paddingRight="11dp"
             android:maxLines="1" />
 
         <ImageView
