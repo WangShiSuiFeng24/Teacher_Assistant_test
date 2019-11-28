@@ -164,6 +164,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Record> backUpRecordList = new ArrayList<>();
     private RecordAdapter recordAdapter;
 
+    //设置recordList更新默认为false
+    private boolean isRecordListUpdate = false;
+
     //讯飞语音识别
     private RecognizerDialog mIatDialog = null;
     private LinkedHashMap<String, String> mIatResults = new LinkedHashMap<>();
@@ -683,6 +686,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recordList.clear();
         backUpRecordList.clear();
 
+        //返回设置recordList更新默认为false
+        isRecordListUpdate = false;
+
+        setSaveBtnBackground(isRecordListUpdate);
+
         //返回时重新设置thisPosition
         testAdapter.setThisPosition(-1);
         //通知RecyclerView，告诉它Adapter的数据发生了变化
@@ -740,6 +748,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         check_box = findViewById(R.id.check_box);
 
         save_to_db = findViewById(R.id.save_to_db);
+        setSaveBtnBackground(isRecordListUpdate);
+
         share_by_excel = findViewById(R.id.share_by_excel);
 
         //绑定recordUI中编辑时弹出的"bottom_dialog"
@@ -802,6 +812,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
                 if(position < recordList.size()) {
                     recordList.get(position).setStu_id(stu_id);
+
+                    //改 更新
+                    isRecordListUpdate = true;
+                    setSaveBtnBackground(isRecordListUpdate);
                 }
             }
         });
@@ -820,6 +834,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                        score = score.replaceAll(" ","");
                             int total_score = (int) new Calculator().calculate(score);
                             recordList.get(position).setTotal_score(total_score);
+
+                            //改 更新
+                            isRecordListUpdate = true;
+                            setSaveBtnBackground(isRecordListUpdate);
 
                             if(!recordRecyclerView.isComputingLayout()) {
                                 recordAdapter.notifyDataSetChanged();
@@ -934,6 +952,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }//再插入
                 db.close();
                 Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+
+                isRecordListUpdate = false;
+                setSaveBtnBackground(isRecordListUpdate);
+
                 return;
             }
 
@@ -1038,6 +1060,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         titlebarView.setTitle(input);
                         isOpenATest = true;
 
+                        isRecordListUpdate = false;
+                        setSaveBtnBackground(isRecordListUpdate);
+
                         //让AlertDialog消失
                         alertDialog.cancel();
                     }
@@ -1075,7 +1100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //          final long unique_test_id = new Date().getTime();//太长
                 //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
 //          final long unique_test_id = getCount() + 1;
-                final long unique_test_id = getTest_idMax() + 1;
+//                final long unique_test_id = getTest_idMax() + 1;
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String the_only_test_name = dateFormat.format(Calendar.getInstance().getTime());
@@ -1170,6 +1195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 my_collection_bottom_dialog.setVisibility(View.GONE);
 
                 save_to_db.setVisibility(View.VISIBLE);
+                setSaveBtnBackground(isRecordListUpdate);
 //                clear_data.setVisibility(View.VISIBLE);
                 share_by_excel.setVisibility(View.VISIBLE);
                 record_fab.setVisibility(View.VISIBLE);
@@ -1337,7 +1363,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 删除dialog
-     * @param position
+     * @param position 当前长按位置
      */
     private void showDeleteDialog(final int position) {
         //长按则删除
@@ -1569,6 +1595,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void setSaveBtnBackground(boolean isRecordListUpdate) {
+        if (isRecordListUpdate) {
+//            save_to_db.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            save_to_db.setEnabled(true);
+            save_to_db.setTextColor(Color.WHITE);
+        } else {
+//            save_to_db.setBackgroundColor(getResources().getColor(R.color.colorAccentDark));
+            save_to_db.setEnabled(false);
+            save_to_db.setTextColor(ContextCompat.getColor(this, R.color.color_b7b8bd));
+        }
+    }
+
 
     /**
      * 实现接口监听
@@ -1644,6 +1682,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         index--;
                     }
                 }
+
+                //删 更新
+                isRecordListUpdate = true;
+                setSaveBtnBackground(isRecordListUpdate);
+
                 index = 0;
                 selectNum.setText(String.valueOf(0));
                 setDeleteBtnBackground(index);
@@ -1792,6 +1835,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     record_title.setVisibility(View.VISIBLE);
 
+                    //增 更新
+                    isRecordListUpdate = true;
+                    setSaveBtnBackground(isRecordListUpdate);
+
                 } else {
                     //flag初始设为false,代表学号不相同
                     boolean flag = false;
@@ -1813,6 +1860,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     //学号相同，更改成绩
                                     record.setScore(newRecord.getScore());
                                     record.setTotal_score(newRecord.getTotal_score());
+
+                                    //改 更新
+                                    isRecordListUpdate = true;
+                                    setSaveBtnBackground(isRecordListUpdate);
+
                                     recordAdapter.notifyDataSetChanged();
                                     alertDialog.dismiss();
                                 }
@@ -1824,6 +1876,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(!flag) {
                         //语音识别stu_id没有一个相同，这里处理
                         recordList.add(newRecord);
+
+                        //增 更新
+                        isRecordListUpdate = true;
+                        setSaveBtnBackground(isRecordListUpdate);
+
                         recordAdapter.notifyDataSetChanged();
 
                         titlebarView.setRightText("编辑");
