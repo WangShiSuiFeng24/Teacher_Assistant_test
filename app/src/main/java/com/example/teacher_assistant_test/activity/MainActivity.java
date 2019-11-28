@@ -834,6 +834,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
 
+            //非点击testItem，新建模式的保存方式
             final EditText edit = new EditText(MainActivity.this);
             //设置EditText的可视最大行数。
             edit.setMaxLines(1);
@@ -929,23 +930,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                                    Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                         }
                         cursor.close();
+
+                        Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                        titlebarView.setTitle(input);
+                        isOpenATest = true;
+
                         //让AlertDialog消失
                         alertDialog.cancel();
                     }
 
-                    //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
-                    long long_to_int_test_id = (int) unique_test_id;
-                    Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
+//                    //获取test_id数据不一致的原因就是SQLite的INTEGER类型存储的是long类型的数据。
+//                    long long_to_int_test_id = (int) unique_test_id;
+//                    Log.i("RecordMarkActivity", "long转int的unique_test_id:"+long_to_int_test_id);
 
-                    ShowAndEditActivity.actionStart(MainActivity.this, long_to_int_test_id, input);
 
-                    if(inRecordUI) {
-                        inRecordUI = false;
-                        test_recycle.setVisibility(View.VISIBLE);
-                        test_fab.setVisibility(View.VISIBLE);
-                        include.setVisibility(View.GONE);
-                        titlebarView.setRightText("");
-                    }
+//                    ShowAndEditActivity.actionStart(MainActivity.this, long_to_int_test_id, input);
+
+//                    if(inRecordUI) {
+//                        inRecordUI = false;
+//                        test_recycle.setVisibility(View.VISIBLE);
+//                        test_fab.setVisibility(View.VISIBLE);
+//                        include.setVisibility(View.GONE);
+//                        titlebarView.setRightText("");
+//                    }
                 }
             });
         }
@@ -1076,6 +1083,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 testAdapter.setThisPosition(-1);
                 //通知RecyclerView，告诉它Adapter的数据发生了变化
                 testAdapter.notifyDataSetChanged();
+
+                //返回设置先清空testList
+                testList.clear();
+                //再重新add数据到testList
+                initTestList();
 
                 return;
             }
