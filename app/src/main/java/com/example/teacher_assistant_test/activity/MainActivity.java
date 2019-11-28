@@ -43,6 +43,7 @@ import android.widget.Toast;
 import com.example.teacher_assistant_test.adapter.RecordAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Record;
+import com.example.teacher_assistant_test.bean.Student;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.ExportSheet;
@@ -158,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DividerItemDecoration recordDividerItemDecoration;
 
     private List<Record> recordList = new ArrayList<>();
+    //备份，即使当前页面被编辑后，students始终保存刚进入页面时的数据
+    private List<Record> backUpRecordList = new ArrayList<>();
     private RecordAdapter recordAdapter;
 
     //讯飞语音识别
@@ -376,6 +379,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Record record = new Record(stu_id, stu_name, stu_gender, test_name, score, total_score);
                 recordList.add(record);
+                backUpRecordList.add(record);
 
 
 //                Student student = new Student(stu_id, stu_name, stu_gender, test_name, score, total_score);
@@ -806,8 +810,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 保存当前页面数据到数据库
      */
     private void saveDataToDatabase() {
+
+        final SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+
         if (checkRecordListLegality()) {
-//                if(!flag) {
+
+            //通过testItem点击进入recordUI
+            if(isOpenATest) {
+                //先删除数据库同studentList中学号的学生，再将studentList直接插入数据库
+                for (int i = 0; i < backUpRecordList.size(); i++) {
+                    String delete_stu_id = backUpRecordList.get(i).getStu_id();
+                    db.delete("StudentMark", "stu_id = ?", new String[]{"" + delete_stu_id + ""});
+                }//先删
+                for (Record record : recordList) {
+                    String stu_id = record.getStu_id();
+
+                    String score = record.getScore();
+                    int total_score = record.getTotal_score();
+                    new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, current_test_id, score, total_score);
+                }//再插入
+                db.close();
+                Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             final EditText edit = new EditText(MainActivity.this);
             //设置EditText的可视最大行数。
             edit.setMaxLines(1);
@@ -850,7 +876,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                            String editText = edit.getText().toString().trim();
 
                         //将用户输入的Test_Name,unique_test_id和当前页面数据一起保存到数据库中
-                        final SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
+
                         //查询数据库中是否存在与将要插入的preMark相同的test_name,若相同，则提示用户test_name已存在重新输入，否则直接新建插入全部数据
                         String sqlSelect = "SELECT test_name FROM StudentTest";
                         Cursor cursor = db.rawQuery(sqlSelect, new String[]{});
