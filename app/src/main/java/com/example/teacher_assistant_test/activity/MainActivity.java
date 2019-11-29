@@ -411,8 +411,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void leftClick() {
                 //由recordUI返回testUI
-                if(inRecordUI) {
-                    recordUI_to_testUI();
+                if (inRecordUI) {
+
+                    if (isRecordListUpdate) {
+
+                        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this, "保存",
+                                "是否保存对本测验成绩的修改", null, "保存", "不保存", "取消");
+
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                save_to_db.performClick();
+
+                                recordUI_to_testUI();
+
+                                alertDialog.dismiss();
+
+                            }
+                        });
+
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                recordUI_to_testUI();
+
+                                alertDialog.dismiss();
+                            }
+                        });
+
+                        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                alertDialog.dismiss();
+                            }
+                        });
+
+                    } else {
+
+                        recordUI_to_testUI();
+                    }
                 }
             }
 
@@ -1203,7 +1243,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             } else {
 
-                recordUI_to_testUI();
+                if (isRecordListUpdate) {
+
+                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this, "保存",
+                            "是否保存对本测验成绩的修改", null, "保存", "不保存", "取消");
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            save_to_db.performClick();
+
+                            recordUI_to_testUI();
+
+                            alertDialog.dismiss();
+
+                        }
+                    });
+
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            recordUI_to_testUI();
+
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                } else {
+
+                    recordUI_to_testUI();
+                }
+
+//                recordUI_to_testUI();
 
 //                inRecordUI = false;
 //                test_recycle.setVisibility(View.VISIBLE);

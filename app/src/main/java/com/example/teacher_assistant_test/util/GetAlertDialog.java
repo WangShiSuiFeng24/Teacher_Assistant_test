@@ -12,17 +12,25 @@ import java.lang.reflect.Field;
 
 public class GetAlertDialog {
 
-    public static AlertDialog getAlertDialog(Context context, String title, String message, View view, String positiveBtn, String negativeBtn  ) {
+    public static AlertDialog getAlertDialog(Context context, String title, String message, View view, String positiveBtn, String negativeBtn) {
+
+        return getAlertDialog(context, title, message, view, positiveBtn, negativeBtn, null);
+
+    }
+
+    public static AlertDialog getAlertDialog(Context context, String title, String message, View view, String positiveBtn, String negativeBtn, String neutralBtn) {
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setView(view)
                 .setPositiveButton(positiveBtn, null)
                 .setNegativeButton(negativeBtn, null)
+                .setNeutralButton(neutralBtn, null)
                 .show();
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.colorAccent));
         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.colorAccent));
+        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(context.getResources().getColor(R.color.colorAccent));
 
         try {
             Field mAlert = AlertDialog.class.getDeclaredField("mAlert");
