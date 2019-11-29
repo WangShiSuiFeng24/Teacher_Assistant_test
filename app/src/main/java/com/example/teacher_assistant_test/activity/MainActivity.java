@@ -389,8 +389,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
 
                 Record record = new Record(stu_id, stu_name, stu_gender, test_name, score, total_score);
+
+                //此处非常关键，若add同一个Record，则改变recordList中Record对象的成员方法或变量时，
+                // backUpRecordList中的对应的Record对象的成员方法或变量也会随之改变
+                //因为两个List中的Record在添加的时候就是同一个Record（地址一样）
+                Record backUpRecord = new Record(stu_id, stu_name, stu_gender, test_name, score, total_score);
+
                 recordList.add(record);
-                backUpRecordList.add(record);
+                backUpRecordList.add(backUpRecord);
 
 
 //                Student student = new Student(stu_id, stu_name, stu_gender, test_name, score, total_score);
