@@ -172,7 +172,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="分享"
+            android:text="导出"
             android:layout_gravity="bottom"/>
 
     </LinearLayout>
