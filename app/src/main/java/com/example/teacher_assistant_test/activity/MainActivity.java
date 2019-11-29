@@ -23,7 +23,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -43,7 +42,6 @@ import android.widget.Toast;
 import com.example.teacher_assistant_test.adapter.RecordAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Record;
-import com.example.teacher_assistant_test.bean.Student;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.ExportSheet;
@@ -70,7 +68,6 @@ import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
-import org.apache.log4j.chainsaw.Main;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -100,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
     //标题栏
-    private TitleBarView titlebarView;
+    private TitleBarView titleBarView;
 
     //在recordUI则为true,初始为false(不在)
     private boolean inRecordUI = false;
@@ -208,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImmersiveStatusBar.setImmersiveStatusBar(this);
 
         //初始化标题栏
-        titlebarView = findViewById(R.id.title);
+        titleBarView = findViewById(R.id.title);
         initTitleBar();
 
         //导入assets文件夹中的Excel数据到数据库
@@ -277,11 +274,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
+            /**
+             * 过滤掉没有说话的错误码显示
+             */
             @Override
             public void onError(SpeechError error) {
-                /**
-                 * 过滤掉没有说话的错误码显示
-                 */
                 TextView tv_error = mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
                 if (tv_error != null) {
                     tv_error.setText("您好像没有说话哦。。。");
@@ -411,9 +408,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化标题栏
      */
     private void initTitleBar() {
-        titlebarView.setTitleSize(20);
-        titlebarView.setTitle("园丁小帮手");
-        titlebarView.setOnViewClick(new TitleBarView.onViewClick() {
+        titleBarView.setTitleSize(20);
+        titleBarView.setTitle("园丁小帮手");
+        titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
                 //由recordUI返回testUI
@@ -634,11 +631,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void testUI_to_recordUI() {
 
         //设置标题栏右图片隐藏
-        titlebarView.setRightDrawable(0);
+        titleBarView.setRightDrawable(0);
 
-        titlebarView.setLeftDrawable(R.drawable.ic_back);
-        titlebarView.setLeftText("返回");
-        titlebarView.setLeftTextColor(Color.WHITE);
+        titleBarView.setLeftDrawable(R.drawable.ic_back);
+        titleBarView.setLeftText("返回");
+        titleBarView.setLeftTextColor(Color.WHITE);
 
         //绑定testUI Visibility随需求改变的控件
         test_recycle = findViewById(R.id.test_recycle);
@@ -648,7 +645,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //如果isOpenATest为true，则为点击testRecyclerView的item进入，于是初始化recordList
         if (isOpenATest) {
             initRecordList();
-            titlebarView.setTitle(current_test_name);
+            titleBarView.setTitle(current_test_name);
         }
 
         //初始化recordUI
@@ -669,8 +666,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         if (recordList.size() != 0) {
-            titlebarView.setRightText("编辑");
-            titlebarView.setRightTextColor(Color.WHITE);
+            titleBarView.setRightText("编辑");
+            titleBarView.setRightTextColor(Color.WHITE);
 
             record_title.setVisibility(View.VISIBLE);
 
@@ -706,7 +703,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         my_collection_bottom_dialog.setVisibility(View.GONE);
 
 
-        /**
+        /*
          * 恢复recordUI默认设置
          */
 
@@ -737,7 +734,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //返回设置recordList更新默认为false
         isRecordListUpdate = false;
 
-        setSaveBtnBackground(isRecordListUpdate);
+        setSaveBtnBackground(false);
 
         //返回时重新设置thisPosition
         testAdapter.setThisPosition(-1);
@@ -764,13 +761,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //恢复标题栏设置
-        titlebarView.setLeftDrawable(0);
-        titlebarView.setLeftText("");
+        titleBarView.setLeftDrawable(0);
+        titleBarView.setLeftText("");
 
-        titlebarView.setTitle("园丁小帮手");
+        titleBarView.setTitle("园丁小帮手");
 
-        titlebarView.setRightText("");
-        titlebarView.setRightDrawable(R.drawable.ic_more);
+        titleBarView.setRightText("");
+        titleBarView.setRightDrawable(R.drawable.ic_more);
 
 
         //返回设置先清空testList
@@ -863,7 +860,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     //改 更新
                     isRecordListUpdate = true;
-                    setSaveBtnBackground(isRecordListUpdate);
+                    setSaveBtnBackground(true);
                 }
             }
         });
@@ -878,7 +875,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     //改 更新
                     isRecordListUpdate = true;
-                    setSaveBtnBackground(isRecordListUpdate);
+                    setSaveBtnBackground(true);
 
                     if(!TextUtils.isEmpty(score)) {
                         recordList.get(position).setScore(score);
@@ -1004,7 +1001,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 
                 isRecordListUpdate = false;
-                setSaveBtnBackground(isRecordListUpdate);
+                setSaveBtnBackground(false);
 
                 return;
             }
@@ -1107,11 +1104,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         cursor.close();
 
                         Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                        titlebarView.setTitle(input);
+                        titleBarView.setTitle(input);
                         isOpenATest = true;
 
                         isRecordListUpdate = false;
-                        setSaveBtnBackground(isRecordListUpdate);
+                        setSaveBtnBackground(true);
 
                         //让AlertDialog消失
                         alertDialog.cancel();
@@ -1785,7 +1782,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //删 更新
                 isRecordListUpdate = true;
-                setSaveBtnBackground(isRecordListUpdate);
+                setSaveBtnBackground(true);
 
                 index = 0;
                 selectNum.setText(String.valueOf(0));
@@ -1815,7 +1812,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         record_fab.setVisibility(View.VISIBLE);
 
-                        titlebarView.setRightText("");
+                        titleBarView.setRightText("");
                     }
                 }
                 recordAdapter.notifyDataSetChanged();
@@ -1831,7 +1828,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateEditMode() {
         editMode = editMode == RECORD_MODE_CHECK ? RECORD_MODE_EDIT : RECORD_MODE_CHECK;
         if (editMode == RECORD_MODE_EDIT) {
-            titlebarView.setRightText("取消");
+            titleBarView.setRightText("取消");
             my_collection_bottom_dialog.setVisibility(View.VISIBLE);
 
             check_box.setVisibility(View.VISIBLE);
@@ -1843,7 +1840,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             editorStatus = true;
         } else {
-            titlebarView.setRightText("编辑");
+            titleBarView.setRightText("编辑");
             my_collection_bottom_dialog.setVisibility(View.GONE);
 
             check_box.setVisibility(View.GONE);
@@ -1925,8 +1922,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     recordList.add(newRecord);
                     recordAdapter.notifyDataSetChanged();
 
-                    titlebarView.setRightText("编辑");
-                    titlebarView.setRightTextColor(Color.WHITE);
+                    titleBarView.setRightText("编辑");
+                    titleBarView.setRightTextColor(Color.WHITE);
 
                     save_to_db.setVisibility(View.VISIBLE);
 //                                clear_data.setVisibility(View.VISIBLE);
@@ -1937,7 +1934,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     //增 更新
                     isRecordListUpdate = true;
-                    setSaveBtnBackground(isRecordListUpdate);
+                    setSaveBtnBackground(true);
 
                 } else {
                     //flag初始设为false,代表学号不相同
@@ -1963,7 +1960,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                     //改 更新
                                     isRecordListUpdate = true;
-                                    setSaveBtnBackground(isRecordListUpdate);
+                                    setSaveBtnBackground(true);
 
                                     recordAdapter.notifyDataSetChanged();
                                     alertDialog.dismiss();
@@ -1979,12 +1976,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         //增 更新
                         isRecordListUpdate = true;
-                        setSaveBtnBackground(isRecordListUpdate);
+                        setSaveBtnBackground(true);
 
                         recordAdapter.notifyDataSetChanged();
 
-                        titlebarView.setRightText("编辑");
-                        titlebarView.setRightTextColor(Color.WHITE);
+                        titleBarView.setRightText("编辑");
+                        titleBarView.setRightTextColor(Color.WHITE);
 
                         save_to_db.setVisibility(View.VISIBLE);
 //                                    clear_data.setVisibility(View.VISIBLE);
