@@ -1352,6 +1352,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             View view = getCurrentFocus();
             if(isHideInput(view, ev)) {
                 hideSoftInput(view.getWindowToken());
+
+                //设置EditText光标模式，isSelectionsGone为true则清除光标
+                recordAdapter.setIsSelectionsGone(true);
+
             }
         }
 

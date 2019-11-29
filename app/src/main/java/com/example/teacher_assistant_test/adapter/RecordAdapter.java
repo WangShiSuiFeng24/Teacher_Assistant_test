@@ -25,6 +25,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     private static final int RECORD_MODE_CHECK = 0;
     int editMode = RECORD_MODE_CHECK;
 
+    private boolean isSelectionsGone = false;
+
 //    //editText的焦点，我们可以通过一个int变量记录他在adapter中的位置
 //    int stuIdFocusPos = -1;
 //    int scoreFocusPos = -1;
@@ -113,6 +115,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             }
         }
 
+        //设置EditText光标模式，isSelectionsGone为true则清除光标
+        if (isSelectionsGone) {
+            holder.student_id.clearFocus();
+            holder.student_score.clearFocus();
+            isSelectionsGone = false;
+        }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,6 +187,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     //设置编辑模式，编辑或取消？
     public void setEditMode(int editMode) {
         this.editMode = editMode;
+        notifyDataSetChanged();
+    }
+
+    //设置EditText光标模式，isSelectionsGone为true则清除光标
+    public void setIsSelectionsGone(boolean isSelectionsGone) {
+        this.isSelectionsGone = isSelectionsGone;
         notifyDataSetChanged();
     }
 
