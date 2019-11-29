@@ -869,6 +869,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //编辑成绩监听
                 //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
                 if(position < recordList.size()) {
+
+                    //改 更新
+                    isRecordListUpdate = true;
+                    setSaveBtnBackground(isRecordListUpdate);
+
                     if(!TextUtils.isEmpty(score)) {
                         recordList.get(position).setScore(score);
                         //先要判断编辑的score字符串是否符合规则，是则计算total_score,否则不计算
@@ -876,10 +881,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                        score = score.replaceAll(" ","");
                             int total_score = (int) new Calculator().calculate(score);
                             recordList.get(position).setTotal_score(total_score);
-
-                            //改 更新
-                            isRecordListUpdate = true;
-                            setSaveBtnBackground(isRecordListUpdate);
 
                             if(!recordRecyclerView.isComputingLayout()) {
                                 recordAdapter.notifyDataSetChanged();
