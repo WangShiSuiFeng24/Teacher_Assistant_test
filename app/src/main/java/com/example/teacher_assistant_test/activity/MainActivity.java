@@ -424,7 +424,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                 save_to_db.performClick();
 
-                                recordUI_to_testUI();
+                                if (!isRecordListUpdate) {
+                                    recordUI_to_testUI();
+                                }
 
                                 alertDialog.dismiss();
 
@@ -1254,7 +1256,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                             save_to_db.performClick();
 
-                            recordUI_to_testUI();
+                            if (!isRecordListUpdate) {
+                                recordUI_to_testUI();
+                            }
 
                             alertDialog.dismiss();
 
