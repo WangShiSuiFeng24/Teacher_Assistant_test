@@ -877,9 +877,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(!TextUtils.isEmpty(score)) {
                         recordList.get(position).setScore(score);
                         //先要判断编辑的score字符串是否符合规则，是则计算total_score,否则不计算
-                        if(new CheckExpression().checkExpression(score)) {
+                        //增加判断score中是否存在空格，若存在则不计算，不存在则计算total_score，否则会发生异常
+                        if(!score.contains(" ") && new CheckExpression().checkExpression(score)) {
 //                        score = score.replaceAll(" ","");
-                            int total_score = (int) new Calculator().calculate(score);
+                            int total_score = (int) new Calculator().calculate(score);//score中有空格会发生异常
                             recordList.get(position).setTotal_score(total_score);
 
                             if(!recordRecyclerView.isComputingLayout()) {
@@ -1412,12 +1413,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //检查recordList中是否有非法stu_id或非法score
             boolean isStu_idAndScoreLegal = true;
             for(Record record : recordList) {
-                if(!canParseInt(record.getStu_id())) {
+                if (!canParseInt(record.getStu_id())) {
                     isStu_idAndScoreLegal = false;
                     Toast.makeText(MainActivity.this, "学号："+record.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                if(!(new CheckExpression().checkExpression(record.getScore()))) {
+                //判断表达式中是否含有空格
+                if (record.getScore().contains(" ")) {
+                    isStu_idAndScoreLegal = false;
+                    Toast.makeText(MainActivity.this, "成绩："+record.getScore()+" 中有空格，请去除空格", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                //判断表达式是否为算术表达式，但不能判断是否存在非法空格
+                if (!(new CheckExpression().checkExpression(record.getScore()))) {
                     isStu_idAndScoreLegal = false;
                     Toast.makeText(MainActivity.this, "成绩："+record.getScore()+" 非法", Toast.LENGTH_SHORT).show();
                     break;
