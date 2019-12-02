@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -96,6 +97,9 @@ import jxl.read.biff.BiffException;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
     private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
+
+    //使用SharedPreferences来记录程序的使用次数
+    SharedPreferences preferences;
 
     //标题栏
     private TitleBarView titleBarView;
@@ -209,8 +213,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView = findViewById(R.id.title);
         initTitleBar();
 
-        //导入assets文件夹中的Excel数据到数据库
-        importSheet();
+        //使用SharedPreferences保存一个状态
+        //定义一个变量count来判断程序是第几次运行，如果是第一次导入assets文件夹中的Excel数据到数据库
+        //如果不是第一次则不导入
+        preferences = getSharedPreferences("count", MODE_PRIVATE);
+        int count = preferences.getInt("count", 0);
+
+        //判断程序是第几次运行，如果是第一次则导入assets文件夹中的Excel数据到数据库
+        if (count == 0) {
+            importSheet();
+        }
+
+        SharedPreferences.Editor editor = preferences.edit();
+        //存入数据
+        editor.putInt("count", ++count);
+        //提交修改
+        editor.apply();
+
 
         //初始化RecyclerView
         testRecyclerView = findViewById(R.id.Recycler_View_Test);
