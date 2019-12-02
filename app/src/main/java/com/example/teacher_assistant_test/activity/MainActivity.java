@@ -414,6 +414,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
+                //进入学生基本信息页面
+                if (!inRecordUI) {
+                    EditStudentInfoActivity.actionStart(MainActivity.this);
+                }
+
                 //由recordUI返回testUI
                 if (inRecordUI) {
 
@@ -472,9 +477,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void ivRightClick(View view) {
                 //弹出PopupMenu
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
-                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
-                popupMenu.show();
+//                PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
+//                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+//                popupMenu.show();
             }
         });
     }
@@ -768,7 +773,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView.setTitle("园丁小帮手");
 
         titleBarView.setRightText("");
-        titleBarView.setRightDrawable(R.drawable.ic_more);
+//        titleBarView.setRightDrawable(R.drawable.ic_more);
+        titleBarView.setLeftDrawable(R.drawable.ic_student_info);
 
 
         //返回设置先清空testList

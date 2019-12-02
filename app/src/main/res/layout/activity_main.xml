@@ -12,7 +12,7 @@
         android:background="@color/colorAccent"
         app:centerTitle="自定义标题"
         app:centerTextColor="#FFF"
-        app:rightDrawable="@drawable/ic_more" />
+        app:leftDrawable="@drawable/ic_student_info" />
 
 <!--    <include layout="@layout/test_item">-->
 
