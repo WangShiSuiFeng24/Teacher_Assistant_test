@@ -56,6 +56,7 @@ import com.example.teacher_assistant_test.adapter.TestAdapter;
 import com.example.teacher_assistant_test.bean.Test;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
+import com.example.teacher_assistant_test.util.TouchEmptyCloseKeyBoardUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.jokar.floatmenu.FloatMenu;
 import com.github.jokar.floatmenu.OnMenuItemClickListener;
@@ -1348,16 +1349,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             point.y = (int)ev.getRawY();
         }
 
-        if(ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View view = getCurrentFocus();
-            if(isHideInput(view, ev)) {
-                hideSoftInput(view.getWindowToken());
+//        if(ev.getAction() == MotionEvent.ACTION_DOWN) {
+//            View view = getCurrentFocus();
+//            if(isHideInput(view, ev)) {
+//                hideSoftInput(view.getWindowToken());
+//
+//                //设置EditText光标模式，isSelectionsGone为true则清除光标
+//                recordAdapter.setIsSelectionsGone(true);
+//
+//            }
+//        }
 
-                //设置EditText光标模式，isSelectionsGone为true则清除光标
-                recordAdapter.setIsSelectionsGone(true);
-
-            }
-        }
+        new TouchEmptyCloseKeyBoardUtils().autoClose(this, ev);
 
         return super.dispatchTouchEvent(ev);
     }
