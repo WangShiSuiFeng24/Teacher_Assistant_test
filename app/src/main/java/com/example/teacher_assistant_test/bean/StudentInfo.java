@@ -5,6 +5,8 @@ public class StudentInfo {
     private String stu_name;
     private String stu_gender;
 
+    private boolean isSelect;
+
     public StudentInfo() {}
     public StudentInfo(int stu_id, String stu_name, String stu_gender) {
         this.stu_id = stu_id;
@@ -20,5 +22,8 @@ public class StudentInfo {
 
     public String getStu_gender() { return stu_gender; }
     public void setStu_gender(String stu_gender) { this.stu_gender = stu_gender; }
+
+    public boolean isSelect() { return isSelect; }
+    public void setSelect(boolean isSelect) { this.isSelect = isSelect; }
 
 }

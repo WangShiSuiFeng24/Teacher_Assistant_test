@@ -2,6 +2,7 @@ package com.example.teacher_assistant_test.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,11 +17,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.bean.Record;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
+import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.util.TitleBarView;
@@ -39,6 +45,8 @@ import java.util.TimerTask;
 public class EditStudentInfoActivity extends AppCompatActivity {
 
     private List<StudentInfo> studentInfoList = new ArrayList<>();
+    //备份，即使当前页面被编辑后，backUpStudentInfoList始终保存刚进入页面时的数据
+    private List<StudentInfo> backUpStudentInfoList = new ArrayList<>();
 
     private TitleBarView titleBarView;
 
@@ -48,6 +56,31 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
     private boolean isDataChanged = false;
 
+
+    private LinearLayout record_title;
+    private ImageView check_box;
+
+    private Button save_to_db;
+    private Button insert_to_list;
+
+    //recordUI中编辑时弹出的"bottom_dialog"
+    private LinearLayout my_collection_bottom_dialog;
+
+    private TextView selectNum;
+    private TextView selectAll;
+    private Button btnDelete;
+
+    //设置编辑模式默认为RECORD_MODE_CHECK
+    private static final int RECORD_MODE_CHECK = 0;
+    private static final int RECORD_MODE_EDIT = 1;
+    private int editMode = RECORD_MODE_CHECK;
+
+    //默认全选状态为false,编辑状态为false，选中数量为0
+    private boolean isSelectAll = false;
+    private boolean editorStatus = false;
+    private int index = 0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,23 +88,70 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
         ImmersiveStatusBar.setImmersiveStatusBar(EditStudentInfoActivity.this);
 
+        initUI();
+
         titleBarView = findViewById(R.id.title4);
         titleBarView.setTitleSize(20);
         titleBarView.setTitle("学生基本信息");
-        titleBarView.setRightTextColor(Color.parseColor("#b7b8bd"));
+        titleBarView.setRightTextColor(Color.WHITE);
         titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
-                finish();
+
+                if (isDataChanged) {
+                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(EditStudentInfoActivity.this, "保存",
+                            "是否保存对本测验成绩的修改", null, "保存", "不保存", "取消");
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            save_to_db.performClick();
+
+                            if (!isDataChanged) {
+                                finish();
+                            }
+
+                            alertDialog.dismiss();
+
+                        }
+                    });
+
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            finish();
+
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            alertDialog.dismiss();
+                        }
+                    });
+                } else {
+
+                    finish();
+                }
             }
 
             @Override
             public void tvRightClick() {
-                //判断数据是否更新，若未更新，则设置点击无效，不处理
-                //否则，保存更新数据到数据库
-                if(isDataChanged) {
-                    saveDataToDataBase();
+//                //判断数据是否更新，若未更新，则设置点击无效，不处理
+//                //否则，保存更新数据到数据库
+//                if(isDataChanged) {
+//                    saveDataToDataBase();
+//                }
+
+                if (studentInfoList.size() != 0) {
+                    updateEditMode();
                 }
+
             }
 
             @Override
@@ -87,40 +167,99 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         studentInfoAdapter = new StudentInfoAdapter(studentInfoList);
         recyclerView.setAdapter(studentInfoAdapter);
 
-        fab = findViewById(R.id.fab);
-        fab.setClosedOnTouchOutside(true);//可以设置点击蒙版关闭的开关
+        studentInfoAdapter.setOnItemClickListener(new StudentInfoAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                studentInfoAdapterOnItemClick(position);
+            }
+        });
 
-        FloatingActionButton fab_insert = findViewById(R.id.fab_insert);
-        FloatingActionButton fab_delete = findViewById(R.id.fab_delete);
-        FloatingActionButton fab_update = findViewById(R.id.fab_update);
+//        fab = findViewById(R.id.fab);
+//        fab.setClosedOnTouchOutside(true);//可以设置点击蒙版关闭的开关
 
-        fab_insert.setOnClickListener(new View.OnClickListener() {
+//        FloatingActionButton fab_insert = findViewById(R.id.fab_insert);
+//        FloatingActionButton fab_delete = findViewById(R.id.fab_delete);
+//        FloatingActionButton fab_update = findViewById(R.id.fab_update);
+//
+//        fab_insert.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                fab.close(true);
+//                showInsertDialog();
+//            }
+//        });
+//
+//        fab_delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                fab.close(true);
+//                showDeleteDialog();
+//            }
+//        });
+//
+//        fab_update.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                fab.close(true);
+//                showUpdateDialog();
+//            }
+//        });
+
+
+
+        save_to_db.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fab.close(true);
+                //判断数据是否更新，若未更新，则设置点击无效，不处理
+                //否则，保存更新数据到数据库
+                if(isDataChanged) {
+                    saveDataToDataBase();
+                }
+            }
+        });
+
+        //增加按钮逻辑
+        insert_to_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 showInsertDialog();
             }
         });
 
-        fab_delete.setOnClickListener(new View.OnClickListener() {
+        //全选按钮逻辑
+        selectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fab.close(true);
-                showDeleteDialog();
+                selectAllItem();
             }
         });
 
-        fab_update.setOnClickListener(new View.OnClickListener() {
+        //删除按钮逻辑
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fab.close(true);
-                showUpdateDialog();
+                deleteRecordItem();
             }
         });
 
 
 
+    }
 
+    private void initUI() {
+        record_title = findViewById(R.id.student_info_title);
+        check_box = findViewById(R.id.check_box);
+
+        save_to_db = findViewById(R.id.save_to_db);
+        setSaveBtnBackground(isDataChanged);
+        insert_to_list = findViewById(R.id.insert_to_list);
+
+        //绑定recordUI中编辑时弹出的"bottom_dialog"
+        my_collection_bottom_dialog = findViewById(R.id.my_collection_bottom_dialog);
+
+        selectNum = findViewById(R.id.tv_select_num);
+        selectAll = findViewById(R.id.select_all);
+        btnDelete = findViewById(R.id.btn_delete);
     }
 
     public static void actionStart(Context context) {
@@ -143,7 +282,10 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
             StudentInfo studentInfo = new StudentInfo(stu_id, stu_name, stu_gender);
 
+            StudentInfo backUpStudentInfo = new StudentInfo(stu_id, stu_name, stu_gender);
+
             studentInfoList.add(studentInfo);
+            backUpStudentInfoList.add(backUpStudentInfo);
         }
         cursor.close();
     }
@@ -241,6 +383,9 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                                 studentInfoList.add(studentInfo);
                                 studentInfoAdapter.notifyDataSetChanged();
                                 isDataChanged = true;
+
+                                setSaveBtnBackground(true);
+
                                 titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
                                 alertDialog.dismiss();
                             } else {
@@ -392,43 +537,156 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * recordAdapter点击事件
+     * @param position 当前item位置
+     */
+    private void studentInfoAdapterOnItemClick(int position) {
+        if (editorStatus) {
+            StudentInfo studentInfo = studentInfoList.get(position);
+            boolean isSelect = studentInfo.isSelect();
+            if (!isSelect) {
+                index++;
+                studentInfo.setSelect(true);
+                if (index == studentInfoList.size()) {
+                    isSelectAll = true;
+                    selectAll.setText("取消全选");
+                }
+            } else {
+                    index--;
+                    studentInfo.setSelect(false);
+                    isSelectAll = false;
+                    selectAll.setText("全选");
+            }
+            setDeleteBtnBackground(index);
+            selectNum.setText(String.valueOf(index));
+            studentInfoAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void saveDataToDataBase() {
         //更新相同学号的姓名stu_name和性别stu_gender
         SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
 
+        //先删除数据库同backupStudentInfoList中学号的学生，再将studentInfoList直接插入数据库
+        for (int i=0; i < backUpStudentInfoList.size(); i++) {
+            int delete_stu_id = backUpStudentInfoList.get(i).getStu_id();
+            db.delete("Student", "stu_id = ?", new String[]{"" + delete_stu_id});
+        }//先删
         ContentValues values = new ContentValues();
-        Iterator<StudentInfo> infoIterator = studentInfoList.iterator();
-        while(infoIterator.hasNext()) {
-            StudentInfo studentInfo = infoIterator.next();
+        for (StudentInfo studentInfo : studentInfoList) {
             int stu_id = studentInfo.getStu_id();
-            values.put("stu_name", studentInfo.getStu_name());
-            values.put("stu_gender", studentInfo.getStu_gender());
+            String stu_name = studentInfo.getStu_name();
+            String stu_gender = studentInfo.getStu_gender();
 
-            db.update("Student", values, "stu_id = ?", new String[]{""+stu_id+""});
-        }
+            values.clear();
+            values.put("stu_id", stu_id);
+            values.put("stu_name", stu_name);
+            values.put("stu_gender", stu_gender);
 
-        //插入不相同学号的item
-        for(StudentInfo studentInfo : studentInfoList) {
-            int stu_id = studentInfo.getStu_id();
-            Cursor cursor = db.query("Student", new String[] {"stu_id"}, "stu_id = ?",
-                    new String[]{""+stu_id+""}, null, null, null);
-
-            if(cursor.getCount() == 0) {
-                values.clear();
-                values.put("stu_id", studentInfo.getStu_id());
-                values.put("stu_name", studentInfo.getStu_name());
-                values.put("stu_gender", studentInfo.getStu_gender());
-
-                db.insert("Student", null, values);
-            } else {
-                Log.d("EditStudentInfoActivity", "StudentMark表中已存在学号：" + stu_id);
-            }
-            cursor.close();
+            db.insert("Student", null, values);
         }
         db.close();
-
+        isDataChanged = false;
+        setSaveBtnBackground(false);
         Toast.makeText(EditStudentInfoActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-        finish();
+
+
+//        ContentValues values = new ContentValues();
+//        Iterator<StudentInfo> infoIterator = studentInfoList.iterator();
+//        while(infoIterator.hasNext()) {
+//            StudentInfo studentInfo = infoIterator.next();
+//            int stu_id = studentInfo.getStu_id();
+//            values.put("stu_name", studentInfo.getStu_name());
+//            values.put("stu_gender", studentInfo.getStu_gender());
+//
+//            db.update("Student", values, "stu_id = ?", new String[]{""+stu_id+""});
+//        }
+//
+//        //插入不相同学号的item
+//        for(StudentInfo studentInfo : studentInfoList) {
+//            int stu_id = studentInfo.getStu_id();
+//            Cursor cursor = db.query("Student", new String[] {"stu_id"}, "stu_id = ?",
+//                    new String[]{""+stu_id+""}, null, null, null);
+//
+//            if(cursor.getCount() == 0) {
+//                values.clear();
+//                values.put("stu_id", studentInfo.getStu_id());
+//                values.put("stu_name", studentInfo.getStu_name());
+//                values.put("stu_gender", studentInfo.getStu_gender());
+//
+//                db.insert("Student", null, values);
+//            } else {
+//                Log.d("EditStudentInfoActivity", "StudentMark表中已存在学号：" + stu_id);
+//            }
+//            cursor.close();
+//        }
+//        db.close();
+//
+//        Toast.makeText(EditStudentInfoActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+//        finish();
+    }
+
+    /**
+     * 按back键时根据各种状态自定义返回效果
+     */
+    @Override
+    public void onBackPressed() {
+        if (editorStatus) {
+            editorStatus = false;
+            updateEditMode();
+            my_collection_bottom_dialog.setVisibility(View.GONE);
+
+            save_to_db.setVisibility(View.VISIBLE);
+            setSaveBtnBackground(isDataChanged);
+            insert_to_list.setVisibility(View.VISIBLE);
+
+            return;
+        } else {
+
+            if (isDataChanged) {
+
+                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(EditStudentInfoActivity.this, "保存",
+                        "是否保存对学生信息的修改", null, "保存", "不保存", "取消");
+
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        save_to_db.performClick();
+
+                        if (!isDataChanged) {
+                            finish();
+                        }
+
+                        alertDialog.dismiss();
+
+                    }
+                });
+
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        finish();
+
+                        alertDialog.dismiss();
+                    }
+                });
+
+                alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        alertDialog.dismiss();
+                    }
+                });
+
+            } else {
+
+                super.onBackPressed();
+            }
+        }
     }
 
     //使用正则表达式判断该字符串是否为数字，第一个\是转义符，\d+表示匹配1个或 //多个连续数字，"+"和"*"类似，"*"表示0个或多个
@@ -441,5 +699,173 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
     private boolean isGenderLegal(String stu_gender) {
         return stu_gender.equals("男") || stu_gender.equals("女");
+    }
+
+
+    private void setSaveBtnBackground(boolean isDataChanged) {
+        if (isDataChanged) {
+//            save_to_db.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            save_to_db.setEnabled(true);
+            save_to_db.setTextColor(Color.WHITE);
+        } else {
+//            save_to_db.setBackgroundColor(getResources().getColor(R.color.colorAccentDark));
+            save_to_db.setEnabled(false);
+            save_to_db.setTextColor(ContextCompat.getColor(this, R.color.color_b7b8bd));
+        }
+    }
+
+//    /**
+//     * 实现接口监听
+//     * @param v view
+//     */
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()){
+//            case R.id.btn_delete:
+//                deleteRecordItem();
+//                break;
+//            case R.id.select_all:
+//                selectAllItem();
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+
+    /**
+     * 删除按钮逻辑
+     */
+    private void deleteRecordItem() {
+        if (index == 0) {
+            btnDelete.setEnabled(false);
+            return;
+        }
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "提示",
+                "删除后不可恢复，是否删除该条目？", null,
+                "确定", "取消");
+
+        if (index == 1) {
+            alertDialog.setMessage("删除后不可恢复，是否删除该条目？");
+        } else {
+            alertDialog.setMessage("删除后不可恢复，是否删除这" + index + "个条目？");
+        }
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = studentInfoList.size(), j = 0; i > j; i--) {
+                    StudentInfo studentInfo = studentInfoList.get(i-1);
+                    if (studentInfo.isSelect()) {
+                        studentInfoList.remove(studentInfo);
+                        index--;
+                    }
+                }
+
+                //删 更新
+                isDataChanged = true;
+                setSaveBtnBackground(true);
+
+                index = 0;
+                selectNum.setText(String.valueOf(0));
+                setDeleteBtnBackground(index);
+                if (studentInfoList.size() == 0) {
+                    updateEditMode();
+
+                    my_collection_bottom_dialog.setVisibility(View.GONE);
+
+                    save_to_db.setVisibility(View.VISIBLE);
+
+                    insert_to_list.setVisibility(View.VISIBLE);
+
+                    record_title.setVisibility(View.GONE);
+                }
+                studentInfoAdapter.notifyDataSetChanged();
+                alertDialog.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * 全选和反选按钮逻辑
+     */
+    private void selectAllItem() {
+        if(studentInfoAdapter == null ) return;
+        if(!isSelectAll) {
+            for (int i = 0, j = studentInfoList.size(); i < j; i++) {
+                studentInfoList.get(i).setSelect(true);
+            }
+            index = studentInfoList.size();
+            btnDelete.setEnabled(true);
+            selectAll.setText("取消全选");
+            isSelectAll = true;
+        } else {
+            for (int i=0, j = studentInfoList.size(); i < j; i++) {
+                studentInfoList.get(i).setSelect(false);
+            }
+            index = 0;
+            btnDelete.setEnabled(false);
+            selectAll.setText("全选");
+            isSelectAll = false;
+        }
+        studentInfoAdapter.notifyDataSetChanged();
+        setDeleteBtnBackground(index);
+        selectNum.setText(String.valueOf(index));
+    }
+
+    /**
+     * 编辑和取消按钮互转
+     */
+    private void updateEditMode() {
+        editMode = editMode == RECORD_MODE_CHECK ? RECORD_MODE_EDIT : RECORD_MODE_CHECK;
+        if (editMode == RECORD_MODE_EDIT) {
+            titleBarView.setRightText("取消");
+            my_collection_bottom_dialog.setVisibility(View.VISIBLE);
+
+            check_box.setVisibility(View.VISIBLE);
+
+            save_to_db.setVisibility(View.GONE);
+            insert_to_list.setVisibility(View.GONE);
+
+            editorStatus = true;
+        } else {
+            titleBarView.setRightText("编辑");
+            my_collection_bottom_dialog.setVisibility(View.GONE);
+
+            check_box.setVisibility(View.GONE);
+
+            save_to_db.setVisibility(View.VISIBLE);
+            insert_to_list.setVisibility(View.VISIBLE);
+
+            editorStatus = false;
+            clearAll();
+        }
+        studentInfoAdapter.setEditMode(editMode);
+    }
+
+    /**
+     * 恢复（初始）默认设置
+     */
+    private void clearAll() {
+        selectNum.setText(String.valueOf(0));
+        isSelectAll = false;
+        selectAll.setText("全选");
+        setDeleteBtnBackground(0);
+    }
+
+    /**
+     * 根据选择的数量是否为0来判断按钮的是否可点击
+     * @param size 选择的数量
+     */
+    private void setDeleteBtnBackground(int size) {
+        if(size != 0) {
+            btnDelete.setBackgroundResource(R.drawable.button_shape);
+            btnDelete.setEnabled(true);
+            btnDelete.setTextColor(Color.WHITE);
+        } else {
+            btnDelete.setBackgroundResource(R.drawable.button_unclickable_shape);
+            btnDelete.setEnabled(false);
+            btnDelete.setTextColor(ContextCompat.getColor(this, R.color.color_b7b8bd));
+        }
     }
 }

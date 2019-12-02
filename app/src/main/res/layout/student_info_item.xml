@@ -31,4 +31,15 @@
         android:gravity="center"
         android:layout_weight="1" />
 
+    <ImageView
+        android:id="@+id/check_box"
+        android:src="@mipmap/ic_uncheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:visibility="gone" />
+
 </LinearLayout>
