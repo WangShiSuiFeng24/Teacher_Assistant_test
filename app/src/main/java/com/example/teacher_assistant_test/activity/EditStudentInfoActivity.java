@@ -29,6 +29,7 @@ import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
 import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.adapter.StudentInfoAdapter;
 import com.example.teacher_assistant_test.bean.StudentInfo;
@@ -57,7 +58,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     private boolean isDataChanged = false;
 
 
-    private LinearLayout record_title;
+    private LinearLayout student_info_title;
     private ImageView check_box;
 
     private Button save_to_db;
@@ -90,10 +91,17 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
         initUI();
 
+        initStudentInfo();
+
         titleBarView = findViewById(R.id.title4);
         titleBarView.setTitleSize(20);
         titleBarView.setTitle("学生基本信息");
         titleBarView.setRightTextColor(Color.WHITE);
+
+        if (studentInfoList.size() == 0) {
+            titleBarView.setRightTextColor(Color.parseColor("#b7b8bd"));
+        }
+
         titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
@@ -160,10 +168,17 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             }
         });
 
-        initStudentInfo();
-        RecyclerView recyclerView = findViewById(R.id.Recycler_View_StudentInfo);
+        //设置recordRecyclerView的空View
+        View emptyView = findViewById(R.id.empty_view);
+        TextView emptyMessage = findViewById(R.id.empty_message);
+        emptyMessage.setText("暂无学生信息，请点击下方添加按钮添加学生信息。");
+
+        RecyclerViewEmptySupport recyclerView = findViewById(R.id.Recycler_View_StudentInfo);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        recyclerView.setEmptyView(emptyView);
+
         studentInfoAdapter = new StudentInfoAdapter(studentInfoList);
         recyclerView.setAdapter(studentInfoAdapter);
 
@@ -247,7 +262,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        record_title = findViewById(R.id.student_info_title);
+        student_info_title = findViewById(R.id.student_info_title);
         check_box = findViewById(R.id.check_box);
 
         save_to_db = findViewById(R.id.save_to_db);
@@ -385,6 +400,8 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                                 isDataChanged = true;
 
                                 setSaveBtnBackground(true);
+
+                                student_info_title.setVisibility(View.VISIBLE);
 
                                 titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
                                 alertDialog.dismiss();
@@ -777,7 +794,9 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
                     insert_to_list.setVisibility(View.VISIBLE);
 
-                    record_title.setVisibility(View.GONE);
+                    student_info_title.setVisibility(View.GONE);
+
+                    titleBarView.setRightTextColor(Color.parseColor("#b7b8bd"));
                 }
                 studentInfoAdapter.notifyDataSetChanged();
                 alertDialog.dismiss();

@@ -99,14 +99,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.example.teacher_assistant_test.util.RecyclerViewEmptySupport
             android:id="@+id/Recycler_View_StudentInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:descendantFocusability="beforeDescendants"
             android:fastScrollEnabled="false"
             android:scrollbars="vertical">
-        </androidx.recyclerview.widget.RecyclerView>
+        </com.example.teacher_assistant_test.util.RecyclerViewEmptySupport>
+
+        <include layout="@layout/empty_view" />
 
 <!--        <ImageView-->
 <!--            android:id="@+id/ic_add"-->
@@ -197,7 +199,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="增加"
+            android:text="添加"
             android:layout_gravity="bottom"/>
 
     </LinearLayout>
