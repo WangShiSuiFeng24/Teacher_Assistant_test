@@ -108,7 +108,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
                 if (isDataChanged) {
                     final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(EditStudentInfoActivity.this, "保存",
-                            "是否保存对本测验成绩的修改", null, "保存", "不保存", "取消");
+                            "是否保存对学生信息的修改", null, "保存", "不保存", "取消");
 
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -758,13 +758,13 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             return;
         }
         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "提示",
-                "删除后不可恢复，是否删除该条目？", null,
+                "是否删除该条目？", null,
                 "确定", "取消");
 
         if (index == 1) {
-            alertDialog.setMessage("删除后不可恢复，是否删除该条目？");
+            alertDialog.setMessage("是否删除该条目？");
         } else {
-            alertDialog.setMessage("删除后不可恢复，是否删除这" + index + "个条目？");
+            alertDialog.setMessage("是否删除这" + index + "个条目？");
         }
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {

@@ -147,13 +147,13 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/save_to_db"
+            android:id="@+id/share_by_excel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="保存"
+            android:text="导出"
             android:layout_gravity="bottom"/>
 
         <com.github.clans.fab.FloatingActionButton
@@ -166,13 +166,13 @@
             app:fab_colorPressed="@color/colorAccentDark" />
 
         <Button
-            android:id="@+id/share_by_excel"
+            android:id="@+id/save_to_db"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="导出"
+            android:text="保存"
             android:layout_gravity="bottom"/>
 
     </LinearLayout>

@@ -1791,13 +1791,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "提示",
-                "删除后不可恢复，是否删除该条目？", null,
+                "是否删除该条目？", null,
                 "确定", "取消");
 
         if (index == 1) {
-            alertDialog.setMessage("删除后不可恢复，是否删除该条目？");
+            alertDialog.setMessage("是否删除该条目？");
         } else {
-            alertDialog.setMessage("删除后不可恢复，是否删除这" + index + "个条目？");
+            alertDialog.setMessage("是否删除这" + index + "个条目？");
         }
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
