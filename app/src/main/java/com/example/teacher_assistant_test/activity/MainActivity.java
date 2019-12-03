@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onError(SpeechError error) {
                 TextView tv_error = mIatDialog.getWindow().getDecorView().findViewWithTag("errtxt");
                 if (tv_error != null) {
-                    tv_error.setText("您好像没有说话哦。。。");
+                    tv_error.setText(R.string.not_speak);
                 }
 
 //                View view = mIatDialog.getWindow().getDecorView().findViewWithTag("errview");
