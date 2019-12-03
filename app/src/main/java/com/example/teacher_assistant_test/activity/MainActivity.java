@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onInit(int code) {
                 Log.d(MainActivity.this.getLocalClassName(), "SpeechRecognizer init() code = " + code);
                 if (code != ErrorCode.SUCCESS) {
-                    Toast.makeText(MainActivity.this, "初始化失败，错误码：" + code + "，请点击网址https://www.xfyun.cn/document/error-code查询解决方案", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.xunfei_record_init_fail_hint, code), Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -322,13 +322,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
             if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "缺少录制音频权限，可能会造成无法语音识别", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.lack_record_permission_hint, Toast.LENGTH_SHORT).show();
             }
         }
 
         if(requestCode == REQUEST_WRITE_STORAGE_PERMISSION) {
             if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "缺少文件读写权限，可能会造成无法分享文件", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.lack_write_storage_permission_hint, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -429,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void initTitleBar() {
         titleBarView.setTitleSize(20);
-        titleBarView.setTitle("园丁小帮手");
+        titleBarView.setTitle(getString(R.string.app_name));
         titleBarView.setOnViewClick(new TitleBarView.onViewClick() {
             @Override
             public void leftClick() {
@@ -443,8 +443,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     if (isRecordListUpdate) {
 
-                        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this, "保存",
-                                "是否保存对本测验成绩的修改", null, "保存", "不保存", "取消");
+                        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this, getString(R.string.save),
+                                getString(R.string.recordUI_back_hint), null, getString(R.string.save), getString(R.string.not_save), getString(R.string.cancel));
 
                         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -510,7 +510,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SQLiteDatabase db = MyDatabaseHelper.getInstance(MainActivity.this);
         ContentValues values = new ContentValues();
         try {
-            InputStream is = getResources().getAssets().open("id_name_info.xls");
+            InputStream is = getResources().getAssets().open(getString(R.string.import_excel_file_name));
 
             Workbook workbook = Workbook.getWorkbook(is);
 
@@ -659,7 +659,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView.setRightDrawable(0);
 
         titleBarView.setLeftDrawable(R.drawable.ic_back);
-        titleBarView.setLeftText("返回");
+        titleBarView.setLeftText(getString(R.string.back));
         titleBarView.setLeftTextColor(Color.WHITE);
 
         //绑定testUI Visibility随需求改变的控件
@@ -691,7 +691,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         if (recordList.size() != 0) {
-            titleBarView.setRightText("编辑");
+            titleBarView.setRightText(getString(R.string.edit));
             titleBarView.setRightTextColor(Color.WHITE);
 
             record_title.setVisibility(View.VISIBLE);
@@ -733,7 +733,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
 
         selectNum.setText(String.valueOf(0));
-        selectAll.setText("全选");
+        selectAll.setText(R.string.select_all);
         setDeleteBtnBackground(0);
 
         isIdSortPressed = false;
@@ -789,7 +789,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView.setLeftDrawable(0);
         titleBarView.setLeftText("");
 
-        titleBarView.setTitle("园丁小帮手");
+        titleBarView.setTitle(getString(R.string.app_name));
 
         titleBarView.setRightText("");
 //        titleBarView.setRightDrawable(R.drawable.ic_more);
@@ -841,7 +841,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //设置recordRecyclerView的空View
         View emptyView = findViewById(R.id.empty_view);
         TextView emptyMessage = findViewById(R.id.empty_message);
-        emptyMessage.setText("暂无成绩数据，请点击下方录音按钮创建新成绩。");
+        emptyMessage.setText(R.string.recordUI_empty_message);
 
         //设置分割线
         recordDividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
@@ -962,13 +962,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 record.setSelect(true);
                 if (index == recordList.size()) {
                     isSelectAll = true;
-                    selectAll.setText("取消全选");
+                    selectAll.setText(R.string.cancel_select_all);
                 }
             } else {
                 index--;
                 record.setSelect(false);
                 isSelectAll = false;
-                selectAll.setText("全选");
+                selectAll.setText(R.string.select_all);
             }
             setDeleteBtnBackground(index);
             selectNum.setText(String.valueOf(index));
@@ -1024,7 +1024,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, current_test_id, score, total_score);
                 }//再插入
                 db.close();
-                Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.save_successfully, Toast.LENGTH_SHORT).show();
 
                 isRecordListUpdate = false;
                 setSaveBtnBackground(false);
@@ -1038,8 +1038,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             edit.setMaxLines(1);
             //先弹出一个可编辑的AlertDialog，可以编辑test_name
             final AlertDialog alertDialog = GetAlertDialog
-                    .getAlertDialog(MainActivity.this,"测验名：",
-                            null, edit, "确定", "取消");
+                    .getAlertDialog(MainActivity.this,getString(R.string.please_enter_the_test_name),
+                            null, edit, getString(R.string.confirm), getString(R.string.cancel));
             //给edit设置焦点
             edit.setFocusable(true);
             edit.setFocusableInTouchMode(true);
@@ -1069,7 +1069,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     Log.i("RecordMarkActivity", "unique_test_id:"+unique_test_id);
                     if (input.equals("")) {
-                        Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.test_name_cannot_be_empty) + input, Toast.LENGTH_SHORT).show();
                         return;
                     } else {
 //                            String editText = edit.getText().toString().trim();
@@ -1083,7 +1083,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(cursor.isLast()) {
                             //StudentTest表为空，第一次更新
                             new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, input);
-                            Toast.makeText(MainActivity.this, "数据库为空，保存成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.save_successfully, Toast.LENGTH_SHORT).show();
                         }
 
                         else {
@@ -1129,7 +1129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                         cursor.close();
 
-                        Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, R.string.save_successfully, Toast.LENGTH_SHORT).show();
                         titleBarView.setTitle(input);
                         isOpenATest = true;
 
@@ -1198,7 +1198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //设置要分享的文件Uri
                             .setShareFileUri(shareFileUri)
                             //设置分享选择器的标题
-                            .setTitle("Share File")
+                            .setTitle(getString(R.string.share_file))
                             .build()
                             //发起分享
                             .shareBySystem();
@@ -1278,8 +1278,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (isRecordListUpdate) {
 
-                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this, "保存",
-                            "是否保存对本测验成绩的修改", null, "保存", "不保存", "取消");
+                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this, getString(R.string.save),
+                            getString(R.string.recordUI_back_hint), null, getString(R.string.save), getString(R.string.not_save), getString(R.string.cancel));
 
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -1450,19 +1450,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for(Record record : recordList) {
                 if (!canParseInt(record.getStu_id())) {
                     isStu_idAndScoreLegal = false;
-                    Toast.makeText(MainActivity.this, "学号："+record.getStu_id()+" 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.illegal_stu_id_hint, record.getStu_id()), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 //判断表达式中是否含有空格
                 if (record.getScore().contains(" ")) {
                     isStu_idAndScoreLegal = false;
-                    Toast.makeText(MainActivity.this, "成绩："+record.getScore()+" 中有空格，请去除空格", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.score_has_blank_space_hint, record.getScore()), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 //判断表达式是否为算术表达式，但不能判断是否存在非法空格
                 if (!(new CheckExpression().checkExpression(record.getScore()))) {
                     isStu_idAndScoreLegal = false;
-                    Toast.makeText(MainActivity.this, "成绩："+record.getScore()+" 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.illegal_score_hint, record.getScore()), Toast.LENGTH_SHORT).show();
                     break;
                 }
             }
@@ -1479,7 +1479,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // 否则返回false。
                 for (Record record : recordList) {
                     if (checkList.contains(record)) {
-                        Toast.makeText(MainActivity.this, "有重复学号：" + record.getStu_id(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.same_stu_id_hint, record.getStu_id()), Toast.LENGTH_SHORT).show();
                         hasSameStu_id = true;
                         break;
                     }
@@ -1497,8 +1497,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showDeleteDialog(final int position) {
         //长按则删除
         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
-                "Alarm", "将要删除测试名为："+testList.get(position).getTest_name()+"的条目",
-                null, "Yes", "No");
+                getString(R.string.alarm), getString(R.string.test_long_click_delete_hint, testList.get(position).getTest_name()),
+                null, getString(R.string.confirm), getString(R.string.cancel));
 
         alertDialog.setCancelable(false);
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -1766,7 +1766,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             index = recordList.size();
             btnDelete.setEnabled(true);
-            selectAll.setText("取消全选");
+            selectAll.setText(R.string.cancel_select_all);
             isSelectAll = true;
         } else {
             for (int i=0, j = recordList.size(); i < j; i++) {
@@ -1774,7 +1774,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             index = 0;
             btnDelete.setEnabled(false);
-            selectAll.setText("全选");
+            selectAll.setText(R.string.select_all);
             isSelectAll = false;
         }
         recordAdapter.notifyDataSetChanged();
@@ -1790,14 +1790,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnDelete.setEnabled(false);
             return;
         }
-        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "提示",
-                "是否删除该条目？", null,
-                "确定", "取消");
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, getString(R.string.alarm),
+                getString(R.string.delete_one_item_hint), null,
+                getString(R.string.confirm), getString(R.string.cancel));
 
         if (index == 1) {
-            alertDialog.setMessage("是否删除该条目？");
+            alertDialog.setMessage(getString(R.string.delete_one_item_hint));
         } else {
-            alertDialog.setMessage("是否删除这" + index + "个条目？");
+            alertDialog.setMessage(getString(R.string.delete_multiple_item_hint, index));
         }
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -1860,7 +1860,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateEditMode() {
         editMode = editMode == RECORD_MODE_CHECK ? RECORD_MODE_EDIT : RECORD_MODE_CHECK;
         if (editMode == RECORD_MODE_EDIT) {
-            titleBarView.setRightText("取消");
+            titleBarView.setRightText(getString(R.string.cancel));
             my_collection_bottom_dialog.setVisibility(View.VISIBLE);
 
             check_box.setVisibility(View.VISIBLE);
@@ -1872,7 +1872,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             editorStatus = true;
         } else {
-            titleBarView.setRightText("编辑");
+            titleBarView.setRightText(getString(R.string.edit));
             my_collection_bottom_dialog.setVisibility(View.GONE);
 
             check_box.setVisibility(View.GONE);
@@ -1894,7 +1894,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void clearAll() {
         selectNum.setText(String.valueOf(0));
         isSelectAll = false;
-        selectAll.setText("全选");
+        selectAll.setText(R.string.select_all);
         setDeleteBtnBackground(0);
     }
 
@@ -1915,9 +1915,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(newMarkList == null) {
             //处理结果为null，无有效成绩
             final AlertDialog alertDialog = GetAlertDialog
-                    .getAlertDialog(MainActivity.this, "Tip",
-                            "语音识别结果为："+resultStr+"\r\n无有效成绩数据，请重新录音！\r\n语音录成绩格式请参照：＂8号 88(+8)分＂这样效果会更好哦！",
-                            null, "OK", "CANCEL");
+                    .getAlertDialog(MainActivity.this, getString(R.string.hint),
+                            getString(R.string.no_valid_mark_hint, resultStr),
+                            null, getString(R.string.confirm), getString(R.string.cancel));
             alertDialog.setCanceledOnTouchOutside(false);
 
         } else {
@@ -1954,7 +1954,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     recordList.add(newRecord);
                     recordAdapter.notifyDataSetChanged();
 
-                    titleBarView.setRightText("编辑");
+                    titleBarView.setRightText(getString(R.string.edit));
                     titleBarView.setRightTextColor(Color.WHITE);
 
                     save_to_db.setVisibility(View.VISIBLE);
@@ -1978,9 +1978,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //弹出dialog,是否更改数据，
                             flag = true;
                             final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(MainActivity.this,
-                                    "Alarm", "学号："+newMark.getStu_id()+"已存在，"+
-                                            "是否需要更改成绩："+record.getScore()+"为："+newRecord.getScore(),
-                                    null, "OK", "CANCEL");
+                                    getString(R.string.alarm),
+                                    getString(R.string.recordUI_record_same_stu_id_hint, newMark.getStu_id(), record.getScore(), newRecord.getScore()),
+                                    null, getString(R.string.confirm), getString(R.string.cancel));
                             alertDialog.setCanceledOnTouchOutside(false);
 
                             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -2012,7 +2012,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         recordAdapter.notifyDataSetChanged();
 
-                        titleBarView.setRightText("编辑");
+                        titleBarView.setRightText(getString(R.string.edit));
                         titleBarView.setRightTextColor(Color.WHITE);
 
                         save_to_db.setVisibility(View.VISIBLE);

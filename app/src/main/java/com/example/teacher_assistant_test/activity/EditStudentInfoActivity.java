@@ -95,7 +95,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
         titleBarView = findViewById(R.id.title4);
         titleBarView.setTitleSize(20);
-        titleBarView.setTitle("学生基本信息");
+        titleBarView.setTitle(getString(R.string.stu_info));
         titleBarView.setRightTextColor(Color.WHITE);
 
         if (studentInfoList.size() == 0) {
@@ -107,8 +107,8 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             public void leftClick() {
 
                 if (isDataChanged) {
-                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(EditStudentInfoActivity.this, "保存",
-                            "是否保存对学生信息的修改", null, "保存", "不保存", "取消");
+                    final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(EditStudentInfoActivity.this, getString(R.string.save),
+                            getString(R.string.stu_info_UI_back_hint), null, getString(R.string.save), getString(R.string.not_save), getString(R.string.cancel));
 
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -171,7 +171,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         //设置recordRecyclerView的空View
         View emptyView = findViewById(R.id.empty_view);
         TextView emptyMessage = findViewById(R.id.empty_message);
-        emptyMessage.setText("暂无学生信息，请点击下方添加按钮添加学生信息。");
+        emptyMessage.setText(R.string.stu_info_UI_empty_message);
 
         RecyclerViewEmptySupport recyclerView = findViewById(R.id.Recycler_View_StudentInfo);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -310,11 +310,11 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final EditText edit_stu_id = new EditText(this);
-        edit_stu_id.setHint("学号：请输入阿拉伯数字");
+        edit_stu_id.setHint(R.string.insert_stu_id_hint);
         layout.addView(edit_stu_id);
 
         final EditText edit_stu_name = new EditText(this);
-        edit_stu_name.setHint("姓名：");
+        edit_stu_name.setHint(R.string.insert_stu_name_hint);
         layout.addView(edit_stu_name);
 
 
@@ -333,11 +333,11 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
 
         final EditText edit_stu_gender = new EditText(this);
-        edit_stu_gender.setHint("性别：请输入 \"男\" 或 \"女\"");
+        edit_stu_gender.setHint(R.string.insert_stu_gender_hint);
         layout.addView(edit_stu_gender);
 
-        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "插入一条学生信息",
-                null, layout, "确定", "取消");
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, getString(R.string.insert_one_stu_info),
+                null, layout, getString(R.string.confirm), getString(R.string.cancel));
         alertDialog.setCanceledOnTouchOutside(false);
 
         edit_stu_id.setFocusable(true);
@@ -377,7 +377,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                         int stu_id = studentInfoList.get(i).getStu_id();
                         if(stu_id == Integer.parseInt(edit_stu_id.getText().toString().trim())) {
                             hasSameId = true;
-                            Toast.makeText(EditStudentInfoActivity.this, "存在相同学号："+edit_stu_id.getText().toString().trim() + " 请重新输入学号！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditStudentInfoActivity.this, getString(R.string.insert_same_stu_id_hint, edit_stu_id.getText().toString().trim()), Toast.LENGTH_SHORT).show();
                             edit_stu_id.requestFocus();
                             break;
                         }
@@ -391,7 +391,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                         String stu_gender = edit_stu_gender.getText().toString().trim();
 
                         if(TextUtils.isEmpty(stu_name) || TextUtils.isEmpty(stu_gender)) {
-                            Toast.makeText(EditStudentInfoActivity.this, "姓名或性别栏为空", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditStudentInfoActivity.this, R.string.insert_empty_hint, Toast.LENGTH_SHORT).show();
                         } else {
                             if(isGenderLegal(stu_gender)) {
                                 StudentInfo studentInfo = new StudentInfo(stu_id, stu_name, stu_gender);
@@ -406,13 +406,13 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                                 titleBarView.setRightTextColor(Color.parseColor("#FFFFFF"));
                                 alertDialog.dismiss();
                             } else {
-                                Toast.makeText(EditStudentInfoActivity.this, "性别非\"男\" 或 \"女\"", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditStudentInfoActivity.this, R.string.insert_illegal_stu_gender_hint, Toast.LENGTH_SHORT).show();
                                 edit_stu_gender.requestFocus();
                             }
                         }
                     }
                 } else {
-                    Toast.makeText(EditStudentInfoActivity.this, "学号："+edit_stu_id.getText().toString().trim()+" 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStudentInfoActivity.this, getString(R.string.insert_illegal_stu_id_hint, edit_stu_id.getText().toString().trim()), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -567,13 +567,13 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                 studentInfo.setSelect(true);
                 if (index == studentInfoList.size()) {
                     isSelectAll = true;
-                    selectAll.setText("取消全选");
+                    selectAll.setText(R.string.cancel_select_all);
                 }
             } else {
                     index--;
                     studentInfo.setSelect(false);
                     isSelectAll = false;
-                    selectAll.setText("全选");
+                    selectAll.setText(R.string.select_all);
             }
             setDeleteBtnBackground(index);
             selectNum.setText(String.valueOf(index));
@@ -606,7 +606,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
         db.close();
         isDataChanged = false;
         setSaveBtnBackground(false);
-        Toast.makeText(EditStudentInfoActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+        Toast.makeText(EditStudentInfoActivity.this, R.string.save_successfully, Toast.LENGTH_SHORT).show();
 
 
 //        ContentValues values = new ContentValues();
@@ -663,8 +663,8 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
             if (isDataChanged) {
 
-                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(EditStudentInfoActivity.this, "保存",
-                        "是否保存对学生信息的修改", null, "保存", "不保存", "取消");
+                final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(EditStudentInfoActivity.this, getString(R.string.save),
+                        getString(R.string.stu_info_UI_back_hint), null, getString(R.string.save), getString(R.string.not_save), getString(R.string.cancel));
 
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -715,7 +715,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     }
 
     private boolean isGenderLegal(String stu_gender) {
-        return stu_gender.equals("男") || stu_gender.equals("女");
+        return stu_gender.equals(getString(R.string.boy)) || stu_gender.equals(getString(R.string.girl));
     }
 
 
@@ -757,14 +757,14 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             btnDelete.setEnabled(false);
             return;
         }
-        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "提示",
-                "是否删除该条目？", null,
-                "确定", "取消");
+        final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, getString(R.string.alarm),
+                getString(R.string.delete_one_item_hint), null,
+                getString(R.string.confirm), getString(R.string.cancel));
 
         if (index == 1) {
-            alertDialog.setMessage("是否删除该条目？");
+            alertDialog.setMessage(getString(R.string.delete_one_item_hint));
         } else {
-            alertDialog.setMessage("是否删除这" + index + "个条目？");
+            alertDialog.setMessage(getString(R.string.delete_multiple_item_hint, index));
         }
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -816,7 +816,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             }
             index = studentInfoList.size();
             btnDelete.setEnabled(true);
-            selectAll.setText("取消全选");
+            selectAll.setText(R.string.cancel_select_all);
             isSelectAll = true;
         } else {
             for (int i=0, j = studentInfoList.size(); i < j; i++) {
@@ -824,7 +824,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
             }
             index = 0;
             btnDelete.setEnabled(false);
-            selectAll.setText("全选");
+            selectAll.setText(R.string.select_all);
             isSelectAll = false;
         }
         studentInfoAdapter.notifyDataSetChanged();
@@ -838,7 +838,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     private void updateEditMode() {
         editMode = editMode == RECORD_MODE_CHECK ? RECORD_MODE_EDIT : RECORD_MODE_CHECK;
         if (editMode == RECORD_MODE_EDIT) {
-            titleBarView.setRightText("取消");
+            titleBarView.setRightText(getString(R.string.cancel));
             my_collection_bottom_dialog.setVisibility(View.VISIBLE);
 
             check_box.setVisibility(View.VISIBLE);
@@ -848,7 +848,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
             editorStatus = true;
         } else {
-            titleBarView.setRightText("编辑");
+            titleBarView.setRightText(getString(R.string.edit));
             my_collection_bottom_dialog.setVisibility(View.GONE);
 
             check_box.setVisibility(View.GONE);
@@ -868,7 +868,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     private void clearAll() {
         selectNum.setText(String.valueOf(0));
         isSelectAll = false;
-        selectAll.setText("全选");
+        selectAll.setText(R.string.select_all);
         setDeleteBtnBackground(0);
     }
 

@@ -13,7 +13,8 @@
         android:focusableInTouchMode="true"
         android:textSize="15sp"
         android:background="@null"
-        android:hint="@null"/>
+        android:hint="@null"
+        android:inputType="text" />
     <!--    <TextView-->
     <!--    android:id="@+id/student_score"-->
     <!--    android:layout_width="0dp"-->
@@ -46,7 +47,8 @@
         android:focusableInTouchMode="true"
         android:textSize="15sp"
         android:background="@null"
-        android:hint="@null"/>
+        android:hint="@null"
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/total_score"
@@ -64,6 +66,7 @@
         android:layout_marginEnd="12dp"
         android:layout_marginRight="12dp"
         android:gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="@null"/>
 
 </LinearLayout>
