@@ -54,4 +54,5 @@
     <string name="total_score">总成绩</string>
     <string name="add">添加</string>
     <string name="not_speak">您好像没有说话哦。。。</string>
+    <string name="set_up">设置</string>
 </resources>

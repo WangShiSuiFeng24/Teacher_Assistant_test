@@ -32,6 +32,10 @@ android {
             jniLibs.srcDir 'libs'
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 static def releaseTime() {
@@ -57,6 +61,8 @@ dependencies {
     implementation 'com.github.jokar:FloatMenu:0.0.3'
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.jianyu:switchbutton:1.0.0'
 }
 repositories {
     mavenCentral()

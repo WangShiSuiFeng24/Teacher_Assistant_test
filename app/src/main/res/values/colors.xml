@@ -6,4 +6,10 @@
 
     <color name="colorAccentDark">#8b0000</color>
     <color name="color_b7b8bd">#b7b8bd</color>
+
+    <color name="white">#fff</color>
+
+    <color name="gray5">#EBEBEB</color>
+
+    <color name="black0">#000000</color>
 </resources>

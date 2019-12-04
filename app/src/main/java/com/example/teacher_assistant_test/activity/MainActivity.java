@@ -499,6 +499,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
 //                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
 //                popupMenu.show();
+                SettingActivity.actionStart(MainActivity.this);
             }
         });
     }
