@@ -10,6 +10,8 @@ public class Record {
     private String score;
     private int total_score;
 
+    private boolean isCorrect;
+
     private boolean isSelect;
 
     public Record() {}
@@ -44,6 +46,9 @@ public class Record {
 
     public int getTotal_score() { return total_score; }
     public void setTotal_score(int total_score) { this.total_score = total_score;}
+
+    public boolean isCorrect() { return isCorrect; }
+    public void setCorrect(boolean isCorrect) { this.isCorrect = isCorrect; }
 
     public boolean isSelect() { return isSelect; }
     public void setSelect(boolean isSelect) { this.isSelect = isSelect; }

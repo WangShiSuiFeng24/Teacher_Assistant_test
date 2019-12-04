@@ -936,6 +936,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        recordAdapter.setOnStarClickListener(new RecordAdapter.OnStarClickListener() {
+            @Override
+            public void onStarClick(int position) {
+                recordAdapterOnStarClick(position);
+            }
+        });
+
 
         //recordUI中的fab点击事件
         record_fab.setOnClickListener(new View.OnClickListener() {
@@ -988,6 +995,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             selectNum.setText(String.valueOf(index));
             recordAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void recordAdapterOnStarClick(int position) {
+        Record record = recordList.get(position);
+        boolean isCorrect = record.isCorrect();
+        if (!isCorrect) {
+            record.setCorrect(true);
+        } else {
+            record.setCorrect(false);
+        }
+        setSaveBtnBackground(true);
+        recordAdapter.notifyDataSetChanged();
     }
 
     /**

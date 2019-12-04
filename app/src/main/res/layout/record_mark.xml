@@ -105,6 +105,14 @@
             android:textStyle="bold"
             android:text="@string/total_score" />
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:text="@string/correct" />
+
         <ImageView
             android:id="@+id/check_box"
             android:layout_width="20dp"

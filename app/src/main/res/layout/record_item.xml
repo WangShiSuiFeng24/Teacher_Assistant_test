@@ -58,6 +58,16 @@
         android:layout_weight="1.2" />
 
     <ImageView
+        android:id="@+id/correct"
+        android:src="@drawable/ic_dark_star"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:contentDescription="@null" />
+
+    <ImageView
         android:id="@+id/check_box"
         android:src="@mipmap/ic_uncheck"
         android:layout_width="wrap_content"

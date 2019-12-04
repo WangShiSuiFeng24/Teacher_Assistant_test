@@ -42,6 +42,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         TextView student_name;
         TextView student_gender;
 
+        ImageView correct;
+
         ImageView checkBox;
 
         public ViewHolder(@NonNull View itemView) {
@@ -53,6 +55,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             student_name = itemView.findViewById(R.id.student_name);
             student_gender = itemView.findViewById(R.id.student_gender);
 
+            correct = itemView.findViewById(R.id.correct);
             checkBox = itemView.findViewById(R.id.check_box);
         }
     }
@@ -124,6 +127,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             }
         }
 
+        if (record.isCorrect()) {
+            holder.correct.setImageResource(R.drawable.ic_light_star);
+        } else {
+            holder.correct.setImageResource(R.drawable.ic_dark_star);
+        }
+
         //设置EditText光标模式，isSelectionsGone为true则清除光标
         if (isSelectionsGone) {
             holder.student_id.clearFocus();
@@ -191,6 +200,14 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 }
             }
         });
+
+        holder.correct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = holder.getLayoutPosition();
+                onStarClickListener.onStarClick(pos);
+            }
+        });
     }
 
     //设置isShowGender
@@ -228,6 +245,16 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     public void setOnScoreFillListener(RecordAdapter.OnScoreFillListener onScoreFillListener) {
         this.onScoreFillListener = onScoreFillListener;
+    }
+
+    private RecordAdapter.OnStarClickListener onStarClickListener;
+
+    public interface OnStarClickListener {
+        void onStarClick(int position);
+    }
+
+    public void setOnStarClickListener(RecordAdapter.OnStarClickListener onStarClickListener) {
+        this.onStarClickListener = onStarClickListener;
     }
 
 
