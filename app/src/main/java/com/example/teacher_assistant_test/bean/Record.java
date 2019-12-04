@@ -10,7 +10,7 @@ public class Record {
     private String score;
     private int total_score;
 
-    private boolean isCorrect;
+    private boolean isCorrect = false;
 
     private boolean isSelect;
 
@@ -23,6 +23,18 @@ public class Record {
         this.score = score;
         this.total_score = total_score;
     }
+    public Record(String stu_id, String stu_name, String stu_gender, String test_name, String score, int total_score, boolean isCorrect) {
+        this.stu_id = stu_id;
+        this.stu_name = stu_name;
+        this.stu_gender = stu_gender;
+        this.test_name = test_name;
+        this.score = score;
+        this.total_score = total_score;
+
+        this.isCorrect = isCorrect;
+    }
+
+
 
     public String getStu_id() { return stu_id; }
     public void setStu_id(String stu_id) { this.stu_id = stu_id; }

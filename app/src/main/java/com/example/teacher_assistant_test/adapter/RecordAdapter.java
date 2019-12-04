@@ -127,6 +127,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             }
         }
 
+        ///根据isCorrect()订正状态设置订正图片样式
         if (record.isCorrect()) {
             holder.correct.setImageResource(R.drawable.ic_light_star);
         } else {

@@ -387,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         backUpRecordList.clear();
 
         Log.i("ShowAndEditActivity", "开始初始化Student。。。。。。");
-        String sqlSelect="SELECT StudentMark.stu_id,Student.stu_name,Student.stu_gender,StudentMark.test_id,StudentTest.test_name,StudentMark.score,StudentMark.total_score "
+        String sqlSelect="SELECT StudentMark.stu_id,Student.stu_name,Student.stu_gender,StudentMark.test_id,StudentTest.test_name,StudentMark.score,StudentMark.total_score,StudentMark.isCorrect "
                 + "FROM StudentMark INNER JOIN Student ON StudentMark.stu_id = Student.stu_id "
                 + "INNER JOIN StudentTest ON StudentMark.test_id = StudentTest.test_id";
         //扫描数据库，将信息放入markList
@@ -410,12 +410,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String score = cursor.getString(cursor.getColumnIndex("score"));
                 int total_score = cursor.getInt(cursor.getColumnIndex("total_score"));
 
-                Record record = new Record(stu_id, stu_name, stu_gender, test_name, score, total_score);
+                //读取SQLite studentMark表订正列
+                boolean isCorrect = ((cursor.getInt(cursor.getColumnIndex("isCorrect")) == 1) ? true : false);
+
+                Record record = new Record(stu_id, stu_name, stu_gender, test_name, score, total_score, isCorrect);
 
                 //此处非常关键，若add同一个Record，则改变recordList中Record对象的成员方法或变量时，
                 // backUpRecordList中的对应的Record对象的成员方法或变量也会随之改变
                 //因为两个List中的Record在添加的时候就是同一个Record（地址一样）
-                Record backUpRecord = new Record(stu_id, stu_name, stu_gender, test_name, score, total_score);
+                Record backUpRecord = new Record(stu_id, stu_name, stu_gender, test_name, score, total_score, isCorrect);
 
                 recordList.add(record);
                 backUpRecordList.add(backUpRecord);
@@ -1054,7 +1057,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     String score = record.getScore();
                     int total_score = record.getTotal_score();
-                    new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, current_test_id, score, total_score);
+
+                    boolean isCorrect = record.isCorrect();
+
+                    new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, current_test_id, score, total_score, isCorrect);
                 }//再插入
                 db.close();
                 Toast.makeText(MainActivity.this, R.string.save_successfully, Toast.LENGTH_SHORT).show();
@@ -1150,7 +1156,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                                    long test_id = unique_test_id;
                                 String score = preRecord.getScore();
                                 int total_score = preRecord.getTotal_score();
-                                new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score);
+
+                                boolean isCorrect = preRecord.isCorrect();
+
+                                new IDUSTool(MainActivity.this).insertStuMarkDB(stu_id, unique_test_id, score, total_score, isCorrect);
 //                                                Toast.makeText(RecordMarkActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 Log.i("RecordMarkActivity", "向StudentMark表中插入stu_id："+stu_id
                                         +"\r\nunique_test_id："+unique_test_id

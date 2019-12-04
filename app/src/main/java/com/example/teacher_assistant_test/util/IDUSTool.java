@@ -56,6 +56,32 @@ public class IDUSTool {
         sqLiteDatabase.insert("StudentMark", null, contentValues);
     }
 
+    /**
+     * 向sqLiteDatabase数据库中插入StudentMark表项
+     *
+     * @param stu_id  学号
+     * @param test_id 测试号
+     * @param score  成绩
+     * @param total_score  总成绩
+     * @param isCorrect 订正
+     */
+    public void insertStuMarkDB(String stu_id, long test_id, String score, int total_score, boolean isCorrect) {
+        //实例化常量值
+        ContentValues contentValues = new ContentValues();
+        //插入学号
+        contentValues.put("stu_id", stu_id);
+        //插入测试号
+        contentValues.put("test_id", test_id);
+        //插入成绩
+        contentValues.put("score", score);
+        //插入总成绩
+        contentValues.put("total_score", total_score);
+        //插入订正项
+        contentValues.put("isCorrect", (isCorrect ? 1 : 0));
+        //调用insert插入数据
+        sqLiteDatabase.insert("StudentMark", null, contentValues);
+    }
+
     public void insertStuTest(long test_id, String test_name) {
         //实例化常量值
         ContentValues contentValues = new ContentValues();

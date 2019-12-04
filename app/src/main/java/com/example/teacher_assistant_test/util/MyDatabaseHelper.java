@@ -21,7 +21,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             + "test_id long,"
             + "stu_id integer,"
             + "score text,"
-            + "total_score integer)";
+            + "total_score integer,"
+            + "isCorrect integer)";
 
     private static final String CREATE_TEST= "create table StudentTest("
             + "test_id long ,"
