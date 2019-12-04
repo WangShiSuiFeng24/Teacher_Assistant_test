@@ -792,7 +792,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView.setTitle(getString(R.string.app_name));
 
         titleBarView.setRightText("");
-//        titleBarView.setRightDrawable(R.drawable.ic_more);
+        titleBarView.setRightDrawable(R.drawable.ic_set_up);
         titleBarView.setLeftDrawable(R.drawable.ic_student_info);
 
 
@@ -1450,7 +1450,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for(Record record : recordList) {
                 if (!canParseInt(record.getStu_id())) {
                     isStu_idAndScoreLegal = false;
-                    Toast.makeText(MainActivity.this, getString(R.string.illegal_stu_id_hint, record.getStu_id()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.illegal_stu_id_hint), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 //判断表达式中是否含有空格
@@ -1462,7 +1462,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //判断表达式是否为算术表达式，但不能判断是否存在非法空格
                 if (!(new CheckExpression().checkExpression(record.getScore()))) {
                     isStu_idAndScoreLegal = false;
-                    Toast.makeText(MainActivity.this, getString(R.string.illegal_score_hint, record.getScore()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.illegal_score_hint), Toast.LENGTH_SHORT).show();
                     break;
                 }
             }
