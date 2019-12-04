@@ -99,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
     //使用SharedPreferences来记录程序的使用次数
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
+    private boolean isShowGender;
 
     //标题栏
     private TitleBarView titleBarView;
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View include;
 
     private LinearLayout record_title;
+    private TextView stu_gender;
     private ImageView check_box;
 
     private Button save_to_db;
@@ -218,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //如果不是第一次则不导入
         preferences = getSharedPreferences("count", MODE_PRIVATE);
         int count = preferences.getInt("count", 0);
+        isShowGender = preferences.getBoolean("isShowGender", false);
 
         //判断程序是第几次运行，如果是第一次则导入assets文件夹中的Excel数据到数据库
         if (count == 0) {
@@ -354,6 +357,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         testAdapter.setThisPosition(-1);
         //通知RecyclerView，告诉它Adapter的数据发生了变化
         testAdapter.notifyDataSetChanged();
+
+        isShowGender = preferences.getBoolean("isShowGender", false);
     }
 
     /**
@@ -713,6 +718,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             backUpRecordList.clear();
             record_fab.performClick();
         }
+
+        recordAdapter.setIsShowGender(isShowGender);
+        if (isShowGender) {
+            stu_gender.setVisibility(View.VISIBLE);
+        } else {
+            stu_gender.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -817,6 +829,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         include = findViewById(R.id.record_mark);
 
         record_title = findViewById(R.id.record_title);
+        stu_gender = findViewById(R.id.stu_gender);
         check_box = findViewById(R.id.check_box);
 
         save_to_db = findViewById(R.id.save_to_db);

@@ -21,6 +21,9 @@ import java.util.List;
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
     private List<Record> mList;
 
+    //默认isShowGender为false
+    private boolean isShowGender = false;
+
     //默认editMode为RECORD_MODE_CHECK=0
     private static final int RECORD_MODE_CHECK = 0;
     int editMode = RECORD_MODE_CHECK;
@@ -100,6 +103,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
         holder.student_name.setText(record.getStu_name());
         holder.student_gender.setText(record.getStu_gender());
+
+        if (isShowGender) {
+            holder.student_gender.setVisibility(View.VISIBLE);
+        } else {
+            holder.student_gender.setVisibility(View.GONE);
+        }
 
         //根据adapter.setEditMode(int editMode)传入的editMode设置checkBox是否可见，默认不可见
         if(editMode == RECORD_MODE_CHECK) {
@@ -182,6 +191,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 }
             }
         });
+    }
+
+    //设置isShowGender
+    public void setIsShowGender(boolean isShowGender) {
+        this.isShowGender = isShowGender;
+        notifyDataSetChanged();
     }
 
     //设置编辑模式，编辑或取消？
