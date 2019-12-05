@@ -26,7 +26,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -946,6 +948,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        recordAdapter.setOnFooterClickListener(new RecordAdapter.OnFooterClickListener() {
+            @Override
+            public void onFooterClick(int position) {
+                recordAdapterOnFooterClick(position);
+            }
+        });
+
 
         //recordUI中的fab点击事件
         record_fab.setOnClickListener(new View.OnClickListener() {
@@ -1000,6 +1009,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 订正列点亮事件
+     * @param position 点击位置
+     */
     private void recordAdapterOnStarClick(int position) {
         Record record = recordList.get(position);
         boolean isCorrect = record.isCorrect();
@@ -1010,6 +1023,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         setSaveBtnBackground(true);
         recordAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     *  每个成绩表页脚增加一个“统计信息”入口，点击后打开统计信息表，内容为：
+     *     - 总分：xxx（分值要可以编辑）
+     *     - 成绩尚缺：（列出姓名）
+     *     - 订正尚缺：（列出姓名）
+     * @param position 点击位置
+     */
+    private void recordAdapterOnFooterClick(int position) {
+
+        View view = LayoutInflater.from(this).inflate(R.layout.statistical_info_dialog, null, false);
+
+        TextView lack_score_name = view.findViewById(R.id.lack_score_name);
+        TextView lack_correct_name = view.findViewById(R.id.lack_correct_name);
+
+        AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "统计信息",
+                null, view, getString(R.string.confirm), getString(R.string.cancel));
+
+        //先查询Student表中所有学生的学号，对比去掉当前页面的学号，返回剩下学号对应的姓名
+        String sqlSelectStuIdAndStuName = "select Student.stu_id, Student.stu_name "
+                + "from Student";
+
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
+
+        Cursor cursor = db.rawQuery(sqlSelectStuIdAndStuName, new String[]{});
+
+        SparseArray<String> sparseArray = new SparseArray<>();
+
+        while (cursor.moveToNext()) {
+            int stu_id = cursor.getInt(cursor.getColumnIndex("stu_id"));
+            String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
+
+            sparseArray.put(stu_id, stu_name);
+        }
+        cursor.close();
+
+        for (int i=sparseArray.size()-1; i>=0; i--) {
+            for (int j=0; j<recordList.size(); j++) {
+                Record record = recordList.get(j);
+                if (sparseArray.keyAt(i) == Integer.parseInt(record.getStu_id())) {
+                    sparseArray.removeAt(i);
+                    break;
+                }
+            }
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i=0; i<sparseArray.size(); i++) {
+            String name = sparseArray.valueAt(i);
+            stringBuilder.append(name);
+            if (i != sparseArray.size()) {
+                stringBuilder.append(" ");
+            }
+        }
+
+        lack_score_name.setText(stringBuilder.toString());
+
+        //订正尚缺则只显示当前页面isCorrect为false的学生姓名
+        StringBuilder stringBuilder1 = new StringBuilder();
+        for (int i=0; i<recordList.size(); i++) {
+            Record record = recordList.get(i);
+            if (!record.isCorrect()) {
+                stringBuilder1.append(record.getStu_name());
+                if (i != recordList.size()) {
+                    stringBuilder1.append(" ");
+                }
+            }
+        }
+
+        lack_correct_name.setText(stringBuilder1.toString());
+
     }
 
     /**
