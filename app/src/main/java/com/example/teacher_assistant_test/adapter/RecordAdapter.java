@@ -18,7 +18,7 @@ import com.example.teacher_assistant_test.bean.Record;
 
 import java.util.List;
 
-public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
+public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<Record> mList;
 
     //默认isShowGender为false
@@ -33,6 +33,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 //    //editText的焦点，我们可以通过一个int变量记录他在adapter中的位置
 //    int stuIdFocusPos = -1;
 //    int scoreFocusPos = -1;
+
+    //普通布局的type
+    static final int TYPE_ITEM = 0;
+    //脚布局
+    static final int TYPE_FOOTER = 1;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         EditText student_id;
@@ -60,6 +65,15 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         }
     }
 
+    static class FootViewHolder extends RecyclerView.ViewHolder {
+        TextView statistical_info;
+
+        public FootViewHolder(@NonNull View itemView) {
+            super(itemView);
+            statistical_info = itemView.findViewById(R.id.statistical_info);
+        }
+    }
+
     public RecordAdapter(List<Record> mList) {
         this.mList = mList;
         setHasStableIds(true);
@@ -84,15 +98,46 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     @NonNull
     @Override
-    public RecordAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.record_item,parent,false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.record_item,parent,false);
+////        ViewHolder holder = new ViewHolder(view);
+////        return holder;
+//        return new RecordAdapter.ViewHolder(view);
+
+
+        if (viewType == TYPE_ITEM){  //如果为普通布局
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.record_item,parent,false);
 //        ViewHolder holder = new ViewHolder(view);
 //        return holder;
-        return new RecordAdapter.ViewHolder(view);
+            return new ViewHolder(view);
+        }else if (viewType == TYPE_FOOTER){  //脚布局
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_view, parent, false);
+            //自己定义FoodViewHolder
+            return new FootViewHolder(view);
+        }
+        return null;
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecordAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder recyclerViewHolder, int position) {
+
+        if (recyclerViewHolder instanceof FootViewHolder) {
+            FootViewHolder footViewHolder = (FootViewHolder) recyclerViewHolder;
+
+            footViewHolder.statistical_info.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFooterClickListener.onFooterClick(position);
+                }
+            });
+
+            return;
+        }
+
+        ViewHolder holder = (ViewHolder) recyclerViewHolder;
+
+
         //当前holder的position
 //        final int currentPosition = position;
 
@@ -258,14 +303,41 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         this.onStarClickListener = onStarClickListener;
     }
 
+    private RecordAdapter.OnFooterClickListener onFooterClickListener;
+
+    public interface OnFooterClickListener {
+        void onFooterClick(int position);
+    }
+
+    public void setOnFooterClickListener(RecordAdapter.OnFooterClickListener onFooterClickListener) {
+        this.onFooterClickListener = onFooterClickListener;
+    }
+
 
     @Override
     public int getItemCount() {
-        return mList.size();
+//        return mList.size();
+        //若mList为空，不显示脚布局，返回0
+        if (mList.size() == 0) {
+            return 0;
+        }
+
+        //mList不为空，添加脚布局，返回mList.size() + 1
+        return mList.size() + 1; //返回数据项+1（加上脚布局）
     }
 
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        //在这里进行判断，如果位置为mList长度+1，且mList不为空，则返回TYPE_FOOTER
+        if(position == mList.size() && mList.size() != 0) {
+            return TYPE_FOOTER;
+        }
+        //否则使用ITEM的布局
+        return TYPE_ITEM;
     }
 }
