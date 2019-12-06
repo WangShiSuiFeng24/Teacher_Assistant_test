@@ -24,7 +24,7 @@ public class ExportSheet {
 
     //导出Excel
     private ArrayList<ArrayList<String>> arrayListInArrayList;
-    private static String[] title = {"学号", "姓名", "性别", "成绩", "总成绩"};
+    private static String[] title = {"学号", "姓名", "性别", "成绩", "总成绩", "订正"};
     private File file;
     private String fileName;
 
@@ -101,6 +101,9 @@ public class ExportSheet {
                 beanList.add(record.getStu_gender());
                 beanList.add(record.getScore());
                 beanList.add(String.valueOf(record.getTotal_score()));
+
+                beanList.add(record.isCorrect() ? "是" : "否");
+
                 arrayListInArrayList.add(beanList);
             }
 
