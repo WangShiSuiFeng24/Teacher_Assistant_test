@@ -15,17 +15,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="总分"
+            android:text="@string/test_full_mark"
             android:textColor="@color/black0"
             android:textSize="16sp"/>
 
         <EditText
-            android:layout_width="0dp"
+            android:id="@+id/test_full_mark_edit"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:maxLength="3"
-            android:layout_weight="1"/>
+            android:inputType="number" />
 
+        <Button
+            android:id="@+id/edit_button"
+            android:layout_width="64dp"
+            android:layout_height="40dp"
+            android:text="@string/edit"
+            android:textColor="@color/colorAccent" />
+<!--            android:background="@android:color/transparent" />-->
 
     </LinearLayout>
 
@@ -36,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="成绩尚缺："
+            android:text="@string/lack_score_name"
             android:textColor="@color/black0"
             android:textSize="16sp" />
 
@@ -55,7 +63,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="订正尚缺："
+            android:text="@string/lack_correct_name"
             android:textColor="@color/black0"
             android:textSize="16sp" />
 

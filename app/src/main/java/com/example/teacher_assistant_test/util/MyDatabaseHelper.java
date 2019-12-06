@@ -26,7 +26,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TEST= "create table StudentTest("
             + "test_id long ,"
-            + "test_name text)";
+            + "test_name text,"
+            + "test_full_mark)";
 
     private static MyDatabaseHelper myDatabaseHelper;
 
@@ -36,8 +37,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public static SQLiteDatabase getInstance(Context context) {
         if(myDatabaseHelper == null) {
-            // 指定数据库名为Student.db，需修改时在此修改；此处使用默认工厂；指定版本为2
-            myDatabaseHelper = new MyDatabaseHelper(context, "Student.db", null, 2);
+            // 指定数据库名为Student.db，需修改时在此修改；此处使用默认工厂；指定版本为2....3
+            myDatabaseHelper = new MyDatabaseHelper(context, "Student.db", null, 3);
         }
         return myDatabaseHelper.getReadableDatabase();
     }
@@ -55,10 +56,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table if exists Student");
-//        db.execSQL("drop table if exists StudentClass");
-        db.execSQL("drop table if exists StudentMark");
-        db.execSQL("drop table if exists StudentTest");
-        onCreate(db);
+        switch (oldVersion) {
+            case 2:
+                db.execSQL("alter table StudentTest add column test_full_mark integer");
+            default:
+                break;
+        }
+
+
+//        db.execSQL("drop table if exists Student");
+////        db.execSQL("drop table if exists StudentClass");
+//        db.execSQL("drop table if exists StudentMark");
+//        db.execSQL("drop table if exists StudentTest");
+//        onCreate(db);
     }
 }

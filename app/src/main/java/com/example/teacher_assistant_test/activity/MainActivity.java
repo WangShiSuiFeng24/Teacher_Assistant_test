@@ -139,6 +139,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //recordUI
     //recordUI中Visibility随需求改变的控件
+
+    //统计信息编辑总分按钮,编辑保存状态flag
+    private int flag = 0;
+
     private View include;
 
     private LinearLayout record_title;
@@ -369,14 +373,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化testList数据
      */
     private void initTestList() {
-        String sqlSelect = "SELECT StudentTest.test_id,StudentTest.test_name FROM StudentTest";
+        String sqlSelect = "SELECT StudentTest.test_id,StudentTest.test_name,StudentTest.test_full_mark FROM StudentTest";
         SQLiteDatabase database = MyDatabaseHelper.getInstance(MainActivity.this);
         Cursor cursor = database.rawQuery(sqlSelect, new String[]{});
         while(cursor.moveToNext()) {
             long test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
             String test_name = cursor.getString(cursor.getColumnIndex("test_name"));
 
-            Test test = new Test(test_id, test_name);
+            int test_full_mark = cursor.getInt(cursor.getColumnIndex("test_full_mark"));
+
+            Test test = new Test(test_id, test_name, test_full_mark);
             testList.add(test);
         }
         cursor.close();
@@ -1038,17 +1044,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         View view = LayoutInflater.from(this).inflate(R.layout.statistical_info_dialog, null, false);
 
+        EditText test_full_mark_edit = view.findViewById(R.id.test_full_mark_edit);
+        test_full_mark_edit.setEnabled(false);
+
+        Button edit_button = view.findViewById(R.id.edit_button);
+
+        edit_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (flag) {
+                    case 0:
+                        test_full_mark_edit.setEnabled(true);
+
+                        test_full_mark_edit.setFocusable(true);
+                        test_full_mark_edit.setFocusableInTouchMode(true);
+                        test_full_mark_edit.requestFocus();
+
+                        edit_button.setText(R.string.save);
+                        flag = 1;
+                        break;
+                    case 1:
+                        String input = test_full_mark_edit.getText().toString();
+
+                        if (TextUtils.isEmpty(input)) break;
+
+                        int test_full_mark = Integer.parseInt(input);
+                        updateTestFullMarkByTestId(current_test_id, test_full_mark);
+
+                        test_full_mark_edit.setEnabled(false);
+                        edit_button.setText(R.string.edit);
+                        flag = 0;
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        });
+
         TextView lack_score_name = view.findViewById(R.id.lack_score_name);
         TextView lack_correct_name = view.findViewById(R.id.lack_correct_name);
 
         AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "统计信息",
-                null, view, getString(R.string.confirm), getString(R.string.cancel));
+                null, view, getString(R.string.confirm), null);
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //恢复统计信息编辑总分按钮,编辑保存状态flag默认值0
+                flag = 0;
+                alertDialog.dismiss();
+            }
+        });
+
+
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
+
+        //根据current_test_id查询对应test_full_mark
+        String sqlSelectTestFullMark = "select StudentTest.test_full_mark "
+                + "from StudentTest where test_id = " + current_test_id;
+
+        Cursor cursor0 = db.rawQuery(sqlSelectTestFullMark, new String[]{});
+
+        while (cursor0.moveToNext()) {
+            int test_full_mark = cursor0.getInt(cursor0.getColumnIndex("test_full_mark"));
+            test_full_mark_edit.setText(String.valueOf(test_full_mark));
+        }
+        cursor0.close();
+
 
         //先查询Student表中所有学生的学号，对比去掉当前页面的学号，返回剩下学号对应的姓名
         String sqlSelectStuIdAndStuName = "select Student.stu_id, Student.stu_name "
                 + "from Student";
-
-        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
 
         Cursor cursor = db.rawQuery(sqlSelectStuIdAndStuName, new String[]{});
 
@@ -1097,6 +1164,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         lack_correct_name.setText(stringBuilder1.toString());
 
+    }
+
+    /**
+     * 更新总分test_full_mark通过测试号test_id
+     * @param test_id 测试号
+     * @param test_full_mark 总分
+     */
+    private void updateTestFullMarkByTestId(long test_id, int test_full_mark) {
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
+
+        ContentValues values = new ContentValues();
+
+        values.put("test_full_mark", test_full_mark);
+
+        db.update("StudentTest", values, "test_id = ?", new String[] {"" + test_id + ""});
     }
 
     /**

@@ -57,4 +57,7 @@
     <string name="set_up">设置</string>
     <string name="correct">订正</string>
     <string name="statistical_info">统计信息</string>
+    <string name="test_full_mark">总分</string>
+    <string name="lack_score_name">成绩尚缺：</string>
+    <string name="lack_correct_name">订正尚缺：</string>
 </resources>
