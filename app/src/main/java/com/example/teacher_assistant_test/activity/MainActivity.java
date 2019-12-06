@@ -1060,6 +1060,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         test_full_mark_edit.setFocusableInTouchMode(true);
                         test_full_mark_edit.requestFocus();
 
+                        //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask()
+                        {
+                            public void run()
+                            {
+                                InputMethodManager inputManager =(InputMethodManager)test_full_mark_edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                inputManager.showSoftInput(test_full_mark_edit, 0);
+                            }
+                        },300);
+
+                        test_full_mark_edit.setSelection(test_full_mark_edit.getText().length());
+
                         edit_button.setText(R.string.save);
                         flag = 1;
                         break;
