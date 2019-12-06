@@ -1074,8 +1074,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i=0; i<sparseArray.size(); i++) {
             String name = sparseArray.valueAt(i);
             stringBuilder.append(name);
-            if (i != sparseArray.size()) {
-                stringBuilder.append(" ");
+            if (i != sparseArray.size()-1) {
+                stringBuilder.append("、");
             }
         }
 
@@ -1087,8 +1087,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Record record = recordList.get(i);
             if (!record.isCorrect()) {
                 stringBuilder1.append(record.getStu_name());
-                if (i != recordList.size()) {
-                    stringBuilder1.append(" ");
+                if (i != recordList.size()-1) {
+                    stringBuilder1.append("、");
                 }
             }
         }
