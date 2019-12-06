@@ -1045,67 +1045,82 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View view = LayoutInflater.from(this).inflate(R.layout.statistical_info_dialog, null, false);
 
         EditText test_full_mark_edit = view.findViewById(R.id.test_full_mark_edit);
-        test_full_mark_edit.setEnabled(false);
 
-        Button edit_button = view.findViewById(R.id.edit_button);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_edit_parent);
 
-        edit_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (flag) {
-                    case 0:
-                        test_full_mark_edit.setEnabled(true);
+        linearLayout.setFocusableInTouchMode(true);
 
-                        test_full_mark_edit.setFocusable(true);
-                        test_full_mark_edit.setFocusableInTouchMode(true);
-                        test_full_mark_edit.requestFocus();
 
-                        //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
-                        Timer timer = new Timer();
-                        timer.schedule(new TimerTask()
-                        {
-                            public void run()
-                            {
-                                InputMethodManager inputManager =(InputMethodManager)test_full_mark_edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                inputManager.showSoftInput(test_full_mark_edit, 0);
-                            }
-                        },100);
 
-                        test_full_mark_edit.setSelection(test_full_mark_edit.getText().length());
+//        test_full_mark_edit.setEnabled(false);
 
-                        edit_button.setText(R.string.save);
-                        flag = 1;
-                        break;
-                    case 1:
-                        String input = test_full_mark_edit.getText().toString();
-
-                        if (TextUtils.isEmpty(input)) break;
-
-                        int test_full_mark = Integer.parseInt(input);
-                        updateTestFullMarkByTestId(current_test_id, test_full_mark);
-
-                        test_full_mark_edit.setEnabled(false);
-                        edit_button.setText(R.string.edit);
-                        flag = 0;
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-        });
+//        Button edit_button = view.findViewById(R.id.edit_button);
+//
+//        edit_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                switch (flag) {
+//                    case 0:
+//                        test_full_mark_edit.setEnabled(true);
+//
+//                        test_full_mark_edit.setFocusable(true);
+//                        test_full_mark_edit.setFocusableInTouchMode(true);
+//                        test_full_mark_edit.requestFocus();
+//
+//                        //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
+//                        Timer timer = new Timer();
+//                        timer.schedule(new TimerTask()
+//                        {
+//                            public void run()
+//                            {
+//                                InputMethodManager inputManager =(InputMethodManager)test_full_mark_edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                                inputManager.showSoftInput(test_full_mark_edit, 0);
+//                            }
+//                        },100);
+//
+//                        test_full_mark_edit.setSelection(test_full_mark_edit.getText().length());
+//
+//                        edit_button.setText(R.string.save);
+//                        flag = 1;
+//                        break;
+//                    case 1:
+//                        String input = test_full_mark_edit.getText().toString();
+//
+//                        if (TextUtils.isEmpty(input)) break;
+//
+//                        int test_full_mark = Integer.parseInt(input);
+//                        updateTestFullMarkByTestId(current_test_id, test_full_mark);
+//
+//                        test_full_mark_edit.setEnabled(false);
+//                        edit_button.setText(R.string.edit);
+//                        flag = 0;
+//                        break;
+//                    default:
+//                        break;
+//                }
+//
+//            }
+//        });
 
         TextView lack_score_name = view.findViewById(R.id.lack_score_name);
         TextView lack_correct_name = view.findViewById(R.id.lack_correct_name);
 
         AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, "统计信息",
-                null, view, getString(R.string.confirm), null);
+                null, view, getString(R.string.confirm), getString(R.string.cancel));
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //恢复统计信息编辑总分按钮,编辑保存状态flag默认值0
-                flag = 0;
+//                //恢复统计信息编辑总分按钮,编辑保存状态flag默认值0
+//                flag = 0;
+
+                String input = test_full_mark_edit.getText().toString();
+
+                if (!TextUtils.isEmpty(input)) {
+                    int test_full_mark = Integer.parseInt(input);
+                    updateTestFullMarkByTestId(current_test_id, test_full_mark);
+                }
+
                 alertDialog.dismiss();
             }
         });
@@ -1122,6 +1137,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         while (cursor0.moveToNext()) {
             int test_full_mark = cursor0.getInt(cursor0.getColumnIndex("test_full_mark"));
             test_full_mark_edit.setText(String.valueOf(test_full_mark));
+
+            test_full_mark_edit.setSelection(test_full_mark_edit.getText().length());
+
+//            test_full_mark_edit.clearFocus();
+
+
         }
         cursor0.close();
 
@@ -1203,7 +1224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mIatDialog = new RecognizerDialog(MainActivity.this, mInitListener);
 
 //                if(mIatDialog!=null)
-        mIatDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
+        mIatDialog.setParameter(SpeechConstant.VAD_EOS, "1500");
         mIatDialog.setParameter("dwa", "wpgs");
 
         mIatDialog.setListener(mRecognizerDialogListener);
