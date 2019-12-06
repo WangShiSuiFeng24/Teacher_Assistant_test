@@ -1069,7 +1069,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 InputMethodManager inputManager =(InputMethodManager)test_full_mark_edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 inputManager.showSoftInput(test_full_mark_edit, 0);
                             }
-                        },300);
+                        },100);
 
                         test_full_mark_edit.setSelection(test_full_mark_edit.getText().length());
 
@@ -1254,25 +1254,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             //非点击testItem，新建模式的保存方式
-            final EditText edit = new EditText(MainActivity.this);
-            //设置EditText的可视最大行数。
-            edit.setMaxLines(1);
-            //先弹出一个可编辑的AlertDialog，可以编辑test_name
+            View view = LayoutInflater.from(this).inflate(R.layout.edit_test_name_and_test_full_mark_view, null, false);
+
+            EditText test_name_edit = view.findViewById(R.id.test_name_edit);
+            EditText test_full_mark_edit = view.findViewById(R.id.test_full_mark_edit);
+
             final AlertDialog alertDialog = GetAlertDialog
                     .getAlertDialog(MainActivity.this,getString(R.string.please_enter_the_test_name),
-                            null, edit, getString(R.string.confirm), getString(R.string.cancel));
-            //给edit设置焦点
-            edit.setFocusable(true);
-            edit.setFocusableInTouchMode(true);
-            edit.requestFocus();
-            //如果是已经入某个界面就要立刻弹出输入键盘，可能会由于界面未加载完成而无法弹出，需要适当延迟，比如延迟500毫秒：
+                            null, view, getString(R.string.confirm), getString(R.string.cancel));
+
+            test_name_edit.setFocusable(true);
+            test_name_edit.setFocusableInTouchMode(true);
+            test_name_edit.requestFocus();
+
             Timer timer = new Timer();
             timer.schedule(new TimerTask()
             {
                 public void run()
                 {
-                    InputMethodManager inputManager =(InputMethodManager)edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.showSoftInput(edit, 0);
+                    InputMethodManager inputManager =(InputMethodManager)test_name_edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.showSoftInput(test_name_edit, 0);
                 }
             },300);
 
@@ -1280,7 +1281,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String input = edit.getText().toString().trim();
+                    String input = test_name_edit.getText().toString().trim();
                     //生成唯一id
 //                                final long unique_test_id = new Date().getTime();//太长
                     //每次先查询StudentTest表长getCount，将unique_test_id设置为表长+1
@@ -1304,6 +1305,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(cursor.isLast()) {
                             //StudentTest表为空，第一次更新
                             new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, input);
+
+                            //保存总分
+                            if (!TextUtils.isEmpty(input = test_full_mark_edit.getText().toString())) {
+                                int test_full_mark = Integer.parseInt(input);
+                                updateTestFullMarkByTestId(unique_test_id, test_full_mark);
+                            }
+
                             Toast.makeText(MainActivity.this, R.string.save_successfully, Toast.LENGTH_SHORT).show();
                         }
 
@@ -1352,6 +1360,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                                    Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                         }
                         cursor.close();
+
+                        //保存总分
+                        if (!TextUtils.isEmpty(input = test_full_mark_edit.getText().toString())) {
+                            int test_full_mark = Integer.parseInt(input);
+                            updateTestFullMarkByTestId(unique_test_id, test_full_mark);
+                        }
 
                         Toast.makeText(MainActivity.this, R.string.save_successfully, Toast.LENGTH_SHORT).show();
                         titleBarView.setTitle(input);
