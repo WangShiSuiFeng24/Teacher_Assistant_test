@@ -33,9 +33,9 @@
     <string name="stu_info">学生基本信息</string>
     <string name="stu_info_UI_back_hint">是否保存修改？</string>
     <string name="stu_info_UI_empty_message">暂无学生信息，请点击下方添加按钮，添加学生信息。</string>
-    <string name="insert_stu_id_hint">学号：请输入阿拉伯数字</string>
-    <string name="insert_stu_name_hint">姓名：请输入姓名</string>
-    <string name="insert_stu_gender_hint">性别：请输入＂男＂或＂女＂</string>
+    <string name="insert_stu_id_hint">请输入阿拉伯数字</string>
+    <string name="insert_stu_name_hint">请输入姓名</string>
+    <string name="insert_stu_gender_hint">请输入＂男＂或＂女＂</string>
     <string name="insert_one_stu_info">插入一条学生信息</string>
     <string name="insert_same_stu_id_hint">已存在相同学号＂%1$s＂，请重新输入学号。</string>
     <string name="insert_empty_hint">姓名或性别栏为空</string>

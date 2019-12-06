@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -306,16 +307,16 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     }
 
     private void showInsertDialog() {
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        final EditText edit_stu_id = new EditText(this);
-        edit_stu_id.setHint(R.string.insert_stu_id_hint);
-        layout.addView(edit_stu_id);
-
-        final EditText edit_stu_name = new EditText(this);
-        edit_stu_name.setHint(R.string.insert_stu_name_hint);
-        layout.addView(edit_stu_name);
+//        LinearLayout layout = new LinearLayout(this);
+//        layout.setOrientation(LinearLayout.VERTICAL);
+//
+//        final EditText edit_stu_id = new EditText(this);
+//        edit_stu_id.setHint(R.string.insert_stu_id_hint);
+//        layout.addView(edit_stu_id);
+//
+//        final EditText edit_stu_name = new EditText(this);
+//        edit_stu_name.setHint(R.string.insert_stu_name_hint);
+//        layout.addView(edit_stu_name);
 
 
 //        final RadioGroup gender = new RadioGroup(this);
@@ -332,12 +333,19 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 //        layout.addView(gender);
 
 
-        final EditText edit_stu_gender = new EditText(this);
-        edit_stu_gender.setHint(R.string.insert_stu_gender_hint);
-        layout.addView(edit_stu_gender);
+//        final EditText edit_stu_gender = new EditText(this);
+//        edit_stu_gender.setHint(R.string.insert_stu_gender_hint);
+//        layout.addView(edit_stu_gender);
+
+
+        View view = LayoutInflater.from(this).inflate(R.layout.edit_stu_id_name_gender, null, false);
+
+        EditText edit_stu_id = view.findViewById(R.id.stu_id_edit);
+        EditText edit_stu_name = view.findViewById(R.id.stu_name_edit);
+        EditText edit_stu_gender = view.findViewById(R.id.stu_gender_edit);
 
         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, getString(R.string.insert_one_stu_info),
-                null, layout, getString(R.string.confirm), getString(R.string.cancel));
+                null, view, getString(R.string.confirm), getString(R.string.cancel));
         alertDialog.setCanceledOnTouchOutside(false);
 
         edit_stu_id.setFocusable(true);
