@@ -64,5 +64,4 @@
     <string name="test_name">测试名</string>
     <string name="gender">性别</string>
     <string name="name">姓名</string>
-    <string name="stu_id">学号</string>
 </resources>
