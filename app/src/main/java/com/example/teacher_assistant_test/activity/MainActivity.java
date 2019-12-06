@@ -20,6 +20,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,6 +53,7 @@ import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.MyDividerItemDecoration;
 import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
 import com.example.teacher_assistant_test.util.StrProcess;
 import com.example.teacher_assistant_test.util.TitleBarView;
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerViewEmptySupport recordRecyclerView;
     private FloatingActionButton record_fab;
 
-    private DividerItemDecoration recordDividerItemDecoration;
+    private MyDividerItemDecoration recordDividerItemDecoration;
 
     private List<Record> recordList = new ArrayList<>();
     //备份，即使当前页面被编辑后，students始终保存刚进入页面时的数据
@@ -863,7 +865,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         emptyMessage.setText(R.string.recordUI_empty_message);
 
         //设置分割线
-        recordDividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recordDividerItemDecoration = new MyDividerItemDecoration(this, MyDividerItemDecoration.VERTICAL, false);
         recordRecyclerView.addItemDecoration(recordDividerItemDecoration);
 
         LinearLayoutManager record_linearLayoutManager = new LinearLayoutManager(MainActivity.this);
