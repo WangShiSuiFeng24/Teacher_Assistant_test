@@ -1329,6 +1329,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //StudentTest表为空，第一次更新
                             new IDUSTool(MainActivity.this).insertStuTest(unique_test_id, input);
 
+                            //将当前全局test_id设置为已保存的unique_test_id
+                            current_test_id = unique_test_id;
+
                             //保存总分
                             if (!TextUtils.isEmpty(input = test_full_mark_edit.getText().toString())) {
                                 int test_full_mark = Integer.parseInt(input);
@@ -1378,6 +1381,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         +"\r\nunique_test_id："+unique_test_id
                                         +"\r\nscore："+score
                                         +"\r\ntotal_score"+total_score+"成功");
+
+                                //将当前全局test_id设置为已保存的unique_test_id
+                                current_test_id = unique_test_id;
 
                             }
 //                                    Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
