@@ -1026,8 +1026,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean isCorrect = record.isCorrect();
         if (!isCorrect) {
             record.setCorrect(true);
+            Toast.makeText(this, R.string.revision_completed, Toast.LENGTH_SHORT).show();
         } else {
             record.setCorrect(false);
+            Toast.makeText(this, R.string.revision_uncompleted, Toast.LENGTH_SHORT).show();
         }
         setSaveBtnBackground(true);
         recordAdapter.notifyDataSetChanged();
@@ -1383,8 +1385,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         cursor.close();
 
                         //保存总分
-                        if (!TextUtils.isEmpty(input = test_full_mark_edit.getText().toString())) {
-                            int test_full_mark = Integer.parseInt(input);
+                        if (!TextUtils.isEmpty(test_full_mark_edit.getText().toString())) {
+                            int test_full_mark = Integer.parseInt(test_full_mark_edit.getText().toString());
                             updateTestFullMarkByTestId(unique_test_id, test_full_mark);
                         }
 
@@ -1393,7 +1395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         isOpenATest = true;
 
                         isRecordListUpdate = false;
-                        setSaveBtnBackground(true);
+                        setSaveBtnBackground(false);
 
                         //让AlertDialog消失
                         alertDialog.cancel();
