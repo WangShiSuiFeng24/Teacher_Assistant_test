@@ -64,7 +64,7 @@
     <string name="test_name">测试名：</string>
     <string name="gender">性别</string>
     <string name="name">姓名</string>
-    <string name="show_gender">成绩单中显示\"性别\"列</string>
+    <string name="show_gender">成绩单中显示\＂性别\＂列</string>
     <string name="revision_completed">订正已完成。</string>
     <string name="revision_uncompleted">订正尚未完成。</string>
 </resources>
