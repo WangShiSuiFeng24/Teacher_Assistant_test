@@ -67,4 +67,7 @@
     <string name="show_gender">成绩单中显示\＂性别\＂列</string>
     <string name="revision_completed">订正已完成。</string>
     <string name="revision_uncompleted">订正尚未完成。</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
