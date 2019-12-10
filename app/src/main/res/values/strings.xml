@@ -47,7 +47,7 @@
     <string name="already_select">已选择</string>
     <string name="zero">0</string>
     <string name="delete">删除</string>
-    <string name="stu_id">学号：</string>
+    <string name="stu_id">学号</string>
     <string name="stu_name">姓名</string>
     <string name="stu_gender">性别</string>
     <string name="score">成绩</string>
@@ -67,4 +67,5 @@
     <string name="show_gender">成绩单中显示\＂性别\＂列</string>
     <string name="revision_completed">订正已完成。</string>
     <string name="revision_uncompleted">订正尚未完成。</string>
+    <string name="id">学号：</string>
 </resources>
