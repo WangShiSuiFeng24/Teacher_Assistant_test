@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +84,9 @@ public class EditStudentInfoActivity extends AppCompatActivity {
     private boolean editorStatus = false;
     private int index = 0;
 
+
+    //性别默认为"男"
+    private String stu_gender = "男";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -342,7 +347,18 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
         EditText edit_stu_id = view.findViewById(R.id.stu_id_edit);
         EditText edit_stu_name = view.findViewById(R.id.stu_name_edit);
-        EditText edit_stu_gender = view.findViewById(R.id.stu_gender_edit);
+//        EditText edit_stu_gender = view.findViewById(R.id.stu_gender_edit);
+
+        RadioGroup edit_stu_gender = view.findViewById(R.id.stu_gender_edit);
+
+        edit_stu_gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = view.findViewById(checkedId);
+                stu_gender = radioButton.getText().toString();
+            }
+        });
+
 
         final AlertDialog alertDialog = GetAlertDialog.getAlertDialog(this, getString(R.string.insert_one_stu_info),
                 null, view, getString(R.string.confirm), getString(R.string.cancel));
@@ -396,7 +412,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                         String stu_name = edit_stu_name.getText().toString().trim();
 //                     String stu_gender = (maleRadioButton != null ? maleRadioButton.getText() : femaleRadioButton.getText()).toString();
 
-                        String stu_gender = edit_stu_gender.getText().toString().trim();
+//                        String stu_gender = edit_stu_gender.getText().toString().trim();
 
                         if(TextUtils.isEmpty(stu_name) || TextUtils.isEmpty(stu_gender)) {
                             Toast.makeText(EditStudentInfoActivity.this, R.string.insert_empty_hint, Toast.LENGTH_SHORT).show();
