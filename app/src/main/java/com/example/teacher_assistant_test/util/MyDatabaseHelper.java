@@ -58,6 +58,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 2:
+                db.execSQL("alter table StudentMark add column isCorrect integer");
                 db.execSQL("alter table StudentTest add column test_full_mark integer");
             default:
                 break;
