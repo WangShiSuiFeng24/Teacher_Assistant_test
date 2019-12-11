@@ -5,6 +5,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,8 +48,11 @@ import android.widget.Toast;
 import com.example.teacher_assistant_test.adapter.RecordAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Record;
+import com.example.teacher_assistant_test.fragment.BackHandlerHelper;
+import com.example.teacher_assistant_test.fragment.ManualInputDigitalResultsFragment;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
+import com.example.teacher_assistant_test.util.CustomDialog;
 import com.example.teacher_assistant_test.util.ExportSheet;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.JsonParser;
@@ -98,7 +103,7 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ManualInputDigitalResultsFragment.DigitalResultsFragmentListener {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
     private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
@@ -125,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //recordUI中Visibility随需求改变的控件
     private LinearLayout test_recycle;
     private LinearLayout test_fab;
+
+    private FloatingActionButton fab;
 
     //testUI Visibility 不随需求改变的控件
     private List<Test> testList = new ArrayList<>();
@@ -206,6 +213,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        }
 //    };
 
+    private boolean inManualInputDigitalResultsFragment = false;
+    private FragmentManager fragmentManager;
+    private ManualInputDigitalResultsFragment manualInputDigitalResultsFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         //testUI中fab的点击事件
-        final FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,7 +288,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
                 } else {
                     //由testUI界面变为RecordUI界面
-                    testUI_to_recordUI();
+//                    testUI_to_recordUI();
+
+                    View view = View.inflate(MainActivity.this, R.layout.dialog_new_file, null);
+
+                    CustomDialog customDialog = new CustomDialog(MainActivity.this, view, R.style.MyDialog);
+
+                    view.findViewById(R.id.tvRecord).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            testUI_to_recordUI();
+                            customDialog.dismiss();
+                        }
+                    });
+
+                    view.findViewById(R.id.tvManualInputDigitalResults).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            inManualInputDigitalResultsFragment = true;
+
+                            //设置标题栏
+                            titleBarView.setLeftText(getString(R.string.back));
+                            titleBarView.setLeftTextColor(Color.parseColor("#FFFFFF"));
+                            titleBarView.setLeftDrawable(R.drawable.ic_back);
+                            titleBarView.setRightDrawable(0);
+
+                            manualInputDigitalResultsFragment = new ManualInputDigitalResultsFragment();
+
+                            Bundle bundle = new Bundle();
+
+                            bundle.putBoolean("isShowGender", isShowGender);
+
+                            manualInputDigitalResultsFragment.setArguments(bundle);
+
+
+                            fragmentManager = getSupportFragmentManager();
+
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                            fragmentTransaction.addToBackStack(null);
+
+                            fragmentTransaction.add(R.id.content, manualInputDigitalResultsFragment, "Digital");
+
+                            fragmentTransaction.commit();
+
+
+                            fab.setVisibility(View.GONE);
+                            customDialog.dismiss();
+                        }
+                    });
+
+                    view.findViewById(R.id.tvManualInputRankResults).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            customDialog.dismiss();
+                        }
+                    });
+
+                    customDialog.show();
+
                 }
 
             }
@@ -453,6 +523,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void leftClick() {
                 //进入学生基本信息页面
                 if (!inRecordUI) {
+                    if (inManualInputDigitalResultsFragment) {
+
+                        ManualInputDigitalResultsFragment manualInputDigitalResultsFragment = (ManualInputDigitalResultsFragment)fragmentManager.findFragmentByTag("Digital");
+                        manualInputDigitalResultsFragment.onBackPressed();
+
+//                        getSupportFragmentManager().popBackStack();
+                        if (fragmentManager.getBackStackEntryCount() == 0) {
+                            inManualInputDigitalResultsFragment = false;
+                        }
+
+                        //设置回来
+//                        fab.setVisibility(View.VISIBLE);
+//                        titleBarView.setLeftText(null);
+//                        titleBarView.setLeftDrawable(R.drawable.ic_student_info);
+//                        titleBarView.setRightDrawable(R.drawable.ic_set_up);
+                        return;
+                    }
                     EditStudentInfoActivity.actionStart(MainActivity.this);
                 }
 
@@ -822,10 +909,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView.setLeftDrawable(R.drawable.ic_student_info);
 
 
-        //返回设置先清空testList
-        testList.clear();
-        //再重新add数据到testList
-        initTestList();
+//        //返回设置先清空testList
+//        testList.clear();
+//        //再重新add数据到testList
+//        initTestList();
+        reFreshTestUI();
 
         if (testList.size() != 0) {
             testRecyclerView.removeItemDecoration(testDividerItemDecoration);
@@ -1631,7 +1719,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
         }
-        super.onBackPressed();
+
+        if (!BackHandlerHelper.handleBackPress(this)) {
+            super.onBackPressed();
+        }
+//        super.onBackPressed();
     }
 
     @Override
@@ -2325,4 +2417,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    public void onItemLongClick(int position) {
 //        //暂不处理
 //    }
+
+
+    @Override
+    public void handleTitleBar(String title) {
+        if (title != null) {
+            titleBarView.setTitle(title);
+            return;
+        }
+
+        fab.setVisibility(View.VISIBLE);
+        titleBarView.setLeftText(null);
+        titleBarView.setLeftDrawable(R.drawable.ic_student_info);
+        titleBarView.setRightDrawable(R.drawable.ic_set_up);
+
+        inManualInputDigitalResultsFragment = false;
+
+        reFreshTestUI();
+    }
+
+    public void setTitle(String title) {
+        titleBarView.setTitle(title);
+    }
+
+    private void reFreshTestUI() {
+        //返回设置先清空testList
+        testList.clear();
+        //再重新add数据到testList
+        initTestList();
+    }
 }

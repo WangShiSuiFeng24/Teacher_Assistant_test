@@ -1,6 +1,7 @@
 package com.example.teacher_assistant_test.adapter;
 
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     //脚布局
     static final int TYPE_FOOTER = 1;
 
+
+    private String beforeStuId;
+    private String beforeScore;
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         EditText student_id;
         EditText student_score;
@@ -55,6 +60,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             student_id = itemView.findViewById(R.id.student_id);
             student_score = itemView.findViewById(R.id.student_score);
+
+            student_score.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+
             total_score = itemView.findViewById(R.id.total_score);
 
             student_name = itemView.findViewById(R.id.student_name);
@@ -209,7 +217,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.student_id.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                beforeStuId = s.toString();
             }
 
             @Override
@@ -219,7 +227,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(Integer.parseInt(holder.student_id.getTag().toString()) == position) {
+                if(Integer.parseInt(holder.student_id.getTag().toString()) == position && !s.toString().equals(beforeStuId)) {
                     //设置Tag解决错乱问题
                     onStuIdFillListener.onStuIdFill(position, s.toString());
                 }
@@ -230,7 +238,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.student_score.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                    beforeScore = s.toString();
             }
 
             @Override
@@ -240,7 +248,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(Integer.parseInt(holder.student_score.getTag().toString()) == position) {
+                if(Integer.parseInt(holder.student_score.getTag().toString()) == position && !s.toString().equals(beforeScore)) {
                     onScoreFillListener.onScoreFill(position, s.toString());
                     holder.student_score.setSelection(s.length());
                 }

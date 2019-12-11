@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.example.teacher_assistant_test.bean.Record;
+import com.example.teacher_assistant_test.bean.Result;
 import com.example.teacher_assistant_test.bean.Student;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class ExportSheet {
 
     private Context context;
     private String test_name;
-    private List<?> studentOrRecordList;
+    private List<?> studentOrRecordOrResultList;
 
     //导出Excel
     private ArrayList<ArrayList<String>> arrayListInArrayList;
@@ -28,10 +29,10 @@ public class ExportSheet {
     private File file;
     private String fileName;
 
-    public ExportSheet(Context context, String test_name, List<?> studentOrRecordList) {
+    public ExportSheet(Context context, String test_name, List<?> studentOrRecordOrResultList) {
         this.context = context;
         this.test_name = test_name;
-        this.studentOrRecordList = studentOrRecordList;
+        this.studentOrRecordOrResultList = studentOrRecordOrResultList;
     }
 
     public String getFileName() {
@@ -82,9 +83,9 @@ public class ExportSheet {
      */
     private ArrayList<ArrayList<String>> getRecordData() {
         arrayListInArrayList = new ArrayList<>();
-        for(int i=0; i<studentOrRecordList.size(); i++) {
-            if(studentOrRecordList.get(i) instanceof Student) {
-                Student student = (Student) studentOrRecordList.get(i);
+        for(int i=0; i<studentOrRecordOrResultList.size(); i++) {
+            if(studentOrRecordOrResultList.get(i) instanceof Student) {
+                Student student = (Student) studentOrRecordOrResultList.get(i);
                 ArrayList<String> beanList = new ArrayList<>();
                 beanList.add(String.valueOf(student.getStu_id()));
                 beanList.add(student.getStu_name());
@@ -93,8 +94,8 @@ public class ExportSheet {
                 beanList.add(String.valueOf(student.getTotal_score()));
                 arrayListInArrayList.add(beanList);
             }
-            if(studentOrRecordList.get(i) instanceof Record) {
-                Record record = (Record) studentOrRecordList.get(i);
+            if(studentOrRecordOrResultList.get(i) instanceof Record) {
+                Record record = (Record) studentOrRecordOrResultList.get(i);
                 ArrayList<String> beanList = new ArrayList<>();
                 beanList.add(String.valueOf(record.getStu_id()));
                 beanList.add(record.getStu_name());
@@ -103,6 +104,19 @@ public class ExportSheet {
                 beanList.add(String.valueOf(record.getTotal_score()));
 
                 beanList.add(record.isCorrect() ? "是" : "否");
+
+                arrayListInArrayList.add(beanList);
+            }
+            if (studentOrRecordOrResultList.get(i) instanceof Result) {
+                Result result = (Result) studentOrRecordOrResultList.get(i);
+                ArrayList<String> beanList = new ArrayList<>();
+                beanList.add(String.valueOf(result.getStu_id()));
+                beanList.add(result.getStu_name());
+                beanList.add(result.getStu_gender());
+                beanList.add(result.getScore());
+                beanList.add(String.valueOf(result.getTotal_score()));
+
+                beanList.add(result.isCorrect() ? "是" : "否");
 
                 arrayListInArrayList.add(beanList);
             }

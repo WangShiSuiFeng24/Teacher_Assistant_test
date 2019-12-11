@@ -14,7 +14,7 @@
         android:textSize="15sp"
         android:background="@null"
         android:hint="@null"
-        android:inputType="text" />
+        android:inputType="number" />
     <!--    <TextView-->
     <!--    android:id="@+id/student_score"-->
     <!--    android:layout_width="0dp"-->

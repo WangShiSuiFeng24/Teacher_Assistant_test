@@ -1,6 +1,7 @@
 package com.example.teacher_assistant_test.adapter;
 
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,9 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     //默认isSelectionsGone为false
     private boolean isSelectionsGone = false;
 
+
+    private String beforeScore;
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView stu_id;
         TextView stu_name;
@@ -53,6 +57,7 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             stu_gender = itemView.findViewById(R.id.stu_gender);
 
             stu_score = itemView.findViewById(R.id.stu_score);
+            stu_score.setRawInputType(InputType.TYPE_CLASS_NUMBER);
             stu_total_score = itemView.findViewById(R.id.stu_total_score);
 
             stu_correct = itemView.findViewById(R.id.stu_correct);
@@ -112,7 +117,7 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.stu_name.setText(result.getStu_name());
         holder.stu_gender.setText(result.getStu_gender());
         holder.stu_score.setText(result.getScore());
-        holder.stu_total_score.setText(result.getTotal_score());
+        holder.stu_total_score.setText(String.valueOf(result.getTotal_score()));
 
         if (isShowGender) {
             holder.stu_gender.setVisibility(View.VISIBLE);
@@ -133,25 +138,29 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             isSelectionsGone = false;
         }
 
-        holder.stu_score.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (Integer.parseInt(holder.stu_score.getTag().toString()) == position) {
-                    onScoreFillListener.onScoreFill(position, s.toString());
-                    holder.stu_score.setSelection(s.length());
+//        if (holder.stu_score.hasFocus()) {
+            holder.stu_score.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    beforeScore = s.toString();
                 }
-            }
-        });
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (Integer.parseInt(holder.stu_score.getTag().toString()) == position) {
+                        if (!s.toString().equals(beforeScore)) {
+                            onScoreFillListener.onScoreFill(position, s.toString());
+                        }
+                        holder.stu_score.setSelection(s.length());
+                    }
+                }
+            });
+//        }
 
         holder.stu_correct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,6 +230,6 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemViewType(int position) {
 
-        return mList.size() !=0 && position == mList.size() ? TYPE_FOOTER :TYPE_ITEM;
+        return (mList.size() !=0 && position == mList.size()) ? TYPE_FOOTER :TYPE_ITEM;
     }
 }

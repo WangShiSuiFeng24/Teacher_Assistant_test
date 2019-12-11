@@ -24,6 +24,13 @@
         android:visibility="gone" />
 
     <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <LinearLayout
         android:id="@+id/test_recycle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -104,6 +111,9 @@
             android:src="@drawable/ic_btn_speak_now"
             app:fab_colorNormal="@color/colorAccent"
             app:fab_colorPressed="@color/colorAccentDark" />
+
+    </LinearLayout>
+
 
     </LinearLayout>
 
