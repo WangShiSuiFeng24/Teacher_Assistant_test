@@ -1956,6 +1956,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
+
+                isRecordListUpdate = true;
+                setSaveBtnBackground(true);
+
                 recordAdapter.notifyDataSetChanged();
             }
         } else {
@@ -1984,6 +1988,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
+
+                isRecordListUpdate = true;
+                setSaveBtnBackground(true);
+
                 recordAdapter.notifyDataSetChanged();
             }
         }
@@ -2004,6 +2012,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         return o1.getTotal_score() - o2.getTotal_score();
                     }
                 });
+
+                isRecordListUpdate = true;
+                setSaveBtnBackground(true);
+
                 recordAdapter.notifyDataSetChanged();
             }
         } else {
@@ -2016,6 +2028,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         return  o2.getTotal_score() - o1.getTotal_score();
                     }
                 });
+
+                isRecordListUpdate = true;
+                setSaveBtnBackground(true);
+
                 recordAdapter.notifyDataSetChanged();
             }
         }
