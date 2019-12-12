@@ -39,6 +39,7 @@ import com.example.teacher_assistant_test.bean.StudentInfo;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -265,6 +266,18 @@ public class EditStudentInfoActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void initUI() {

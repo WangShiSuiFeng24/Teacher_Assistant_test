@@ -78,6 +78,8 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -222,6 +224,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        /**
+         * 初始化common库
+         * 参数1:上下文，必须的参数，不能为空
+         * 参数2:友盟 app key，非必须参数，如果Manifest文件中已配置app key，该参数可以传空，则使用Manifest中配置的app key，否则该参数必须传入
+         * 参数3:友盟 channel，非必须参数，如果Manifest文件中已配置channel，该参数可以传空，则使用Manifest中配置的channel，否则该参数必须传入，channel命名请详见channel渠道命名规范
+         * 参数4:设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机
+         * 参数5:Push推送业务的secret，需要集成Push功能时必须传入Push的secret，否则传空
+         */
+        //如果AndroidManifest.xml清单配置中没有设置appkey和channel，则可以在这里设置
+        //        UMConfigure.init(this, "5df21615570df3d59f000651", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "1fe6a20054bcef865eeb0991ee84525b");
+        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE,"");
+
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 禁用横屏
 
@@ -421,6 +436,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         Log.d("MainActivity", "onResume()");
         super.onResume();
+
+        MobclickAgent.onResume(this);
+
         //先清空testList
         testList.clear();
         //再重新add数据到testList
@@ -437,6 +455,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         testAdapter.notifyDataSetChanged();
 
         isShowGender = preferences.getBoolean("isShowGender", false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     /**

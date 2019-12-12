@@ -12,6 +12,7 @@ import com.example.library.SwitchButton;
 import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.TitleBarView;
+import com.umeng.analytics.MobclickAgent;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -37,6 +38,18 @@ public class SettingActivity extends AppCompatActivity {
 
         switchButton = findViewById(R.id.switch_button);
         initSwitchButton();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void initTitleBar() {
