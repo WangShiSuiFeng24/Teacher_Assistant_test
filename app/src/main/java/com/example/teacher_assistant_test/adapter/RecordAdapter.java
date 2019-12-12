@@ -227,7 +227,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(Integer.parseInt(holder.student_id.getTag().toString()) == position && !s.toString().equals(beforeStuId)) {
+                if(Integer.parseInt(holder.student_id.getTag().toString()) == position) {
                     //设置Tag解决错乱问题
                     onStuIdFillListener.onStuIdFill(position, s.toString());
                 }
@@ -248,7 +248,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(Integer.parseInt(holder.student_score.getTag().toString()) == position && !s.toString().equals(beforeScore)) {
+                if(Integer.parseInt(holder.student_score.getTag().toString()) == position) {
                     onScoreFillListener.onScoreFill(position, s.toString());
                     holder.student_score.setSelection(s.length());
                 }

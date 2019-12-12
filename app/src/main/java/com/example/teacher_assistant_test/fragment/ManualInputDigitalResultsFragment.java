@@ -183,8 +183,8 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
 
             Result result = new Result(String.valueOf(stu_id), stu_name, stu_gender);
             result.setCorrect(false);
-            result.setScore(String.valueOf(0));
-            result.setTotal_score(0);
+//            result.setScore(String.valueOf(0));
+//            result.setTotal_score(0);
 
             resultList.add(result);
 
@@ -193,13 +193,41 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
         cursor.close();
     }
 
+    /**
+     * 先判断传入的score是否和resultList中对应的score相等，若相等则不作任何处理
+     *
+     * TextUtils.isEmpty判断null或者空字符串""则为true，否则为false（" "含有一个空格也为false）
+     *
+     * 传入的score和resultList中对应的score都为null或空字符串，则视为相等
+     * @param position 当前EditText位置
+     * @param score EditText的改变值
+     */
     private void resultAdapterOnScoreFill(int position, String score) {
         if (position < resultList.size()) {
+
+            //先判断传入的score是否和resultList中对应的score相等，若相等则不作任何处理
+            /*
+                TextUtils.isEmpty判断null或者空字符串""则为true，否则为false（" "含有一个空格也为false）
+                传入的score和resultList中对应的score都为null或空字符串，则视为相等
+             */
+            if (TextUtils.isEmpty(resultList.get(position).getScore()) && TextUtils.isEmpty(score)) {
+                return;
+            }
+
+            /*
+                既非null也非空字符串""，则用equals再判断是否相等
+             */
+            if (!TextUtils.isEmpty(resultList.get(position).getScore()) && !TextUtils.isEmpty(score) && score.equals(resultList.get(position).getScore())) {
+                return;
+            }
+
             isResultListUpdate = true;
             setSaveBtnBackground(true);
 
+            resultList.get(position).setScore(score);
+
             if (!TextUtils.isEmpty(score)) {
-                resultList.get(position).setScore(score);
+//                resultList.get(position).setScore(score);
 
                 if (!score.contains(" ") && new CheckExpression().checkExpression(score)) {
                     int total_score = (int) new Calculator().calculate(score);
@@ -208,6 +236,12 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
                     if(!recyclerView.isComputingLayout()) {
                         resultAdapter.notifyDataSetChanged();
                     }
+                }
+            } else {
+                //score编辑框为空，则设置total_score为0
+                resultList.get(position).setTotal_score(0);
+                if(!recyclerView.isComputingLayout()) {
+                    resultAdapter.notifyDataSetChanged();
                 }
             }
         }
@@ -271,11 +305,11 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
             }
         });
 
-        //成绩尚缺显示total_score为0的学生姓名
+        //成绩尚缺显示score为空的学生姓名
         StringBuilder stringBuilder = new StringBuilder();
         for (int i=0; i < resultList.size(); i++) {
             Result result = resultList.get(i);
-            if (result.getTotal_score() == 0) {
+            if (TextUtils.isEmpty(result.getScore())) {
                 stringBuilder.append(result.getStu_name());
                 if (i != resultList.size()-1) {
                     stringBuilder.append("、");
@@ -486,14 +520,19 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
     private boolean checkResultListLegality() {
         boolean isScoreLegal = true;
         for (Result result : resultList) {
+            //设置为空时score也合法
+            if (result.getScore() == null) {
+
+                break;
+            }
             if (result.getScore().contains(" ")) {
                 isScoreLegal = false;
-                Toast.makeText(getActivity(), getString(R.string.score_has_blank_space_hint, result.getScore()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.score_has_blank_space_hint, result.getStu_id(), result.getScore()), Toast.LENGTH_SHORT).show();
                 break;
             }
             if (!(new CheckExpression().checkExpression(result.getScore()))) {
                 isScoreLegal = false;
-                Toast.makeText(getActivity(), getString(R.string.illegal_score_hint), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.illegal_score_hint, result.getStu_id(), result.getScore()), Toast.LENGTH_SHORT).show();
                 break;
             }
         }

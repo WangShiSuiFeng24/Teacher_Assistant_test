@@ -997,6 +997,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //编辑学号监听
                 //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
                 if(position < recordList.size()) {
+
+                    if (TextUtils.isEmpty(recordList.get(position).getStu_id()) && TextUtils.isEmpty(stu_id)) {
+                        return;
+                    }
+
+                    if (!TextUtils.isEmpty(recordList.get(position).getStu_id()) && !TextUtils.isEmpty(stu_id)
+                            && recordList.get(position).getStu_id().equals(stu_id)) {
+                        return;
+                    }
+
                     recordList.get(position).setStu_id(stu_id);
 
                     //改 更新
@@ -1014,12 +1024,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //判断当前位置是否存在，因为删除item会触发文本改变事件afterTextChanged(Editable s)
                 if(position < recordList.size()) {
 
+                    if (TextUtils.isEmpty(recordList.get(position).getScore()) && TextUtils.isEmpty(score)) {
+                        return;
+                    }
+
+                    if (!TextUtils.isEmpty(recordList.get(position).getScore()) && !TextUtils.isEmpty(score)
+                            && recordList.get(position).getScore().equals(score)) {
+                        return;
+                    }
+
                     //改 更新
                     isRecordListUpdate = true;
                     setSaveBtnBackground(true);
 
+                    recordList.get(position).setScore(score);
+
                     if(!TextUtils.isEmpty(score)) {
-                        recordList.get(position).setScore(score);
+//                        recordList.get(position).setScore(score);
                         //先要判断编辑的score字符串是否符合规则，是则计算total_score,否则不计算
                         //增加判断score中是否存在空格，若存在则不计算，不存在则计算total_score，否则会发生异常
                         if(!score.contains(" ") && new CheckExpression().checkExpression(score)) {
@@ -1031,6 +1052,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 recordAdapter.notifyDataSetChanged();
                             }
 
+                        }
+                    } else {
+                        //score编辑框为空，则设置total_score为0
+                        recordList.get(position).setTotal_score(0);
+                        if(!recordRecyclerView.isComputingLayout()) {
+                            recordAdapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -1812,10 +1839,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, getString(R.string.illegal_stu_id_hint), Toast.LENGTH_SHORT).show();
                     break;
                 }
+
+                //设置为空时score也合法
+                if (record.getScore() == null) {
+                    break;
+                }
+
                 //判断表达式中是否含有空格
                 if (record.getScore().contains(" ")) {
                     isStu_idAndScoreLegal = false;
-                    Toast.makeText(MainActivity.this, getString(R.string.score_has_blank_space_hint, record.getScore()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.score_has_blank_space_hint, record.getStu_id(), record.getScore()), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 //判断表达式是否为算术表达式，但不能判断是否存在非法空格
@@ -2333,6 +2366,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     for(int i=0; i<recordList.size(); i++) {
                         final Record record = recordList.get(i);
                         if(newRecord.getStu_id().equals(record.getStu_id())) {
+
+                            flag = true;
+                            //增加判断若有学号但是成绩为空的情况
+                            if (record.getScore() == null) {
+                                record.setScore(newRecord.getScore());
+                                record.setTotal_score(newRecord.getTotal_score());
+
+                                //改 更新
+                                isRecordListUpdate = true;
+                                setSaveBtnBackground(true);
+
+                                recordAdapter.notifyDataSetChanged();
+                                break;
+                            }
+
                             //语音识别stu_id相同，这里处理
                             //弹出dialog,是否更改数据，
                             flag = true;

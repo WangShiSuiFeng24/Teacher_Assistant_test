@@ -36,8 +36,6 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private boolean isSelectionsGone = false;
 
 
-    private String beforeScore;
-
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView stu_id;
         TextView stu_name;
@@ -138,29 +136,28 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             isSelectionsGone = false;
         }
 
-//        if (holder.stu_score.hasFocus()) {
-            holder.stu_score.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    beforeScore = s.toString();
-                }
+        holder.stu_score.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-                }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (Integer.parseInt(holder.stu_score.getTag().toString()) == position) {
-                        if (!s.toString().equals(beforeScore)) {
-                            onScoreFillListener.onScoreFill(position, s.toString());
-                        }
-                        holder.stu_score.setSelection(s.length());
-                    }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (Integer.parseInt(holder.stu_score.getTag().toString()) == position) {
+
+                    onScoreFillListener.onScoreFill(position, s.toString());
+
+                    holder.stu_score.setSelection(s.length());
                 }
-            });
-//        }
+            }
+        });
+
 
         holder.stu_correct.setOnClickListener(new View.OnClickListener() {
             @Override

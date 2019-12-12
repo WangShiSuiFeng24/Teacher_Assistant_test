@@ -123,6 +123,10 @@ public class ExcelUtils {
                     ArrayList<String> list = (ArrayList<String>) objList.get(j);
                     for(int i=0; i<list.size(); i++) {
                         sheet.addCell(new Label(i, j+1, list.get(i), arial12format));
+                        if (list.get(i) == null) {
+                            sheet.setColumnView(i, 8);//设置当有个别表项为空时的列宽
+                            continue;
+                        }
                         if(list.get(i).length() <= 5) {
                             sheet.setColumnView(i, list.get(i).length()+8);//设置列宽
                         } else {

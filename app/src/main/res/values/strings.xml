@@ -19,8 +19,8 @@
     <string name="test_name_cannot_be_empty">测验名不能为空~</string>
     <string name="share_file">分享文件</string>
     <string name="illegal_stu_id_hint">学号只接受数字</string>
-    <string name="score_has_blank_space_hint">成绩＂%1$s＂中带有空格，请去除空格</string>
-    <string name="illegal_score_hint">成绩只接受算术表达式</string>
+    <string name="score_has_blank_space_hint">学号为＂%1$s＂的成绩＂%2$s＂中带有空格，请去除空格</string>
+    <string name="illegal_score_hint">成绩只接受算术表达式，学号为＂%1$s＂的成绩＂%2$s＂非法</string>
     <string name="same_stu_id_hint">学号＂%1$s＂重复了</string>
     <string name="alarm">警告</string>
     <string name="test_long_click_delete_hint">将要删除＂%1$s＂</string>
