@@ -41,6 +41,7 @@ import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.util.MyDividerItemDecoration;
 import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
+import com.example.teacher_assistant_test.util.WrapContentLinearLayoutManager;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -103,7 +104,8 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
 
         recyclerView.setEmptyView(emptyView);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(linearLayoutManager);
 
