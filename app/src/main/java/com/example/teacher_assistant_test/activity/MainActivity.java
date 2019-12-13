@@ -50,6 +50,7 @@ import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Record;
 import com.example.teacher_assistant_test.fragment.BackHandlerHelper;
 import com.example.teacher_assistant_test.fragment.ManualInputDigitalResultsFragment;
+import com.example.teacher_assistant_test.fragment.ManualInputRankResultsFragment;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.CustomDialog;
@@ -106,7 +107,9 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, ManualInputDigitalResultsFragment.DigitalResultsFragmentListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+        ManualInputDigitalResultsFragment.DigitalResultsFragmentListener,
+        ManualInputRankResultsFragment.RankResultsFragmentListener {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
     private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
@@ -216,9 +219,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        }
 //    };
 
-    private boolean inManualInputDigitalResultsFragment = false;
+    private boolean inFragment = false;
     private FragmentManager fragmentManager;
     private ManualInputDigitalResultsFragment manualInputDigitalResultsFragment;
+
+    private ManualInputRankResultsFragment manualInputRankResultsFragment;
 
 
     @Override
@@ -322,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onClick(View v) {
 
-                            inManualInputDigitalResultsFragment = true;
+                            inFragment = true;
 
                             //设置标题栏
                             titleBarView.setLeftText(getString(R.string.back));
@@ -358,6 +363,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     view.findViewById(R.id.tvManualInputRankResults).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
+                            inFragment = true;
+
+                            //设置标题栏
+                            titleBarView.setLeftText(getString(R.string.back));
+                            titleBarView.setLeftTextColor(Color.parseColor("#FFFFFF"));
+                            titleBarView.setLeftDrawable(R.drawable.ic_back);
+                            titleBarView.setRightDrawable(0);
+
+                            manualInputRankResultsFragment = new ManualInputRankResultsFragment();
+
+                            Bundle bundle = new Bundle();
+
+                            bundle.putBoolean("isShowGender", isShowGender);
+
+                            manualInputRankResultsFragment.setArguments(bundle);
+
+                            fragmentManager = getSupportFragmentManager();
+
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                            fragmentTransaction.addToBackStack(null);
+
+                            fragmentTransaction.add(R.id.content, manualInputRankResultsFragment, "rank");
+
+                            fragmentTransaction.commit();
+
+                            fab.setVisibility(View.GONE);
+
                             customDialog.dismiss();
                         }
                     });
@@ -548,14 +582,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void leftClick() {
                 //进入学生基本信息页面
                 if (!inRecordUI) {
-                    if (inManualInputDigitalResultsFragment) {
+                    if (inFragment) {
 
-                        ManualInputDigitalResultsFragment manualInputDigitalResultsFragment = (ManualInputDigitalResultsFragment)fragmentManager.findFragmentByTag("Digital");
-                        manualInputDigitalResultsFragment.onBackPressed();
+                        ManualInputDigitalResultsFragment manualInputDigitalResultsFragment =
+                                (ManualInputDigitalResultsFragment)fragmentManager.findFragmentByTag("Digital");
+
+                        if (manualInputDigitalResultsFragment != null) {
+                            manualInputDigitalResultsFragment.onBackPressed();
+                        }
+
+                        ManualInputRankResultsFragment manualInputRankResultsFragment =
+                                (ManualInputRankResultsFragment)fragmentManager.findFragmentByTag("rank");
+
+                        if (manualInputRankResultsFragment != null) {
+                            manualInputRankResultsFragment.onBackPressed();
+                        }
 
 //                        getSupportFragmentManager().popBackStack();
                         if (fragmentManager.getBackStackEntryCount() == 0) {
-                            inManualInputDigitalResultsFragment = false;
+                            inFragment = false;
                         }
 
                         //设置回来
@@ -2535,7 +2580,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView.setLeftDrawable(R.drawable.ic_student_info);
         titleBarView.setRightDrawable(R.drawable.ic_set_up);
 
-        inManualInputDigitalResultsFragment = false;
+        inFragment = false;
+
+        reFreshTestList();
+    }
+
+    @Override
+    public void notifyUpdateUI(String title) {
+        if (title != null) {
+            titleBarView.setTitle(title);
+            return;
+        }
+
+        fab.setVisibility(View.VISIBLE);
+        titleBarView.setLeftText(null);
+        titleBarView.setLeftDrawable(R.drawable.ic_student_info);
+        titleBarView.setRightDrawable(R.drawable.ic_set_up);
+
+        inFragment = false;
 
         reFreshTestList();
     }

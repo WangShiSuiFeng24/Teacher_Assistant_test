@@ -32,6 +32,9 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     //默认isShowGender为false
     private boolean isShowGender = false;
 
+    //默认isRank为true
+    private boolean isRank = false;
+
     //默认isSelectionsGone为false
     private boolean isSelectionsGone = false;
 
@@ -42,6 +45,9 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         TextView stu_gender;
 
         EditText stu_score;
+
+        TextView rank_score;
+
         TextView stu_total_score;
 
         ImageView stu_correct;
@@ -56,6 +62,9 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             stu_score = itemView.findViewById(R.id.stu_score);
             stu_score.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+
+            rank_score = itemView.findViewById(R.id.rank_score);
+
             stu_total_score = itemView.findViewById(R.id.stu_total_score);
 
             stu_correct = itemView.findViewById(R.id.stu_correct);
@@ -115,12 +124,25 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.stu_name.setText(result.getStu_name());
         holder.stu_gender.setText(result.getStu_gender());
         holder.stu_score.setText(result.getScore());
+
+        holder.rank_score.setText(result.getScore());
+
         holder.stu_total_score.setText(String.valueOf(result.getTotal_score()));
 
         if (isShowGender) {
             holder.stu_gender.setVisibility(View.VISIBLE);
         } else {
             holder.stu_gender.setVisibility(View.GONE);
+        }
+
+        if (!isRank) {
+            holder.stu_score.setVisibility(View.VISIBLE);
+            holder.stu_total_score.setVisibility(View.VISIBLE);
+            holder.rank_score.setVisibility(View.GONE);
+        } else {
+            holder.stu_score.setVisibility(View.GONE);
+            holder.stu_total_score.setVisibility(View.GONE);
+            holder.rank_score.setVisibility(View.VISIBLE);
         }
 
         //根据isCorrect()订正状态设置订正图片样式
@@ -136,27 +158,38 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             isSelectionsGone = false;
         }
 
-        holder.stu_score.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (!isRank) {
+            holder.stu_score.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (Integer.parseInt(holder.stu_score.getTag().toString()) == position) {
-
-                    onScoreFillListener.onScoreFill(position, s.toString());
-
-                    holder.stu_score.setSelection(s.length());
                 }
-            }
-        });
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (Integer.parseInt(holder.stu_score.getTag().toString()) == position) {
+
+                        onScoreFillListener.onScoreFill(position, s.toString());
+
+                        holder.stu_score.setSelection(s.length());
+                    }
+                }
+            });
+        } else {
+            holder.rank_score.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = holder.getLayoutPosition();
+                    onScoreClickListener.onScoreClick(pos);
+                }
+            });
+
+        }
 
 
         holder.stu_correct.setOnClickListener(new View.OnClickListener() {
@@ -175,10 +208,28 @@ public class ResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
+    //设置isShowTotalScore
+    public void setRankMode(boolean isRank) {
+        this.isRank = isRank;
+        notifyDataSetChanged();
+    }
+
     //设置EditText光标模式，isSelectionsGone为true则清除光标
     public void setIsSelectionsGone(boolean isSelectionsGone) {
         this.isSelectionsGone = isSelectionsGone;
         notifyDataSetChanged();
+    }
+
+
+    //score 编辑框点击事件
+    private ResultAdapter.OnScoreClickListener onScoreClickListener;
+
+    public interface OnScoreClickListener {
+        void onScoreClick(int position);
+    }
+
+    public void setOnScoreClickListener(ResultAdapter.OnScoreClickListener onScoreClickListener) {
+        this.onScoreClickListener = onScoreClickListener;
     }
 
     private ResultAdapter.OnFooterClickListener onFooterClickListener;
