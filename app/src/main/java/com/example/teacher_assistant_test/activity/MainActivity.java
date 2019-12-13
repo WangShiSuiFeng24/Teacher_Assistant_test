@@ -1866,6 +1866,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //检查recordList中是否有非法stu_id或非法score
             boolean isStu_idAndScoreLegal = true;
             for(Record record : recordList) {
+
+                //先判断学号是否为空，若为空则直接返回false
+                if (TextUtils.isEmpty(record.getStu_id())) {
+                    isStu_idAndScoreLegal = false;
+                    Toast.makeText(MainActivity.this, R.string.stu_id_can_not_be_null, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 if (!canParseInt(record.getStu_id())) {
                     isStu_idAndScoreLegal = false;
                     Toast.makeText(MainActivity.this, getString(R.string.illegal_stu_id_hint), Toast.LENGTH_SHORT).show();
@@ -1873,8 +1881,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 //设置为空时score也合法
-                if (record.getScore() == null) {
-                    break;
+                if (TextUtils.isEmpty(record.getScore())) {
+                    continue;
                 }
 
                 //判断表达式中是否含有空格

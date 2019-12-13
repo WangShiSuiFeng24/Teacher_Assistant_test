@@ -521,9 +521,9 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
         boolean isScoreLegal = true;
         for (Result result : resultList) {
             //设置为空时score也合法
-            if (result.getScore() == null) {
+            if (TextUtils.isEmpty(result.getScore())) {
 
-                break;
+                continue;
             }
             if (result.getScore().contains(" ")) {
                 isScoreLegal = false;
