@@ -51,6 +51,7 @@ import com.example.teacher_assistant_test.bean.Record;
 import com.example.teacher_assistant_test.fragment.BackHandlerHelper;
 import com.example.teacher_assistant_test.fragment.ManualInputDigitalResultsFragment;
 import com.example.teacher_assistant_test.fragment.ManualInputRankResultsFragment;
+import com.example.teacher_assistant_test.fragment.ResultsFragment;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
 import com.example.teacher_assistant_test.util.CustomDialog;
@@ -109,7 +110,8 @@ import jxl.read.biff.BiffException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         ManualInputDigitalResultsFragment.DigitalResultsFragmentListener,
-        ManualInputRankResultsFragment.RankResultsFragmentListener {
+        ManualInputRankResultsFragment.RankResultsFragmentListener,
+        ResultsFragment.ResultsListener{
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
     private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
@@ -225,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ManualInputRankResultsFragment manualInputRankResultsFragment;
 
+    private ResultsFragment resultsFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -318,7 +322,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     view.findViewById(R.id.tvRecord).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            testUI_to_recordUI();
+//                            testUI_to_recordUI();
+
+                            inFragment = true;
+
+                            //设置标题栏
+                            titleBarView.setLeftText(getString(R.string.back));
+                            titleBarView.setLeftTextColor(Color.parseColor("#FFFFFF"));
+                            titleBarView.setLeftDrawable(R.drawable.ic_back);
+                            titleBarView.setRightDrawable(0);
+
+
+                            resultsFragment = new ResultsFragment();
+
+                            Bundle bundle = new Bundle();
+
+                            bundle.putBoolean("isOpenATest", isOpenATest);
+                            bundle.putBoolean("isShowGender", isShowGender);
+
+                            resultsFragment.setArguments(bundle);
+
+                            fragmentManager = getSupportFragmentManager();
+
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                            fragmentTransaction.addToBackStack(null);
+
+                            fragmentTransaction.add(R.id.content, resultsFragment, "results");
+
+                            fragmentTransaction.commit();
+
+                            fab.setVisibility(View.GONE);
+
                             customDialog.dismiss();
                         }
                     });
@@ -598,6 +633,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             manualInputRankResultsFragment.onBackPressed();
                         }
 
+                        ResultsFragment resultsFragment =
+                                (ResultsFragment)fragmentManager.findFragmentByTag("results");
+
+                        if (resultsFragment != null) {
+                            resultsFragment.onBackPressed();
+                        }
+
 //                        getSupportFragmentManager().popBackStack();
                         if (fragmentManager.getBackStackEntryCount() == 0) {
                             inFragment = false;
@@ -663,8 +705,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void tvRightClick() {
-                if (inRecordUI && recordList.size() != 0) {
-                    updateEditMode();
+//                if (inRecordUI && recordList.size() != 0) {
+//                    updateEditMode();
+//                }
+
+                if (inFragment && getSupportFragmentManager().findFragmentByTag("results") !=null) {
+                    ResultsFragment resultsFragment =
+                            (ResultsFragment)getSupportFragmentManager()
+                                    .findFragmentByTag("results");
+                    if (resultsFragment.getRecordList().size() != 0) {
+                        resultsFragment.updateEditMode();
+                    }
                 }
             }
 
@@ -783,12 +834,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        }).start();
 
         //运行在主线程中
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                testUI_to_recordUI();
-            }
-        }, 300);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                testUI_to_recordUI();
+
+                inFragment = true;
+
+                //设置标题栏
+                titleBarView.setLeftText(getString(R.string.back));
+                titleBarView.setLeftTextColor(Color.parseColor("#FFFFFF"));
+                titleBarView.setLeftDrawable(R.drawable.ic_back);
+                titleBarView.setRightDrawable(0);
+
+
+                resultsFragment = new ResultsFragment();
+
+                Bundle bundle = new Bundle();
+
+                bundle.putLong("current_test_id", current_test_id);
+                bundle.putString("current_test_name", current_test_name);
+                bundle.putBoolean("isOpenATest", isOpenATest);
+                bundle.putBoolean("isShowGender", isShowGender);
+
+                resultsFragment.setArguments(bundle);
+
+                fragmentManager = getSupportFragmentManager();
+
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                fragmentTransaction.addToBackStack(null);
+
+                fragmentTransaction.add(R.id.content, resultsFragment, "results");
+
+                fragmentTransaction.commit();
+
+                fab.setVisibility(View.GONE);
+
+//            }
+//        }, 300);
     }
 
     /**
@@ -2577,6 +2661,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fab.setVisibility(View.VISIBLE);
         titleBarView.setLeftText(null);
+        titleBarView.setTitle(getString(R.string.app_name));
         titleBarView.setLeftDrawable(R.drawable.ic_student_info);
         titleBarView.setRightDrawable(R.drawable.ic_set_up);
 
@@ -2594,6 +2679,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fab.setVisibility(View.VISIBLE);
         titleBarView.setLeftText(null);
+        titleBarView.setTitle(getString(R.string.app_name));
+        titleBarView.setLeftDrawable(R.drawable.ic_student_info);
+        titleBarView.setRightDrawable(R.drawable.ic_set_up);
+
+        inFragment = false;
+
+        reFreshTestList();
+    }
+
+    @Override
+    public void notifyUpdateUI(String title, String rightText, int rightTextColor) {
+        if (title != null || rightText != null || rightTextColor != 0) {
+            if (title != null) {
+                titleBarView.setTitle(title);
+            }
+            if (rightText != null) {
+                titleBarView.setRightText(rightText);
+            }
+            if (rightTextColor != 0) {
+                titleBarView.setRightTextColor(rightTextColor);
+            }
+            return;
+        }
+
+        fab.setVisibility(View.VISIBLE);
+        titleBarView.setLeftText(null);
+        titleBarView.setTitle(getString(R.string.app_name));
+        titleBarView.setRightText("");
         titleBarView.setLeftDrawable(R.drawable.ic_student_info);
         titleBarView.setRightDrawable(R.drawable.ic_set_up);
 
