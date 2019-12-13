@@ -47,7 +47,7 @@
         android:focusableInTouchMode="true"
         android:textSize="15sp"
         android:background="@null"
-        android:hint="@null"
+        android:hint="@string/there_is_no"
         android:inputType="text" />
 
     <TextView

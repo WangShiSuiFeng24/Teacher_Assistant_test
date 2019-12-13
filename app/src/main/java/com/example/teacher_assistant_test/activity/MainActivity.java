@@ -67,6 +67,7 @@ import com.example.teacher_assistant_test.bean.Test;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.TouchEmptyCloseKeyBoardUtils;
+import com.example.teacher_assistant_test.util.WrapContentLinearLayoutManager;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.jokar.floatmenu.FloatMenu;
 import com.github.jokar.floatmenu.OnMenuItemClickListener;
@@ -490,7 +491,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recordList.clear();
         backUpRecordList.clear();
 
-        Log.i("ShowAndEditActivity", "开始初始化Student。。。。。。");
+        Log.i("MainActivity", "开始初始化Student。。。。。。");
         String sqlSelect="SELECT StudentMark.stu_id,Student.stu_name,Student.stu_gender,StudentMark.test_id,StudentTest.test_name,StudentMark.score,StudentMark.total_score,StudentMark.isCorrect "
                 + "FROM StudentMark INNER JOIN Student ON StudentMark.stu_id = Student.stu_id "
                 + "INNER JOIN StudentTest ON StudentMark.test_id = StudentTest.test_id";
@@ -499,11 +500,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Cursor cursor=sd.rawQuery(sqlSelect,new String[]{});
 
         //打印cursor中的行数
-        Log.i("ShowAndEditActivity", "cursor.getCount()："+cursor.getCount());
+        Log.i("MainActivity", "cursor.getCount()："+cursor.getCount());
 
         while(cursor.moveToNext()){
             long test_id = cursor.getInt(cursor.getColumnIndex("test_id"));
-            Log.i("ShowAndEditActivity", "数据库test_id："+test_id);
+            Log.i("MainActivity", "数据库test_id："+test_id);
 
             //只有当查询出的条目的test_id等于传入的this.test_id时才将该条目add到List<Student>
             if(test_id == current_test_id) {
@@ -665,7 +666,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void initTestRecyclerView() {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(MainActivity.this);
 
         testRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -937,7 +939,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        testList.clear();
 //        //再重新add数据到testList
 //        initTestList();
-        reFreshTestUI();
+        reFreshTestList();
+
+        testAdapter.notifyDataSetChanged();
 
         if (testList.size() != 0) {
             testRecyclerView.removeItemDecoration(testDividerItemDecoration);
@@ -986,7 +990,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recordDividerItemDecoration = new MyDividerItemDecoration(this, MyDividerItemDecoration.VERTICAL, false);
         recordRecyclerView.addItemDecoration(recordDividerItemDecoration);
 
-        LinearLayoutManager record_linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+//        LinearLayoutManager record_linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        WrapContentLinearLayoutManager record_linearLayoutManager = new WrapContentLinearLayoutManager(MainActivity.this);
         recordRecyclerView.setLayoutManager(record_linearLayoutManager);
         recordRecyclerView.setEmptyView(emptyView);
         recordAdapter = new RecordAdapter(recordList);
@@ -1170,6 +1175,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             record.setCorrect(false);
             Toast.makeText(this, R.string.revision_uncompleted, Toast.LENGTH_SHORT).show();
         }
+
+        isRecordListUpdate = true;
+
         setSaveBtnBackground(true);
         recordAdapter.notifyDataSetChanged();
     }
@@ -1878,7 +1886,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //判断表达式是否为算术表达式，但不能判断是否存在非法空格
                 if (!(new CheckExpression().checkExpression(record.getScore()))) {
                     isStu_idAndScoreLegal = false;
-                    Toast.makeText(MainActivity.this, getString(R.string.illegal_score_hint), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.illegal_score_hint, record.getStu_id(), record.getScore()), Toast.LENGTH_SHORT).show();
                     break;
                 }
             }
@@ -2521,14 +2529,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         inManualInputDigitalResultsFragment = false;
 
-        reFreshTestUI();
+        reFreshTestList();
     }
 
     public void setTitle(String title) {
         titleBarView.setTitle(title);
     }
 
-    private void reFreshTestUI() {
+    private void reFreshTestList() {
         //返回设置先清空testList
         testList.clear();
         //再重新add数据到testList

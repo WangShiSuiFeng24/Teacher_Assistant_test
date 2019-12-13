@@ -37,11 +37,11 @@
         android:focusableInTouchMode="true"
         android:textSize="15sp"
         android:background="@null"
-        android:hint="@null"
+        android:hint="@string/there_is_no"
         android:inputType="text"
         android:singleLine="true"
         android:maxLength="8"
-        android:digits="0123456789+-*/"/>
+        android:digits="0123456789+-*/" />
 
     <TextView
         android:id="@+id/stu_total_score"
