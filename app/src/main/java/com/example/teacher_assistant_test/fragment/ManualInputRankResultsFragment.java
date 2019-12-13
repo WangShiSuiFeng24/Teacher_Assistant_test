@@ -1,10 +1,13 @@
 package com.example.teacher_assistant_test.fragment;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,6 +24,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -29,6 +33,7 @@ import com.example.teacher_assistant_test.activity.MainActivity;
 import com.example.teacher_assistant_test.adapter.ResultAdapter;
 import com.example.teacher_assistant_test.bean.Result;
 import com.example.teacher_assistant_test.util.CustomDialog;
+import com.example.teacher_assistant_test.util.ExportSheet;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
@@ -36,15 +41,24 @@ import com.example.teacher_assistant_test.util.MyDividerItemDecoration;
 import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
 import com.example.teacher_assistant_test.util.WrapContentLinearLayoutManager;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import gdut.bsx.share2.FileUtil;
+import gdut.bsx.share2.Share2;
+import gdut.bsx.share2.ShareContentType;
 
 /**
  * Created by $(USER) on $(DATE).
  */
 public class ManualInputRankResultsFragment extends Fragment implements FragmentBackHandler {
+
+    private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
 
     private List<Result> resultList = new ArrayList<>();
     private List<String> backUpStuId = new ArrayList<>();
@@ -430,7 +444,41 @@ public class ManualInputRankResultsFragment extends Fragment implements Fragment
      * 分享当前页面
      */
     private void shareExcel() {
+        //先判断权限是否授予，没有则单独申请，有则继续
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION);
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String the_only_test_name = dateFormat.format(Calendar.getInstance().getTime());
 
+            if (current_test_name != null) {
+                the_only_test_name = current_test_name;
+            }
+
+            //导出Excel
+            ExportSheet exportSheet = new ExportSheet(getActivity(), the_only_test_name, resultList);
+
+            exportSheet.exportSheet();
+
+            try {
+                File file = new File(exportSheet.getFileName());
+
+                Uri shareFileUri = FileUtil.getFileUri(getActivity(), ShareContentType.FILE, file);
+
+                new Share2.Builder(getActivity())
+                        //指定分享的文件类型
+                        .setContentType(ShareContentType.FILE)
+                        //设置要分享的文件Uri
+                        .setShareFileUri(shareFileUri)
+                        //设置分享选择器的标题
+                        .setTitle(getString(R.string.share_file))
+                        .build()
+                        //发起分享
+                        .shareBySystem();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setSaveBtnBackground(boolean isResultListUpdate) {
