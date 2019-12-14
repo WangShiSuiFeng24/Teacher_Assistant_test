@@ -2717,6 +2717,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         inFragment = false;
 
+        isOpenATest = false;
+
         reFreshTestList();
     }
 
