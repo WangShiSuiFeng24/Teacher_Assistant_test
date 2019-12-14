@@ -2710,6 +2710,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleBarView.setLeftDrawable(R.drawable.ic_student_info);
         titleBarView.setRightDrawable(R.drawable.ic_set_up);
 
+        //返回时重新设置thisPosition
+        testAdapter.setThisPosition(-1);
+        //通知RecyclerView，告诉它Adapter的数据发生了变化
+        testAdapter.notifyDataSetChanged();
+
         inFragment = false;
 
         reFreshTestList();
