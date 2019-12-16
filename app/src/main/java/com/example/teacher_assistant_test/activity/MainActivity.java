@@ -2741,5 +2741,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         testList.clear();
         //再重新add数据到testList
         initTestList();
+
+        //返回先移除分割线
+        testRecyclerView.removeItemDecoration(testDividerItemDecoration);
+        //再添加分割线
+        testRecyclerView.addItemDecoration(testDividerItemDecoration);
     }
 }
