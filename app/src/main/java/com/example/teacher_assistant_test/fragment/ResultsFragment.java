@@ -795,31 +795,33 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
         final SQLiteDatabase db = MyDatabaseHelper.getInstance(getActivity());
 
-        //等级成绩状态下，不用检查，直接保存
-        if (current_test_type == 1) {
-            for (int i=0; i< backUpRecordList.size(); i++) {
-                String delete_stu_id = backUpRecordList.get(i).getStu_id();
-                db.delete("StudentMark", "stu_id = ? AND test_id = ?", new String[]{"" + delete_stu_id + "", ""+current_test_id+""});
-            }
-            for (Record record : recordList) {
-                String stu_id = record.getStu_id();
-
-                String score = record.getScore();
-                int total_score = record.getTotal_score();
-
-                boolean isCorrect = record.isCorrect();
-
-                new IDUSTool(getActivity()).insertStuMarkDB(stu_id, current_test_id, score, total_score, isCorrect);
-            }
-            Toast.makeText(getActivity(), R.string.save_successfully, Toast.LENGTH_SHORT).show();
-
-            isRecordListUpdate = false;
-            setSaveBtnBackground(false);
-
-            return;
-        }
 
         if (checkRecordListLegality()) {
+
+            //等级成绩状态下，只检查id，保存
+            if (current_test_type == 1) {
+                for (int i=0; i< backUpRecordList.size(); i++) {
+                    String delete_stu_id = backUpRecordList.get(i).getStu_id();
+                    db.delete("StudentMark", "stu_id = ? AND test_id = ?", new String[]{"" + delete_stu_id + "", ""+current_test_id+""});
+                }
+                for (Record record : recordList) {
+                    String stu_id = record.getStu_id();
+
+                    String score = record.getScore();
+                    int total_score = record.getTotal_score();
+
+                    boolean isCorrect = record.isCorrect();
+
+                    new IDUSTool(getActivity()).insertStuMarkDB(stu_id, current_test_id, score, total_score, isCorrect);
+                }
+                Toast.makeText(getActivity(), R.string.save_successfully, Toast.LENGTH_SHORT).show();
+
+                isRecordListUpdate = false;
+                setSaveBtnBackground(false);
+
+                return;
+            }
+
 
             //通过testItem点击进入recordUI
             if(isOpenATest) {
@@ -1221,12 +1223,44 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
      * @return 合法返回true,不合法返回false
      */
     private boolean checkRecordListLegality() {
+        boolean isStu_idAndScoreLegal = true;
+
+        //如果是等级类型，只用检查学号合法性
+        if (current_test_type == 1) {
+            for (Record record : recordList) {
+                //先判断学号是否为空，若为空则直接返回false
+                if (TextUtils.isEmpty(record.getStu_id())) {
+                    isStu_idAndScoreLegal = false;
+                    Toast.makeText(getActivity(), R.string.stu_id_can_not_be_null, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+
+            if (!isStu_idAndScoreLegal) {
+                return false;
+            }
+
+            //检查是否有重复id
+            boolean hasSameStu_id = false;
+            List<Record> checkList = new ArrayList<>();
+
+            for (Record record : recordList) {
+                if (checkList.contains(record)) {
+                    Toast.makeText(getActivity(), getString(R.string.same_stu_id_hint, record.getStu_id()), Toast.LENGTH_SHORT).show();
+                    hasSameStu_id = true;
+                    break;
+                }
+                checkList.add(record);
+            }
+            return !hasSameStu_id;
+        }
+
 //        if (recordList.size() == 0) {
 //            Toast.makeText(MainActivity.this, "数据为空，保存失败", Toast.LENGTH_LONG).show();
 //            return false;
 //        } else {
         //检查recordList中是否有非法stu_id或非法score
-        boolean isStu_idAndScoreLegal = true;
+
         for(Record record : recordList) {
 
             //先判断学号是否为空，若为空则直接返回false
