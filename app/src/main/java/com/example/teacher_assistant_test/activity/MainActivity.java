@@ -134,6 +134,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //当前点击test_name
     private String current_test_name;
 
+    //当前点击test_type
+    private int current_test_type;
+
     //testUI
     //recordUI中Visibility随需求改变的控件
     private LinearLayout test_recycle;
@@ -537,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化testList数据
      */
     private void initTestList() {
-        String sqlSelect = "SELECT StudentTest.test_id,StudentTest.test_name,StudentTest.test_full_mark FROM StudentTest";
+        String sqlSelect = "SELECT StudentTest.test_id,StudentTest.test_name,StudentTest.test_full_mark,StudentTest.test_type FROM StudentTest";
         SQLiteDatabase database = MyDatabaseHelper.getInstance(MainActivity.this);
         Cursor cursor = database.rawQuery(sqlSelect, new String[]{});
         while(cursor.moveToNext()) {
@@ -546,7 +549,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             int test_full_mark = cursor.getInt(cursor.getColumnIndex("test_full_mark"));
 
-            Test test = new Test(test_id, test_name, test_full_mark);
+            int test_type = cursor.getInt(cursor.getColumnIndex("test_type"));
+
+//            Test test = new Test(test_id, test_name, test_full_mark);
+            Test test = new Test(test_id, test_name, test_full_mark, test_type);
             testList.add(test);
         }
         cursor.close();
@@ -819,6 +825,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //设置当前点击的test_id以及test_name
         current_test_id = testList.get(position).getTest_id();
         current_test_name = testList.get(position).getTest_name();
+        current_test_type = testList.get(position).getTest_type();
 
 
         //Android系统中的视图组件并不是线程安全的，如果要更新视图，必须在主线程中更新，不可以在子线程中执行更新的操作。
@@ -854,6 +861,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 bundle.putLong("current_test_id", current_test_id);
                 bundle.putString("current_test_name", current_test_name);
+
+                bundle.putInt("current_test_type", current_test_type);
+
                 bundle.putBoolean("isOpenATest", isOpenATest);
                 bundle.putBoolean("isShowGender", isShowGender);
 

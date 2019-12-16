@@ -92,6 +92,18 @@ public class IDUSTool {
         sqLiteDatabase.insert("StudentTest", null, contentValues);
     }
 
+    public void insertStuTest(long test_id, String test_name, int test_type) {
+        //实例化常量值
+        ContentValues contentValues = new ContentValues();
+        //插入测试ID
+        contentValues.put("test_id", test_id);
+        //插入测试名
+        contentValues.put("test_name", test_name);
+        //插入测试类型
+        contentValues.put("test_type", test_type);
+        sqLiteDatabase.insert("StudentTest", null, contentValues);
+    }
+
     /**
      * 删除数据
      *

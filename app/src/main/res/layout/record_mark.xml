@@ -98,6 +98,7 @@
 
 
         <TextView
+            android:id="@+id/total_score_title"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:gravity="center"

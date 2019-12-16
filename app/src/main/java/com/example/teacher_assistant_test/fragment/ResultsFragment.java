@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -38,6 +39,7 @@ import com.example.teacher_assistant_test.bean.Mark;
 import com.example.teacher_assistant_test.bean.Record;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
+import com.example.teacher_assistant_test.util.CustomDialog;
 import com.example.teacher_assistant_test.util.ExportSheet;
 import com.example.teacher_assistant_test.util.GetAlertDialog;
 import com.example.teacher_assistant_test.util.IDUSTool;
@@ -95,9 +97,13 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
     //当前点击test_name
     private String current_test_name;
 
+    //当前点击test_type
+    private int current_test_type;
+
 
     private LinearLayout record_title;
     private TextView stu_gender;
+    private TextView total_score_title;
     private ImageView check_box;
 
     private Button save_to_db;
@@ -160,6 +166,7 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
         record_title = view.findViewById(R.id.record_title);
         stu_gender = view.findViewById(R.id.stu_gender);
+        total_score_title = view.findViewById(R.id.total_score_title);
         check_box = view.findViewById(R.id.check_box);
 
         save_to_db = view.findViewById(R.id.save_to_db);
@@ -221,6 +228,7 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         if (isOpenATest) {
             current_test_id = getArguments().getLong("current_test_id");
             current_test_name = getArguments().getString("current_test_name");
+            current_test_type = getArguments().getInt("current_test_type");
 
             initRecordList();
 
@@ -251,6 +259,16 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
             stu_gender.setVisibility(View.GONE);
         }
         recordAdapter.setIsShowGender(isShowGender);
+
+        if (current_test_type == 0) {
+            total_score_title.setVisibility(View.VISIBLE);
+            record_fab.setVisibility(View.VISIBLE);
+        }
+        if (current_test_type == 1) {
+            total_score_title.setVisibility(View.GONE);
+            record_fab.setVisibility(View.GONE);
+        }
+        recordAdapter.setTestType(current_test_type);
 
 
         id_sort.setOnClickListener(new View.OnClickListener() {
@@ -462,6 +480,13 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
             }
         });
 
+        recordAdapter.setOnScoreClickListener(new RecordAdapter.OnScoreClickListener() {
+            @Override
+            public void onScoreClick(int position) {
+                recordAdapterOnScoreClick(position);
+            }
+        });
+
         recordAdapter.setOnStarClickListener(new RecordAdapter.OnStarClickListener() {
             @Override
             public void onStarClick(int position) {
@@ -541,6 +566,54 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
             selectNum.setText(String.valueOf(index));
             recordAdapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * 等级成绩点击事件
+     * @param position 当前点击位置
+     */
+    private void recordAdapterOnScoreClick(int position) {
+        View view = View.inflate(getActivity(), R.layout.dialog_rank, null);
+
+        CustomDialog customDialog = new CustomDialog(getActivity(), view, R.style.MyDialog);
+
+        setListener(view, position, R.id.a1, customDialog);
+        setListener(view, position, R.id.a2, customDialog);
+        setListener(view, position, R.id.a3, customDialog);
+        setListener(view, position, R.id.a4, customDialog);
+
+        setListener(view, position, R.id.b1, customDialog);
+        setListener(view, position, R.id.b2, customDialog);
+        setListener(view, position, R.id.b3, customDialog);
+        setListener(view, position, R.id.b4, customDialog);
+
+        setListener(view, position, R.id.c1, customDialog);
+        setListener(view, position, R.id.c2, customDialog);
+        setListener(view, position, R.id.c3, customDialog);
+        setListener(view, position, R.id.c4, customDialog);
+
+        setListener(view, position, R.id.d1, customDialog);
+        setListener(view, position, R.id.d2, customDialog);
+        setListener(view, position, R.id.d3, customDialog);
+        setListener(view, position, R.id.d4, customDialog);
+
+        customDialog.show();
+    }
+
+    private void setListener(View view, int position, @IdRes int id, CustomDialog customDialog) {
+        TextView textView = view.findViewById(id);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recordList.get(position).setScore(textView.getText().toString());
+                recordAdapter.notifyDataSetChanged();
+
+                isRecordListUpdate = true;
+                setSaveBtnBackground(true);
+
+                customDialog.dismiss();
+            }
+        });
     }
 
     /**
@@ -722,6 +795,30 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
         final SQLiteDatabase db = MyDatabaseHelper.getInstance(getActivity());
 
+        //等级成绩状态下，不用检查，直接保存
+        if (current_test_type == 1) {
+            for (int i=0; i< backUpRecordList.size(); i++) {
+                String delete_stu_id = backUpRecordList.get(i).getStu_id();
+                db.delete("StudentMark", "stu_id = ? AND test_id = ?", new String[]{"" + delete_stu_id + "", ""+current_test_id+""});
+            }
+            for (Record record : recordList) {
+                String stu_id = record.getStu_id();
+
+                String score = record.getScore();
+                int total_score = record.getTotal_score();
+
+                boolean isCorrect = record.isCorrect();
+
+                new IDUSTool(getActivity()).insertStuMarkDB(stu_id, current_test_id, score, total_score, isCorrect);
+            }
+            Toast.makeText(getActivity(), R.string.save_successfully, Toast.LENGTH_SHORT).show();
+
+            isRecordListUpdate = false;
+            setSaveBtnBackground(false);
+
+            return;
+        }
+
         if (checkRecordListLegality()) {
 
             //通过testItem点击进入recordUI
@@ -801,7 +898,7 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
                         if(cursor.isLast()) {
                             //StudentTest表为空，第一次更新
-                            new IDUSTool(getActivity()).insertStuTest(unique_test_id, input);
+                            new IDUSTool(getActivity()).insertStuTest(unique_test_id, input, 0);
 
                             //将当前全局test_id设置为已保存的unique_test_id
                             current_test_id = unique_test_id;
@@ -833,7 +930,7 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
                             //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
 
                             //先把test_id和test_name插入到StudentTest表中
-                            new IDUSTool(getActivity()).insertStuTest(unique_test_id, input);
+                            new IDUSTool(getActivity()).insertStuTest(unique_test_id, input, 0);
                             Log.i("RecordMarkActivity", "向StudentTest表中插入unique_test_id:"+unique_test_id+"，input:"+input+"成功");
 
                             //再向StudentMark表中插入当前页面数据

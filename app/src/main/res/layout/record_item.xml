@@ -51,6 +51,18 @@
         android:inputType="text" />
 
     <TextView
+        android:id="@+id/rank_score"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_weight="1.5"
+        android:textSize="15sp"
+        android:hint="@string/there_is_no"
+        android:singleLine="true"
+        android:maxLength="5"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/total_score"
         android:layout_width="0dp"
         android:layout_height="50dp"

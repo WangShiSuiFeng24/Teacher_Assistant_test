@@ -25,6 +25,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     //默认isShowGender为false
     private boolean isShowGender = false;
 
+    //默认test_type为0，数字成绩模式，若为1则为等级成绩模式
+    private int test_type = 0;
+
     //默认editMode为RECORD_MODE_CHECK=0
     private static final int RECORD_MODE_CHECK = 0;
     int editMode = RECORD_MODE_CHECK;
@@ -47,6 +50,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     static class ViewHolder extends RecyclerView.ViewHolder {
         EditText student_id;
         EditText student_score;
+        TextView rank_score;
         TextView total_score;
 
         TextView student_name;
@@ -60,6 +64,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             student_id = itemView.findViewById(R.id.student_id);
             student_score = itemView.findViewById(R.id.student_score);
+            rank_score = itemView.findViewById(R.id.rank_score);
 
             student_score.setRawInputType(InputType.TYPE_CLASS_NUMBER);
 
@@ -155,6 +160,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         Record record = mList.get(position);
         holder.student_id.setText(record.getStu_id());
         holder.student_score.setText(record.getScore());
+        holder.rank_score.setText(record.getScore());
         holder.total_score.setText(String.valueOf(record.getTotal_score()));
 
         holder.student_name.setText(record.getStu_name());
@@ -164,6 +170,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.student_gender.setVisibility(View.VISIBLE);
         } else {
             holder.student_gender.setVisibility(View.GONE);
+        }
+
+        if (test_type == 0) {
+            holder.student_score.setVisibility(View.VISIBLE);
+            holder.total_score.setVisibility(View.VISIBLE);
+            holder.rank_score.setVisibility(View.GONE);
+        }
+        if (test_type == 1) {
+            holder.student_score.setVisibility(View.GONE);
+            holder.total_score.setVisibility(View.GONE);
+            holder.rank_score.setVisibility(View.VISIBLE);
         }
 
         //根据adapter.setEditMode(int editMode)传入的editMode设置checkBox是否可见，默认不可见
@@ -234,26 +251,37 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         });
 
-
-        holder.student_score.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (test_type == 0) {
+            holder.student_score.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                     beforeScore = s.toString();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(Integer.parseInt(holder.student_score.getTag().toString()) == position) {
-                    onScoreFillListener.onScoreFill(position, s.toString());
-                    holder.student_score.setSelection(s.length());
                 }
-            }
-        });
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(Integer.parseInt(holder.student_score.getTag().toString()) == position) {
+                        onScoreFillListener.onScoreFill(position, s.toString());
+                        holder.student_score.setSelection(s.length());
+                    }
+                }
+            });
+        }
+        if (test_type == 1) {
+            holder.rank_score.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = holder.getLayoutPosition();
+                    onScoreClickListener.onScoreClick(pos);
+                }
+            });
+
+        }
 
         holder.correct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -267,6 +295,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     //设置isShowGender
     public void setIsShowGender(boolean isShowGender) {
         this.isShowGender = isShowGender;
+        notifyDataSetChanged();
+    }
+
+    //设置testType
+    public void setTestType(int test_type) {
+        this.test_type = test_type;
         notifyDataSetChanged();
     }
 
@@ -321,6 +355,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.onFooterClickListener = onFooterClickListener;
     }
 
+
+    //score 编辑框点击事件
+    private RecordAdapter.OnScoreClickListener onScoreClickListener;
+
+    public interface OnScoreClickListener {
+        void onScoreClick(int position);
+    }
+
+    public void setOnScoreClickListener(RecordAdapter.OnScoreClickListener onScoreClickListener) {
+        this.onScoreClickListener = onScoreClickListener;
+    }
 
     @Override
     public int getItemCount() {
