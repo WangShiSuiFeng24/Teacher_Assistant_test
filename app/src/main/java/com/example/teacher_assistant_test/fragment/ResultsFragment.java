@@ -648,6 +648,17 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
             }
         }
 
+        for (int i=0; i<recordList.size(); i++) {
+            Record record = recordList.get(i);
+            if (TextUtils.isEmpty(record.getScore())) {
+                stringBuilder.append(record.getStu_name());
+                stringBuilder.append("、");
+            }
+        }
+        //删除最后一个顿号
+        stringBuilder.deleteCharAt(stringBuilder.length()-1);
+
+
         lack_score_name.setText(stringBuilder.toString());
 
         //订正尚缺则只显示当前页面isCorrect为false的学生姓名
