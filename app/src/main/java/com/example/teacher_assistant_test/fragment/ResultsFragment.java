@@ -253,6 +253,20 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         recordAdapter.setIsShowGender(isShowGender);
 
 
+        id_sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idSortControl();
+            }
+        });
+
+        score_sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scoreSortControl();
+            }
+        });
+
 
 
         mRecognizerDialogListener = new RecognizerDialogListener() {
@@ -1200,9 +1214,8 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
     /**
      * xml中设置的监听，对id排序
-     * @param v xml中view
      */
-    public void idSortControl(View v) {
+    public void idSortControl() {
         if(!isIdSortPressed) {
             isIdSortPressed = true;
             id_sort.setImageResource(R.drawable.ic_drop_up);
@@ -1276,9 +1289,8 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
     /**
      * xml中设置的监听，对score排序
-     * @param v xml中view
      */
-    public void scoreSortControl(View v) {
+    public void scoreSortControl() {
         if(!isScoreSortPressed) {
             isScoreSortPressed = true;
             score_sort.setImageResource(R.drawable.ic_drop_up);

@@ -2094,7 +2094,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * xml中设置的监听，对id排序
      * @param v xml中view
      */
-    public void idSortControl(View v) {
+    /*public void idSortControl(View v) {
         if(!isIdSortPressed) {
             isIdSortPressed = true;
             id_sort.setImageResource(R.drawable.ic_drop_up);
@@ -2164,13 +2164,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 recordAdapter.notifyDataSetChanged();
             }
         }
-    }
+    }*/
 
     /**
      * xml中设置的监听，对score排序
      * @param v xml中view
      */
-    public void scoreSortControl(View v) {
+    /*public void scoreSortControl(View v) {
         if(!isScoreSortPressed) {
             isScoreSortPressed = true;
             score_sort.setImageResource(R.drawable.ic_drop_up);
@@ -2204,7 +2204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 recordAdapter.notifyDataSetChanged();
             }
         }
-    }
+    }*/
 
 
     /**
