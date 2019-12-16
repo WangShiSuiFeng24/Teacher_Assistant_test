@@ -27,7 +27,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TEST= "create table StudentTest("
             + "test_id long ,"
             + "test_name text,"
-            + "test_full_mark)";
+            + "test_full_mark integer,"
+            + "type integer)";
 
     private static MyDatabaseHelper myDatabaseHelper;
 
@@ -37,8 +38,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public static SQLiteDatabase getInstance(Context context) {
         if(myDatabaseHelper == null) {
-            // 指定数据库名为Student.db，需修改时在此修改；此处使用默认工厂；指定版本为2....3
-            myDatabaseHelper = new MyDatabaseHelper(context, "Student.db", null, 3);
+            // 指定数据库名为Student.db，需修改时在此修改；此处使用默认工厂；指定版本为2....3....4
+            myDatabaseHelper = new MyDatabaseHelper(context, "Student.db", null, 4);
         }
         return myDatabaseHelper.getReadableDatabase();
     }
@@ -60,6 +61,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             case 2:
                 db.execSQL("alter table StudentMark add column isCorrect integer");
                 db.execSQL("alter table StudentTest add column test_full_mark integer");
+            case 3:
+                db.execSQL("alter table StudentTest add column type integer");
             default:
                 break;
         }
