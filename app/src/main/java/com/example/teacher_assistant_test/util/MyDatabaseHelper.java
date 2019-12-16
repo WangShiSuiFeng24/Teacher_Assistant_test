@@ -28,7 +28,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             + "test_id long ,"
             + "test_name text,"
             + "test_full_mark integer,"
-            + "type integer)";
+            + "test_type integer)";
 
     private static MyDatabaseHelper myDatabaseHelper;
 
@@ -62,7 +62,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("alter table StudentMark add column isCorrect integer");
                 db.execSQL("alter table StudentTest add column test_full_mark integer");
             case 3:
-                db.execSQL("alter table StudentTest add column type integer");
+                db.execSQL("alter table StudentTest add column test_type integer");
             default:
                 break;
         }
