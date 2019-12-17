@@ -668,6 +668,11 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         TextView lack_score_name = view.findViewById(R.id.lack_score_name);
         TextView lack_correct_name = view.findViewById(R.id.lack_correct_name);
 
+        //增设等级成绩表页面没有总分
+        if (current_test_type == 1) {
+            linearLayout.setVisibility(View.GONE);
+        }
+
         AlertDialog alertDialog = GetAlertDialog.getAlertDialog(getActivity(), "统计信息",
                 null, view, getString(R.string.confirm), getString(R.string.cancel));
 
