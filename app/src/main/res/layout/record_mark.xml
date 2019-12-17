@@ -38,7 +38,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:onClick="idSortControl"
+
                     android:contentDescription="@null" />
 
             </RelativeLayout>
@@ -91,7 +91,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="12dp"
-                    android:onClick="scoreSortControl"
+
                     android:contentDescription="@null" />
 
             </RelativeLayout>
