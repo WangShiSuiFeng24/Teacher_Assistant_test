@@ -730,9 +730,9 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         for (int i=0; i<sparseArray.size(); i++) {
             String name = sparseArray.valueAt(i);
             stringBuilder.append(name);
-            if (i != sparseArray.size()-1) {
+//            if (i != sparseArray.size()-1) {
                 stringBuilder.append("、");
-            }
+//            }
         }
 
         for (int i=0; i<recordList.size(); i++) {
