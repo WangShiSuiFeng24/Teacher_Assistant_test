@@ -58,7 +58,6 @@ import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
-import org.apache.log4j.chainsaw.Main;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,12 +72,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.ToDoubleBiFunction;
 
 import gdut.bsx.share2.FileUtil;
 import gdut.bsx.share2.Share2;
 import gdut.bsx.share2.ShareContentType;
-import jxl.format.Colour;
 
 /**
  * Created by Andong Ming on 2019.12.13.
@@ -86,6 +83,11 @@ import jxl.format.Colour;
 public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
     private static final int REQUEST_WRITE_STORAGE_PERMISSION = 2;
+
+    private static final String[] arr = {"D-", "D", "D+", "D++"
+                                        , "C-", "C", "C+", "C++"
+                                        , "B-", "B", "B+", "B++"
+                                        , "A-", "A", "A+", "A++"};
 
 
     //打开一个test则为true，初始为false
@@ -1429,6 +1431,10 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
                 Collections.sort(recordList, new Comparator<Record>() {
                     @Override
                     public int compare(Record o1, Record o2) {
+                        if (current_test_type == 1) {
+
+                            return getStringIndex(o1.getScore()) - getStringIndex(o2.getScore());
+                        }
                         return o1.getTotal_score() - o2.getTotal_score();
                     }
                 });
@@ -1445,6 +1451,10 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
                 Collections.sort(recordList, new Comparator<Record>() {
                     @Override
                     public int compare(Record o1, Record o2) {
+                        if (current_test_type == 1) {
+
+                            return getStringIndex(o2.getScore()) - getStringIndex(o1.getScore());
+                        }
                         return  o2.getTotal_score() - o1.getTotal_score();
                     }
                 });
@@ -1755,5 +1765,18 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
     public List<Record> getRecordList() {
         return recordList;
+    }
+
+    /**
+     * 获取等级成绩在数组中的下标
+     * @param s 等级成绩字符串
+     * @return 下标
+     */
+    private static int getStringIndex(String s) {
+        for (int i = 0; i< arr.length; i++) {
+            if (s != null && s.equals(arr[i]))
+                return i;
+        }
+        return -1;
     }
 }
