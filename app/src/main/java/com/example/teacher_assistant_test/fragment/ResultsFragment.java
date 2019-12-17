@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,6 +122,10 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
 
     //recordUI中子控件
+
+    private RelativeLayout stu_id_title;
+    private RelativeLayout score_title;
+
     private boolean isIdSortPressed = false;
     private ImageView id_sort;
     private boolean isScoreSortPressed = false;
@@ -183,6 +188,9 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         btnDelete = view.findViewById(R.id.btn_delete);
 
         //绑定子控件
+        stu_id_title = view.findViewById(R.id.stu_id_title);
+        score_title = view.findViewById(R.id.score_title);
+
         id_sort = view.findViewById(R.id.id_sort);
         score_sort = view.findViewById(R.id.score_sort);
 
@@ -273,14 +281,14 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         recordAdapter.setTestType(current_test_type);
 
 
-        id_sort.setOnClickListener(new View.OnClickListener() {
+        stu_id_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 idSortControl();
             }
         });
 
-        score_sort.setOnClickListener(new View.OnClickListener() {
+        score_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 scoreSortControl();
