@@ -2669,7 +2669,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        fab.setVisibility(View.VISIBLE);
+        //解决增删大量数据后返回保存产生的一个fab视觉暂留问题
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fab.setVisibility(View.VISIBLE);
+            }
+        }, 100);
         titleBarView.setLeftText(null);
         titleBarView.setTitle(getString(R.string.app_name));
         titleBarView.setLeftDrawable(R.drawable.ic_student_info);
@@ -2687,7 +2693,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        fab.setVisibility(View.VISIBLE);
+        //解决增删大量数据后返回保存产生的一个fab视觉暂留问题
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fab.setVisibility(View.VISIBLE);
+            }
+        }, 100);
         titleBarView.setLeftText(null);
         titleBarView.setTitle(getString(R.string.app_name));
         titleBarView.setLeftDrawable(R.drawable.ic_student_info);
@@ -2713,7 +2725,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        fab.setVisibility(View.VISIBLE);
+        //解决增删大量数据后返回保存产生的一个fab视觉暂留问题
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fab.setVisibility(View.VISIBLE);
+            }
+        }, 100);
+
+//        fab.setVisibility(View.VISIBLE);
         titleBarView.setLeftText(null);
         titleBarView.setTitle(getString(R.string.app_name));
         titleBarView.setRightText("");
