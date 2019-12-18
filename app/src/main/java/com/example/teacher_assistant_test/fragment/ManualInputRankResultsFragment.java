@@ -291,7 +291,7 @@ public class ManualInputRankResultsFragment extends Fragment implements Fragment
         //增设等级成绩表页面没有总分
         linearLayout.setVisibility(View.GONE);
 
-        AlertDialog alertDialog = GetAlertDialog.getAlertDialog(getActivity(), "统计信息",
+        AlertDialog alertDialog = GetAlertDialog.getAlertDialog(getActivity(), getString(R.string.statistical_info),
                 null, view, getString(R.string.confirm), getString(R.string.cancel));
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
