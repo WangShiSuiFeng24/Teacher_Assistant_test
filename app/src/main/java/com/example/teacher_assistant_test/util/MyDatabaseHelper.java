@@ -28,7 +28,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             + "test_id long ,"
             + "test_name text,"
             + "test_full_mark integer,"
-            + "test_type integer)";
+            + "test_type integer,"
+            + "test_time text)";
 
     private static MyDatabaseHelper myDatabaseHelper;
 
@@ -38,8 +39,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public static SQLiteDatabase getInstance(Context context) {
         if(myDatabaseHelper == null) {
-            // 指定数据库名为Student.db，需修改时在此修改；此处使用默认工厂；指定版本为2....3....4
-            myDatabaseHelper = new MyDatabaseHelper(context, "Student.db", null, 4);
+            // 指定数据库名为Student.db，需修改时在此修改；此处使用默认工厂；指定版本为2....3....4....5
+            myDatabaseHelper = new MyDatabaseHelper(context, "Student.db", null, 5);
         }
         return myDatabaseHelper.getReadableDatabase();
     }
@@ -63,6 +64,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("alter table StudentTest add column test_full_mark integer");
             case 3:
                 db.execSQL("alter table StudentTest add column test_type integer");
+            case 4:
+                db.execSQL("alter table StudentTest add column test_time text");
             default:
                 break;
         }
