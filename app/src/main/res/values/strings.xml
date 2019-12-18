@@ -74,4 +74,5 @@
     <string name="there_is_no">无</string>
     <string name="stu_id_can_not_be_null">学号不能为空</string>
     <string name="fractional_statistics">分数段统计</string>
+    <string name="average_score">均&#8195;&#8195;分：</string>
 </resources>

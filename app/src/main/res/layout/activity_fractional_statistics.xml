@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_green_dark"
+    tools:context=".activity.FractionalStatisticsActivity">
+
+    <EditText
+        android:id="@+id/full_mark"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="100"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_full_mark"
+        app:layout_constraintEnd_toEndOf="@+id/excellent_line"
+        app:layout_constraintLeft_toRightOf="@+id/tv_full_mark" />
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/full_mark"
+        app:layout_constraintLeft_toRightOf="@+id/full_mark"
+        app:layout_constraintTop_toTopOf="@+id/full_mark" />
+
+    <com.example.teacher_assistant_test.util.TitleBarView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorAccent"
+        app:centerTextColor="#FFF"
+        app:centerTitle="自定义标题"
+        app:layout_constraintTop_toTopOf="parent"
+        app:leftDrawable="@drawable/ic_back"
+        app:leftText="@string/back"
+        app:leftTextColor="@color/white">
+
+    </com.example.teacher_assistant_test.util.TitleBarView>
+
+    <TextView
+        android:id="@+id/tv_test_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="36dp"
+        android:text="测试时间："
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <TextView
+        android:id="@+id/test_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="2019-12-18"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_test_time"
+        app:layout_constraintLeft_toRightOf="@+id/tv_test_time" />
+
+    <TextView
+        android:id="@+id/tv_average_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="52dp"
+        android:text="@string/average_score"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_test_time"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_test_time"
+        app:layout_constraintTop_toBottomOf="@+id/tv_test_time" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="92.67分"
+        android:textColor="#FFFF00"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_average_score"
+        app:layout_constraintLeft_toRightOf="@+id/tv_average_score" />
+
+    <TextView
+        android:id="@+id/excellent_score_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="优秀分数线："
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_average_score"
+        app:layout_constraintTop_toBottomOf="@+id/tv_average_score" />
+
+    <EditText
+        android:id="@+id/excellent_line"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="95"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/excellent_score_line"
+        app:layout_constraintLeft_toRightOf="@+id/excellent_score_line" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="48dp"
+        android:text="18人"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/excellent_score_line"
+        app:layout_constraintLeft_toRightOf="@+id/excellent_line" />
+
+    <TextView
+        android:id="@+id/tv_full_mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="124dp"
+        android:layout_marginTop="24dp"
+        android:text="满分："
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/excellent_score_line" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_full_mark"
+        app:layout_constraintLeft_toRightOf="@+id/tv_full_mark"
+        app:layout_constraintTop_toTopOf="@+id/tv_full_mark" />
+
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="132dp"
+        android:text="3人"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_full_mark"
+        app:layout_constraintEnd_toEndOf="@+id/textView3"
+        app:layout_constraintLeft_toRightOf="@+id/tv_full_mark" />
+
+    <EditText
+        android:id="@+id/et_11"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="132dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="90"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_full_mark" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_11"
+        app:layout_constraintLeft_toRightOf="@+id/et_11"
+        app:layout_constraintTop_toTopOf="@+id/et_11"
+        app:layout_constraintVertical_bias="0.482" />
+
+    <EditText
+        android:id="@+id/et_12"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="100"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_11"
+        app:layout_constraintEnd_toEndOf="@+id/full_mark"
+        app:layout_constraintLeft_toRightOf="@+id/et_11" />
+
+    <View
+        android:id="@+id/view6"
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_12"
+        app:layout_constraintLeft_toRightOf="@+id/et_12"
+        app:layout_constraintTop_toTopOf="@+id/et_12" />
+
+    <TextView
+        android:id="@+id/tv_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="48dp"
+        android:text="27人"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_12"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintLeft_toRightOf="@+id/et_12" />
+
+    <EditText
+        android:id="@+id/et_21"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="80"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/et_11"
+        app:layout_constraintTop_toBottomOf="@+id/et_11" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_21"
+        app:layout_constraintLeft_toRightOf="@+id/et_21"
+        app:layout_constraintTop_toTopOf="@+id/et_21" />
+
+    <EditText
+        android:id="@+id/et_22"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="90"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_21"
+        app:layout_constraintEnd_toEndOf="@+id/et_12"
+        app:layout_constraintLeft_toRightOf="@+id/et_21" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_22"
+        app:layout_constraintLeft_toRightOf="@+id/et_22"
+        app:layout_constraintTop_toTopOf="@+id/et_22" />
+
+    <TextView
+        android:id="@+id/tv_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="48dp"
+        android:text="10人"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_22"
+        app:layout_constraintEnd_toEndOf="@+id/tv_2"
+        app:layout_constraintLeft_toRightOf="@+id/et_22" />
+
+
+    <EditText
+        android:id="@+id/et_31"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="70"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/et_21"
+        app:layout_constraintTop_toBottomOf="@+id/et_21" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_31"
+        app:layout_constraintLeft_toRightOf="@+id/et_31"
+        app:layout_constraintTop_toTopOf="@+id/et_31" />
+
+    <EditText
+        android:id="@+id/et_32"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="80"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_31"
+        app:layout_constraintEnd_toEndOf="@+id/et_22"
+        app:layout_constraintLeft_toRightOf="@+id/et_31" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_32"
+        app:layout_constraintLeft_toRightOf="@+id/et_32"
+        app:layout_constraintTop_toTopOf="@+id/et_32" />
+
+    <TextView
+        android:id="@+id/tv_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:text="0人"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_32"
+        app:layout_constraintEnd_toEndOf="@+id/tv_3"
+        app:layout_constraintLeft_toRightOf="@+id/et_32" />
+
+    <EditText
+        android:id="@+id/et_41"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="60"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/et_31"
+        app:layout_constraintTop_toBottomOf="@+id/et_31" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_41"
+        app:layout_constraintLeft_toRightOf="@+id/et_41"
+        app:layout_constraintTop_toTopOf="@+id/et_41" />
+
+    <EditText
+        android:id="@+id/et_42"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="70"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_41"
+        app:layout_constraintEnd_toEndOf="@+id/et_32"
+        app:layout_constraintLeft_toRightOf="@+id/et_41" />
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_42"
+        app:layout_constraintLeft_toRightOf="@+id/et_42"
+        app:layout_constraintTop_toTopOf="@+id/et_42" />
+
+    <TextView
+        android:id="@+id/tv_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:text="0人"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_42"
+        app:layout_constraintEnd_toEndOf="@+id/tv_4"
+        app:layout_constraintLeft_toRightOf="@+id/et_42" />
+
+    <EditText
+        android:id="@+id/et_51"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="0"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/et_41"
+        app:layout_constraintTop_toBottomOf="@+id/et_41" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_51"
+        app:layout_constraintLeft_toRightOf="@+id/et_51"
+        app:layout_constraintTop_toTopOf="@+id/et_51" />
+
+    <EditText
+        android:id="@+id/et_52"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="end"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:text="60"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_51"
+        app:layout_constraintEnd_toEndOf="@+id/et_42"
+        app:layout_constraintLeft_toRightOf="@+id/et_51" />
+
+    <View
+        android:id="@+id/view9"
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/et_52"
+        app:layout_constraintLeft_toRightOf="@+id/et_52"
+        app:layout_constraintTop_toTopOf="@+id/et_52" />
+
+    <TextView
+        android:id="@+id/tv_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:text="0人"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/et_52"
+        app:layout_constraintEnd_toEndOf="@+id/tv_5"
+        app:layout_constraintLeft_toRightOf="@+id/et_52" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="（含）"
+        android:textColor="@color/black0"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_51"
+        app:layout_constraintTop_toBottomOf="@+id/et_51" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="（不含）"
+        android:textColor="@color/black0"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_52"
+        app:layout_constraintTop_toBottomOf="@+id/et_52" />
+
+    <TextView
+        android:id="@+id/tv_61"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="未参试或0分："
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/et_51"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_61"
+        app:layout_constraintEnd_toEndOf="@+id/view9"
+        app:layout_constraintLeft_toRightOf="@+id/tv_61"
+        app:layout_constraintTop_toTopOf="@+id/tv_61" />
+
+    <TextView
+        android:id="@+id/tv_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:text="0人"
+        android:textColor="@color/black0"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_61"
+        app:layout_constraintEnd_toEndOf="@+id/tv_6"
+        app:layout_constraintLeft_toRightOf="@+id/tv_61" />
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/semi_round_backgroud"
+        android:text="复制信息"
+        android:textColor="#4169E1"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_61" />
+
+    <Button
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/semi_round_backgroud"
+        android:text="手动修改后需刷新"
+        android:textColor="#3D9140"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintStart_toEndOf="@+id/button" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

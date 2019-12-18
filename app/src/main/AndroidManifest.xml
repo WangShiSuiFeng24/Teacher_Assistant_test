@@ -15,13 +15,11 @@
     <!-- 手机定位信息，用来为语义等功能提供定位，提供更精准的服务 -->
     <!-- 定位信息是敏感信息，可通过Setting.setLocationEnable(false)关闭定位请求 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 如需使用人脸识别，还要添加：摄相头权限，拍照需要用到 -->
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <!--友盟统计所需权限-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 友盟统计所需权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +28,8 @@
         android:roundIcon="@mipmap/ic_icons"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.SettingActivity"></activity>
+        <activity android:name=".activity.FractionalStatisticsActivity"></activity>
+        <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.EditStudentInfoActivity" />
         <activity
             android:name=".activity.RecordMarkActivity"
@@ -42,13 +41,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!--value的值填写你在友盟后台申请的应用Appkey-->
-        <meta-data android:value="5df21615570df3d59f000651" android:name="UMENG_APPKEY"/>
-        <!--value的值填写渠道名称，例如yingyongbao。这里设置动态渠道变量-->
-        <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
-
+        </activity> <!-- value的值填写你在友盟后台申请的应用Appkey -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5df21615570df3d59f000651" /> <!-- value的值填写渠道名称，例如yingyongbao。这里设置动态渠道变量 -->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
     </application>
 
 </manifest>

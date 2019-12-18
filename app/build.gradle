@@ -74,8 +74,8 @@ dependencies {
     implementation 'com.jianyu:switchbutton:1.0.0'
 
     /*友盟统计需要的最新版本组件化基础库和统计SDK*/
-    implementation  'com.umeng.umsdk:analytics:8.0.0'
-    implementation  'com.umeng.umsdk:common:2.0.0'
+    implementation 'com.umeng.umsdk:analytics:8.0.0'
+    implementation 'com.umeng.umsdk:common:2.0.0'
 }
 repositories {
     mavenCentral()
