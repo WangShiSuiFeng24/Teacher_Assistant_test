@@ -71,6 +71,8 @@ public class ManualInputRankResultsFragment extends Fragment implements Fragment
 
     private String current_test_name;
 
+    private String current_test_time;
+
     private boolean isResultListUpdate = false;
 
     private Button save_to_db;
@@ -371,6 +373,9 @@ public class ManualInputRankResultsFragment extends Fragment implements Fragment
             return;
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        current_test_time = dateFormat.format(Calendar.getInstance().getTime());
+
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_test_name_and_test_full_mark_view, null, false);
 
         EditText test_name_edit = view.findViewById(R.id.test_name_edit);
@@ -415,7 +420,7 @@ public class ManualInputRankResultsFragment extends Fragment implements Fragment
 
                     //先把current_test_id和input_name插入到StudentTest表中
 
-                    new IDUSTool(getActivity()).insertStuTest(current_test_id, input_name, 1);
+                    new IDUSTool(getActivity()).insertStuTest(current_test_id, input_name, 1, current_test_time);
 
                     //保存总分
                     if (!TextUtils.isEmpty(test_full_mark_edit.getText().toString())) {

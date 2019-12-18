@@ -105,6 +105,9 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
     //当前点击test_type
     private int current_test_type;
 
+    //当前点击test_time
+    private String current_test_time;
+
 
     private LinearLayout record_title;
     private TextView stu_gender;
@@ -871,6 +874,10 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
             }
 
             //非点击testItem，新建模式的保存方式
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            current_test_time = dateFormat.format(Calendar.getInstance().getTime());
+
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_test_name_and_test_full_mark_view, null, false);
 
             EditText test_name_edit = view.findViewById(R.id.test_name_edit);
@@ -921,7 +928,7 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
                         if(cursor.isLast()) {
                             //StudentTest表为空，第一次更新
-                            new IDUSTool(getActivity()).insertStuTest(unique_test_id, input, 0);
+                            new IDUSTool(getActivity()).insertStuTest(unique_test_id, input, 0, current_test_name);
 
                             //将当前全局test_id设置为已保存的unique_test_id
                             current_test_id = unique_test_id;
@@ -953,7 +960,7 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
                             //循环检查完毕，此时没有相同的test_name,直接向StudentTest表中插入所有数据，不用判断
 
                             //先把test_id和test_name插入到StudentTest表中
-                            new IDUSTool(getActivity()).insertStuTest(unique_test_id, input, 0);
+                            new IDUSTool(getActivity()).insertStuTest(unique_test_id, input, 0, current_test_time);
                             Log.i("RecordMarkActivity", "向StudentTest表中插入unique_test_id:"+unique_test_id+"，input:"+input+"成功");
 
                             //再向StudentMark表中插入当前页面数据

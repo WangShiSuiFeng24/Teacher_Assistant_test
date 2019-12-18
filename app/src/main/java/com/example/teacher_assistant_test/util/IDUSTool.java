@@ -105,6 +105,27 @@ public class IDUSTool {
     }
 
     /**
+     * 向sqLiteDatabase数据库中插入StudentTest表项
+     * @param test_id 测试id
+     * @param test_name 测试名
+     * @param test_type 测试类型
+     * @param test_time 测试时间
+     */
+    public void insertStuTest(long test_id, String test_name, int test_type, String test_time) {
+        //实例化常量值
+        ContentValues contentValues = new ContentValues();
+        //插入测试ID
+        contentValues.put("test_id", test_id);
+        //插入测试名
+        contentValues.put("test_name", test_name);
+        //插入测试类型
+        contentValues.put("test_type", test_type);
+        //插入测试时间
+        contentValues.put("test_time", test_time);
+        sqLiteDatabase.insert("StudentTest", null, contentValues);
+    }
+
+    /**
      * 删除数据
      *
      * @param stu_id
