@@ -49,6 +49,7 @@ import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.util.MyDividerItemDecoration;
 import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
 import com.example.teacher_assistant_test.util.StrProcess;
+import com.example.teacher_assistant_test.util.ToastHelper;
 import com.example.teacher_assistant_test.util.WrapContentLinearLayoutManager;
 import com.github.clans.fab.FloatingActionButton;
 import com.iflytek.cloud.InitListener;
@@ -71,6 +72,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -635,10 +637,14 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         boolean isCorrect = record.isCorrect();
         if (!isCorrect) {
             record.setCorrect(true);
-            Toast.makeText(getActivity(), R.string.revision_completed, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), R.string.revision_completed, Toast.LENGTH_SHORT).show();
+
+            ToastHelper.showToast(getActivity(), getString(R.string.revision_completed), 800);
         } else {
             record.setCorrect(false);
-            Toast.makeText(getActivity(), R.string.revision_uncompleted, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), R.string.revision_uncompleted, Toast.LENGTH_SHORT).show();
+
+            ToastHelper.showToast(getActivity(), getString(R.string.revision_uncompleted), 800);
         }
 
         isRecordListUpdate = true;

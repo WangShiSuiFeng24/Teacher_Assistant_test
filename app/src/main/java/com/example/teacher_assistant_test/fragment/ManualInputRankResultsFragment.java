@@ -39,6 +39,7 @@ import com.example.teacher_assistant_test.util.IDUSTool;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.util.MyDividerItemDecoration;
 import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
+import com.example.teacher_assistant_test.util.ToastHelper;
 import com.example.teacher_assistant_test.util.WrapContentLinearLayoutManager;
 
 import java.io.File;
@@ -255,10 +256,12 @@ public class ManualInputRankResultsFragment extends Fragment implements Fragment
         boolean isCorrect = result.isCorrect();
         if (!isCorrect) {
             result.setCorrect(true);
-            Toast.makeText(getActivity(), R.string.revision_completed, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), R.string.revision_completed, Toast.LENGTH_SHORT).show();
+            ToastHelper.showToast(getActivity(), getString(R.string.revision_completed), 800);
         } else {
             result.setCorrect(false);
-            Toast.makeText(getActivity(), R.string.revision_uncompleted, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), R.string.revision_uncompleted, Toast.LENGTH_SHORT).show();
+            ToastHelper.showToast(getActivity(), getString(R.string.revision_uncompleted), 800);
         }
         isResultListUpdate = true;
         setSaveBtnBackground(true);
