@@ -18,4 +18,8 @@
     <color name="line">#D2D2D2</color>
 
     <color name="black0">#000000</color>
+
+    <color name="light_blue">#00C5CD</color>
+
+    <color name="blue">#4169E1</color>
 </resources>
