@@ -767,7 +767,9 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
             }
         }
         //删除最后一个顿号
-        stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        if (stringBuilder.length() != 0) {
+            stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        }
 
 
         lack_score_name.setText(stringBuilder.toString());
