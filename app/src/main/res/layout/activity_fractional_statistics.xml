@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:weightSum="1" >
 
     <com.example.teacher_assistant_test.util.TitleBarView
         android:id="@+id/title"
@@ -22,10 +23,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="@color/light_blue"
         tools:context=".activity.FractionalStatisticsActivity"
-        tools:layout_editor_absoluteY="25dp">
+        tools:layout_editor_absoluteY="25dp"
+        android:layout_weight="1">
 
         <EditText
             android:id="@+id/et_full_mark"
@@ -41,6 +43,8 @@
             android:text="100"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/et_excellent_score_line"
             app:layout_constraintHorizontal_bias="0.0"
@@ -105,6 +109,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_test_time_title"
             app:layout_constraintVertical_bias="0.027" />
 
+
         <TextView
             android:id="@+id/tv_average_score"
             android:layout_width="wrap_content"
@@ -115,11 +120,10 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/tv_average_score_title"
             app:layout_constraintBottom_toBottomOf="@+id/tv_average_score_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.119"
-            app:layout_constraintStart_toEndOf="@+id/tv_average_score_title"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_test_time"
             app:layout_constraintTop_toTopOf="@+id/tv_average_score_title"
-            app:layout_constraintVertical_bias="0.0" />
-
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/tv_excellent_score_line_title"
@@ -149,6 +153,8 @@
             android:text="95"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBaseline_toBaselineOf="@+id/tv_excellent_score_line_title"
             app:layout_constraintBottom_toBottomOf="@+id/tv_excellent_score_line_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -289,7 +295,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/et_full_mark"
             app:layout_constraintEnd_toStartOf="@+id/et_full_mark"
-            app:layout_constraintHorizontal_bias="0.79"
+            app:layout_constraintHorizontal_bias="0.839"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/et_full_mark"
             app:layout_constraintVertical_bias="1.0" />
@@ -330,6 +336,8 @@
             android:text="90"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="@+id/et_12"
             app:layout_constraintEnd_toStartOf="@+id/et_12"
             app:layout_constraintHorizontal_bias="0.743"
@@ -365,6 +373,8 @@
             android:text="100"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/et_full_mark"
             app:layout_constraintHorizontal_bias="1.0"
@@ -408,6 +418,8 @@
             android:text="80"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBaseline_toBaselineOf="@+id/et_22"
             app:layout_constraintBottom_toBottomOf="@+id/et_22"
             app:layout_constraintEnd_toStartOf="@+id/et_22"
@@ -441,6 +453,8 @@
             android:text="90"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/et_12"
             app:layout_constraintHorizontal_bias="0.0"
@@ -486,6 +500,8 @@
             android:text="70"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBaseline_toBaselineOf="@+id/et_32"
             app:layout_constraintBottom_toBottomOf="@+id/et_32"
             app:layout_constraintEnd_toStartOf="@+id/et_32"
@@ -519,6 +535,8 @@
             android:text="80"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/et_22"
             app:layout_constraintHorizontal_bias="1.0"
@@ -563,6 +581,8 @@
             android:text="60"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBaseline_toBaselineOf="@+id/et_42"
             app:layout_constraintBottom_toBottomOf="@+id/et_42"
             app:layout_constraintEnd_toStartOf="@+id/et_42"
@@ -596,6 +616,8 @@
             android:text="70"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/et_32"
             app:layout_constraintHorizontal_bias="1.0"
@@ -637,9 +659,11 @@
             android:paddingLeft="5dp"
             android:paddingEnd="5dp"
             android:paddingRight="5dp"
-            android:text="0"
+            android:text="1"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="@+id/et_52"
             app:layout_constraintEnd_toStartOf="@+id/et_52"
             app:layout_constraintHorizontal_bias="0.736"
@@ -671,6 +695,8 @@
             android:text="60"
             android:textColor="@color/blue"
             android:textSize="22sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/et_42"
             app:layout_constraintHorizontal_bias="0.0"
