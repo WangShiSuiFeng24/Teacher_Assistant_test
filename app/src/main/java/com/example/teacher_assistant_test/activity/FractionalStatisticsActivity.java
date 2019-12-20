@@ -2,6 +2,8 @@ package com.example.teacher_assistant_test.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
@@ -337,6 +340,7 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_copy_info:
+                copyInfo();
                 break;
 
             case R.id.btn_refresh:
@@ -351,6 +355,135 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
             default:
                 break;
         }
+    }
+
+    /**
+     * 复制信息button 逻辑
+     */
+    private void copyInfo() {
+
+        String s = test_name + " 成绩反馈"
+                + "\r\n"
+                + "测试时间：[" + test_time + "]"
+                + "\r\n" + "\r\n"
+                + "满分共[" + tv_full_score_3.getText().toString().replace("人", "") + "]人："
+                + "\r\n"
+                + getFullScoreStudent(Integer.parseInt(tv_full_score_3.getText().toString().replace("人", "")))
+                + "\r\n" + "\r\n"
+                + "非满分优秀共[" + tv_excellent_3.getText().toString().replace("人", "") + "]人："
+                + "\r\n"
+                + getExcellentStudent(Integer.parseInt(tv_excellent_3.getText().toString().replace("人", "")))
+                + "\r\n" + "\r\n"
+                + "班级均分：" + tv_average_score.getText().toString()
+                + "\r\n" + "\r\n"
+                + "分数段情况："
+                + "\r\n"
+                + et_full_mark.getText().toString() + " 共：" + tv_full_score_3.getText().toString()
+                + "\r\n"
+                + et_11.getText().toString() + "--" + et_12.getText().toString() + " 共：" + tv_13.getText().toString() + "（不含" + et_12.getText().toString() + "）"
+                + "\r\n"
+                + et_21.getText().toString() + "--" + et_22.getText().toString() + " 共：" + tv_23.getText().toString() + "（不含" + et_22.getText().toString() + "）"
+                + "\r\n"
+                + et_31.getText().toString() + "--" + et_32.getText().toString() + " 共：" + tv_33.getText().toString() + "（不含" + et_32.getText().toString() + "）"
+                + "\r\n"
+                + et_41.getText().toString() + "--" + et_42.getText().toString() + " 共：" + tv_43.getText().toString() + "（不含" + et_42.getText().toString() + "）"
+                + "\r\n"
+                + et_51.getText().toString() + "--" + et_52.getText().toString() + " 共：" + tv_53.getText().toString() + "（不含" + et_52.getText().toString() + "）";
+
+        //获取剪贴板管理器：
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 创建普通字符型ClipData
+        ClipData mClipData = ClipData.newPlainText("Label", s);
+        // 将ClipData内容放到系统剪贴板里。
+        cm.setPrimaryClip(mClipData);
+
+        Toast.makeText(this, "已复制到剪切板", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 获取满分学生字符串
+     * @param num 满分人数
+     * @return 字符串
+     */
+    private String getFullScoreStudent(int num) {
+        if (num <= 0) return "";
+
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
+
+        String sql = "select stu_name from Student "
+                + "inner join StudentMark on Student.stu_id = StudentMark.stu_id "
+                + "where test_id = " + test_id
+                + " and total_score = " + test_full_mark;
+
+        Cursor cursor = db.rawQuery(sql, new String[]{});
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        int i = 0;
+
+        while (cursor.moveToNext()) {
+            i++;
+
+            String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
+
+            stringBuilder.append(stu_name);
+
+            if (i == num) break;
+
+            if (i % 5 == 0) {
+                stringBuilder.append("\r\n");
+            } else {
+                stringBuilder.append(" ");
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 获取优秀学生字符串
+     * @param num 优秀学生数
+     * @return 字符串
+     */
+    private String getExcellentStudent(int num) {
+        if (num <= 0) return "";
+
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
+
+        String sql = "select stu_name from Student inner join StudentMark "
+                + "on Student.stu_id = StudentMark.stu_id "
+                + "where test_id = " + test_id
+                + " and total_score >= " + et_excellent_score_line.getText().toString();
+
+        Cursor cursor = db.rawQuery(sql, new String[]{});
+
+        int i = 0;
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        while (cursor.moveToNext()) {
+            i++;
+
+            String stu_name = cursor.getString(cursor.getColumnIndex("stu_name"));
+
+            stringBuilder.append(stu_name);
+
+            if (i == num) break;
+
+            if (i % 5 == 0) {
+                stringBuilder.append("\r\n");
+            } else {
+                stringBuilder.append(" ");
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        return stringBuilder.toString();
     }
 
     /**

@@ -34,6 +34,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.activity.FractionalStatisticsActivity;
 import com.example.teacher_assistant_test.activity.MainActivity;
 import com.example.teacher_assistant_test.adapter.RecordAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
@@ -512,7 +513,8 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         recordAdapter.setOnFooterClickListener(new RecordAdapter.OnFooterClickListener() {
             @Override
             public void onFooterClick(int position) {
-                recordAdapterOnFooterClick(position);
+//                recordAdapterOnFooterClick(position);
+                FractionalStatisticsActivity.actionStart(getContext(), current_test_id);
             }
         });
 
