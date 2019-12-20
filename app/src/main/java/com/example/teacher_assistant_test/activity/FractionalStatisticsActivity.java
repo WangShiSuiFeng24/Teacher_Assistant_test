@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
@@ -215,31 +216,26 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
 
 
         //优秀分数线、人数
-        tv_excellent_3.setText(String.valueOf(getNumByRange(Integer.parseInt(et_excellent_score_line.getText().toString()),
-                test_full_mark+1) + "人"));
+        if (!TextUtils.isEmpty(et_excellent_score_line.getText().toString())) {
+            tv_excellent_3.setText(String.valueOf(getNumByRange(Integer.parseInt(et_excellent_score_line.getText().toString()),
+                    test_full_mark+1) + "人"));
+        }
+
 
         //满分、人数
         et_full_mark.setText(String.valueOf(test_full_mark));
         tv_full_score_3.setText(String.valueOf(getNumByRange(test_full_mark, test_full_mark+1) + "人"));
 
         //1
-        tv_13.setText(String.valueOf(getNumByRange(Integer.parseInt(et_11.getText().toString()),
-                Integer.parseInt(et_12.getText().toString())) + "人"));
-
+        tv_13.setText(String.format("%s人", getNumByRange(et_11, et_12)));
         //2
-        tv_23.setText(String.valueOf(getNumByRange(Integer.parseInt(et_21.getText().toString()),
-                Integer.parseInt(et_22.getText().toString())) + "人"));
-
-        //3
-        tv_33.setText(String.valueOf(getNumByRange(Integer.parseInt(et_31.getText().toString()),
-                Integer.parseInt(et_32.getText().toString())) + "人"));
-
+        tv_23.setText(String.format("%s人", getNumByRange(et_21, et_22)));
+        //
+        tv_33.setText(String.format("%s人", getNumByRange(et_31, et_32)));
         //4
-        tv_43.setText(String.valueOf(getNumByRange(Integer.parseInt(et_41.getText().toString()),
-                Integer.parseInt(et_42.getText().toString())) + "人"));
+        tv_43.setText(String.format("%s人", getNumByRange(et_41, et_42)));
         //5
-        tv_53.setText(String.valueOf(getNumByRange(Integer.parseInt(et_51.getText().toString()),
-                Integer.parseInt(et_52.getText().toString())) + "人"));
+        tv_53.setText(String.format("%s人", getNumByRange(et_51, et_52)));
 
         //未参试或0分    暂时只统计0分的人数
         tv_63.setText(String.valueOf(getNumByRange(0, 1) + "人"));
@@ -309,6 +305,31 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     }
 
     /**
+     * 获取指定成绩范围的学生人数字符串，增加了检查空字符串""的操作
+     * @param lowEdit 含最低分数EditText
+     * @param highEdit 不含最高分数EditText
+     * @return 返回人数字符串
+     */
+    private String getNumByRange(EditText lowEdit, EditText highEdit) {
+
+        int low = lowEdit.getText().toString().equals("") ? 0 :Integer.parseInt(lowEdit.getText().toString());
+        int high = highEdit.getText().toString().equals("") ? 0 : Integer.parseInt(highEdit.getText().toString());
+
+        int num = 0;
+
+        if (low > high) {
+            return num + "";
+        }
+
+        for (int score : scores) {
+            if (score >= low && score < high) {
+                num++;
+            }
+        }
+        return num + "";
+    }
+
+    /**
      * 实现接口监听
      * @param v view
      */
@@ -320,8 +341,10 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
 
             case R.id.btn_refresh:
                 //更新满分
-                test_full_mark = Integer.parseInt(et_full_mark.getText().toString());
-                updateTestFullMarkByTestId(test_id, test_full_mark);
+                if (!TextUtils.isEmpty(et_full_mark.getText().toString())) {
+                    test_full_mark = Integer.parseInt(et_full_mark.getText().toString());
+                    updateTestFullMarkByTestId(test_id, test_full_mark);
+                }
 
                 initUI();
                 break;
