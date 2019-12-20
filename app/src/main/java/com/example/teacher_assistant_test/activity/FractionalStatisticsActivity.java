@@ -2,6 +2,7 @@ package com.example.teacher_assistant_test.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -318,11 +319,30 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
                 break;
 
             case R.id.btn_refresh:
+                //更新满分
+                test_full_mark = Integer.parseInt(et_full_mark.getText().toString());
+                updateTestFullMarkByTestId(test_id, test_full_mark);
+
                 initUI();
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 更新总分test_full_mark通过测试号test_id
+     * @param test_id 测试号
+     * @param test_full_mark 总分
+     */
+    private void updateTestFullMarkByTestId(long test_id, int test_full_mark) {
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
+
+        ContentValues values = new ContentValues();
+
+        values.put("test_full_mark", test_full_mark);
+
+        db.update("StudentTest", values, "test_id = ?", new String[] {"" + test_id + ""});
     }
 
     @Override
