@@ -21,805 +21,804 @@
 
     </com.example.teacher_assistant_test.util.TitleBarView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/light_blue"
-        tools:context=".activity.FractionalStatisticsActivity"
-        tools:layout_editor_absoluteY="25dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/light_blue">
 
-        <EditText
-            android:id="@+id/et_full_mark"
-            android:layout_width="50dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="100"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/et_excellent_score_line"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/et_excellent_score_line"
-            app:layout_constraintTop_toBottomOf="@+id/et_excellent_score_line"
-            app:layout_constraintVertical_bias="0.045" />
 
-        <View
-            android:id="@+id/view5"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_full_mark"
-            app:layout_constraintEnd_toEndOf="@+id/view6"
-            app:layout_constraintStart_toStartOf="@+id/view6"
-            app:layout_constraintTop_toTopOf="@+id/et_full_mark" />
+            tools:context=".activity.FractionalStatisticsActivity"
+            tools:layout_editor_absoluteY="25dp">
 
-        <TextView
-            android:id="@+id/tv_test_time_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="测试时间："
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.139"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.048" />
+            <EditText
+                android:id="@+id/et_full_mark"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="100"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_excellent_score_line"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/et_excellent_score_line"
+                app:layout_constraintTop_toBottomOf="@+id/et_excellent_score_line" />
 
-        <TextView
-            android:id="@+id/tv_test_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2019-12-18"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_test_time_title"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_test_time_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.14"
-            app:layout_constraintStart_toEndOf="@+id/tv_test_time_title"
-            app:layout_constraintTop_toTopOf="@+id/tv_test_time_title"
-            app:layout_constraintVertical_bias="0.067" />
+            <View
+                android:id="@+id/view5"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_full_mark"
+                app:layout_constraintEnd_toEndOf="@+id/view6"
+                app:layout_constraintStart_toStartOf="@+id/view6"
+                app:layout_constraintTop_toTopOf="@+id/et_full_mark" />
 
-        <TextView
-            android:id="@+id/tv_average_score_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/average_score"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tv_test_time_title"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_test_time_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_test_time_title"
-            app:layout_constraintVertical_bias="0.027" />
+            <TextView
+                android:id="@+id/tv_test_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="测试时间："
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.167"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_test_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019-12-18"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_test_time_title"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_test_time_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.14"
+                app:layout_constraintStart_toEndOf="@+id/tv_test_time_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_test_time_title"
+                app:layout_constraintVertical_bias="0.067" />
 
 
-        <TextView
-            android:id="@+id/tv_average_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="92.67分"
-            android:textColor="#FFFF00"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_average_score_title"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_average_score_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tv_test_time"
-            app:layout_constraintTop_toTopOf="@+id/tv_average_score_title"
-            app:layout_constraintVertical_bias="1.0" />
+            <TextView
+                android:id="@+id/tv_average_score_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/average_score"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_test_time_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_test_time_title" />
 
-        <TextView
-            android:id="@+id/tv_excellent_score_line_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="优秀分数线："
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_average_score_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_average_score_title"
-            app:layout_constraintVertical_bias="0.032" />
+            <TextView
+                android:id="@+id/tv_average_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="92.67分"
+                android:textColor="#FFFF00"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_average_score_title"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_average_score_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_test_time"
+                app:layout_constraintTop_toTopOf="@+id/tv_average_score_title"
+                app:layout_constraintVertical_bias="1.0" />
 
-        <EditText
-            android:id="@+id/et_excellent_score_line"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="95"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_excellent_score_line_title"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_excellent_score_line_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.129"
-            app:layout_constraintStart_toEndOf="@+id/tv_excellent_score_line_title"
-            app:layout_constraintTop_toTopOf="@+id/tv_excellent_score_line_title"
-            app:layout_constraintVertical_bias="1.0" />
+            <TextView
+                android:id="@+id/tv_excellent_score_line_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="优秀分数线："
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_average_score_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_average_score_title" />
 
-        <TextView
-            android:id="@+id/tv_excellent_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="18人"
-            android:textColor="@color/black0"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="@+id/et_excellent_score_line"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.509"
-            app:layout_constraintStart_toEndOf="@+id/et_excellent_score_line"
-            app:layout_constraintTop_toTopOf="@+id/et_excellent_score_line"
-            app:layout_constraintVertical_bias="0.0" />
+            <EditText
+                android:id="@+id/et_excellent_score_line"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="95"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_excellent_score_line_title"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_excellent_score_line_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.129"
+                app:layout_constraintStart_toEndOf="@+id/tv_excellent_score_line_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_excellent_score_line_title"
+                app:layout_constraintVertical_bias="1.0" />
 
-        <View
-            android:id="@+id/view2"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
-            app:layout_constraintEnd_toEndOf="@+id/button2"
-            app:layout_constraintStart_toStartOf="@+id/button2"
-            app:layout_constraintTop_toBottomOf="@+id/tv_excellent_score_line_title" />
+            <TextView
+                android:id="@+id/tv_excellent_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18人"
+                android:textColor="@color/black0"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/et_excellent_score_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintStart_toEndOf="@+id/et_excellent_score_line"
+                app:layout_constraintTop_toTopOf="@+id/et_excellent_score_line"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/button2"
-            android:layout_width="37dp"
-            android:layout_height="103dp"
-            android:background="@drawable/semi_round_background_for_tv"
-            android:gravity="center"
-            android:text="分数段"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/et_31"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.106"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_21"
-            app:layout_constraintVertical_bias="0.578" />
+            <View
+                android:id="@+id/view2"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/button2"
+                app:layout_constraintEnd_toEndOf="@+id/button2"
+                app:layout_constraintStart_toStartOf="@+id/button2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_excellent_score_line_title" />
 
-        <View
-            android:id="@+id/view3"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/btn_copy_info"
-            app:layout_constraintEnd_toEndOf="@+id/button2"
-            app:layout_constraintStart_toStartOf="@+id/button2"
-            app:layout_constraintTop_toBottomOf="@+id/button2"
-            app:layout_constraintVertical_weight="0.5" />
+            <TextView
+                android:id="@+id/button2"
+                android:layout_width="37dp"
+                android:layout_height="103dp"
+                android:background="@drawable/semi_round_background_for_tv"
+                android:gravity="center"
+                android:text="分数段"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/et_31"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.106"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_21"
+                app:layout_constraintVertical_bias="0.578" />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_full_mark_title"
-            app:layout_constraintEnd_toStartOf="@+id/tv_full_mark_title"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/view2"
-            app:layout_constraintTop_toTopOf="@+id/tv_full_mark_title"
-            app:layout_constraintVertical_bias="0.548" />
+            <View
+                android:id="@+id/view3"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/btn_copy_info"
+                app:layout_constraintEnd_toEndOf="@+id/button2"
+                app:layout_constraintStart_toStartOf="@+id/button2"
+                app:layout_constraintTop_toBottomOf="@+id/button2"
+                app:layout_constraintVertical_weight="0.5" />
 
-        <View
-            android:id="@+id/view10"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/et_11"
-            app:layout_constraintEnd_toStartOf="@+id/et_11"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/view"
-            app:layout_constraintTop_toTopOf="@+id/et_11"
-            app:layout_constraintVertical_bias="0.482" />
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_full_mark_title"
+                app:layout_constraintEnd_toStartOf="@+id/tv_full_mark_title"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/view2"
+                app:layout_constraintTop_toTopOf="@+id/tv_full_mark_title"
+                app:layout_constraintVertical_bias="0.548" />
 
-        <View
-            android:id="@+id/view11"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/et_21"
-            app:layout_constraintEnd_toStartOf="@+id/et_21"
-            app:layout_constraintStart_toEndOf="@+id/button2"
-            app:layout_constraintTop_toTopOf="@+id/et_21" />
+            <View
+                android:id="@+id/view10"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_11"
+                app:layout_constraintEnd_toStartOf="@+id/et_11"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toTopOf="@+id/et_11"
+                app:layout_constraintVertical_bias="0.482" />
 
-        <View
-            android:id="@+id/view4"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/et_31"
-            app:layout_constraintEnd_toStartOf="@+id/et_31"
-            app:layout_constraintStart_toEndOf="@+id/button2"
-            app:layout_constraintTop_toTopOf="@+id/et_31" />
+            <View
+                android:id="@+id/view11"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_21"
+                app:layout_constraintEnd_toStartOf="@+id/et_21"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/button2"
+                app:layout_constraintTop_toTopOf="@+id/et_21" />
 
-        <View
-            android:id="@+id/view13"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/et_41"
-            app:layout_constraintEnd_toStartOf="@+id/et_41"
-            app:layout_constraintStart_toStartOf="@+id/view10"
-            app:layout_constraintTop_toTopOf="@+id/et_41" />
+            <View
+                android:id="@+id/view4"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_31"
+                app:layout_constraintEnd_toStartOf="@+id/et_31"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/button2"
+                app:layout_constraintTop_toTopOf="@+id/et_31" />
 
-        <View
-            android:id="@+id/view12"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/et_51"
-            app:layout_constraintEnd_toStartOf="@+id/et_51"
-            app:layout_constraintStart_toStartOf="@+id/view13"
-            app:layout_constraintTop_toTopOf="@+id/et_51" />
+            <View
+                android:id="@+id/view13"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_41"
+                app:layout_constraintEnd_toStartOf="@+id/et_41"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/view10"
+                app:layout_constraintTop_toTopOf="@+id/et_41" />
 
-
-        <TextView
-            android:id="@+id/tv_full_mark_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="满分："
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/et_full_mark"
-            app:layout_constraintEnd_toStartOf="@+id/et_full_mark"
-            app:layout_constraintHorizontal_bias="0.839"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_full_mark"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <View
-            android:id="@+id/view14"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_full_mark"
-            app:layout_constraintEnd_toEndOf="@+id/view15"
-            app:layout_constraintStart_toStartOf="@+id/view15"
-            app:layout_constraintTop_toTopOf="@+id/et_full_mark" />
-
-        <TextView
-            android:id="@+id/tv_full_score_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="132dp"
-            android:text="3人"
-            android:textColor="@color/black0"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_full_mark_title"
-            app:layout_constraintEnd_toEndOf="@+id/tv_excellent_3"
-            app:layout_constraintLeft_toRightOf="@+id/tv_full_mark_title" />
-
-        <EditText
-            android:id="@+id/et_11"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="90"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="@+id/et_12"
-            app:layout_constraintEnd_toStartOf="@+id/et_12"
-            app:layout_constraintHorizontal_bias="0.743"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_12"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <View
-            android:id="@+id/view15"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="11dp"
-            android:layout_marginRight="11dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_11"
-            app:layout_constraintEnd_toStartOf="@+id/et_12"
-            app:layout_constraintLeft_toRightOf="@+id/et_11"
-            app:layout_constraintTop_toTopOf="@+id/et_11"
-            app:layout_constraintVertical_bias="0.448" />
-
-        <EditText
-            android:id="@+id/et_12"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="100"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/et_full_mark"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/et_full_mark"
-            app:layout_constraintTop_toBottomOf="@+id/et_full_mark"
-            app:layout_constraintVertical_bias="0.048" />
-
-        <View
-            android:id="@+id/view6"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_12"
-            app:layout_constraintEnd_toStartOf="@+id/tv_13"
-            app:layout_constraintStart_toEndOf="@+id/et_12"
-            app:layout_constraintTop_toTopOf="@+id/et_12" />
-
-        <TextView
-            android:id="@+id/tv_13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:text="27人"
-            android:textColor="@color/black0"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/et_12"
-            app:layout_constraintEnd_toEndOf="@+id/tv_full_score_3"
-            app:layout_constraintLeft_toRightOf="@+id/et_12" />
-
-        <EditText
-            android:id="@+id/et_21"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="80"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBaseline_toBaselineOf="@+id/et_22"
-            app:layout_constraintBottom_toBottomOf="@+id/et_22"
-            app:layout_constraintEnd_toStartOf="@+id/et_22"
-            app:layout_constraintHorizontal_bias="0.736"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_22"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <View
-            android:id="@+id/view16"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_21"
-            app:layout_constraintEnd_toEndOf="@+id/view15"
-            app:layout_constraintLeft_toRightOf="@+id/et_21"
-            app:layout_constraintTop_toTopOf="@+id/et_21" />
-
-        <EditText
-            android:id="@+id/et_22"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="90"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/et_12"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/et_12"
-            app:layout_constraintTop_toBottomOf="@+id/et_12"
-            app:layout_constraintVertical_bias="0.062" />
-
-        <View
-            android:id="@+id/view18"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_22"
-            app:layout_constraintEnd_toEndOf="@+id/view6"
-            app:layout_constraintLeft_toRightOf="@+id/et_22"
-            app:layout_constraintTop_toTopOf="@+id/et_22" />
-
-        <TextView
-            android:id="@+id/tv_23"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:text="10人"
-            android:textColor="@color/black0"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/et_22"
-            app:layout_constraintEnd_toEndOf="@+id/tv_13"
-            app:layout_constraintLeft_toRightOf="@+id/et_22" />
+            <View
+                android:id="@+id/view12"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_51"
+                app:layout_constraintEnd_toStartOf="@+id/et_51"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/view13"
+                app:layout_constraintTop_toTopOf="@+id/et_51" />
 
 
-        <EditText
-            android:id="@+id/et_31"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="70"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBaseline_toBaselineOf="@+id/et_32"
-            app:layout_constraintBottom_toBottomOf="@+id/et_32"
-            app:layout_constraintEnd_toStartOf="@+id/et_32"
-            app:layout_constraintHorizontal_bias="0.736"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_32"
-            app:layout_constraintVertical_bias="0.0" />
+            <TextView
+                android:id="@+id/tv_full_mark_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="满分："
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/et_full_mark"
+                app:layout_constraintEnd_toStartOf="@+id/et_full_mark"
+                app:layout_constraintHorizontal_bias="0.839"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_full_mark"
+                app:layout_constraintVertical_bias="1.0" />
 
-        <View
-            android:id="@+id/view17"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_31"
-            app:layout_constraintEnd_toEndOf="@+id/view16"
-            app:layout_constraintLeft_toRightOf="@+id/et_31"
-            app:layout_constraintTop_toTopOf="@+id/et_31" />
+            <View
+                android:id="@+id/view14"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_full_mark"
+                app:layout_constraintEnd_toEndOf="@+id/view15"
+                app:layout_constraintStart_toStartOf="@+id/view15"
+                app:layout_constraintTop_toTopOf="@+id/et_full_mark" />
 
-        <EditText
-            android:id="@+id/et_32"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="80"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/et_22"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/et_22"
-            app:layout_constraintTop_toBottomOf="@+id/et_22"
-            app:layout_constraintVertical_bias="0.084" />
+            <TextView
+                android:id="@+id/tv_full_score_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="132dp"
+                android:text="3人"
+                android:textColor="@color/black0"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_full_mark_title"
+                app:layout_constraintEnd_toEndOf="@+id/tv_excellent_3"
+                app:layout_constraintLeft_toRightOf="@+id/tv_full_mark_title" />
 
-        <View
-            android:id="@+id/view19"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_32"
-            app:layout_constraintEnd_toEndOf="@+id/view18"
-            app:layout_constraintLeft_toRightOf="@+id/et_32"
-            app:layout_constraintTop_toTopOf="@+id/et_32" />
+            <EditText
+                android:id="@+id/et_11"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="90"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/et_12"
+                app:layout_constraintEnd_toStartOf="@+id/et_12"
+                app:layout_constraintHorizontal_bias="0.743"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_12"
+                app:layout_constraintVertical_bias="1.0" />
 
-        <TextView
-            android:id="@+id/tv_33"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:text="0人"
-            android:textColor="@color/black0"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/et_32"
-            app:layout_constraintEnd_toEndOf="@+id/tv_23"
-            app:layout_constraintLeft_toRightOf="@+id/et_32" />
+            <View
+                android:id="@+id/view15"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="11dp"
+                android:layout_marginRight="11dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_11"
+                app:layout_constraintEnd_toStartOf="@+id/et_12"
+                app:layout_constraintLeft_toRightOf="@+id/et_11"
+                app:layout_constraintTop_toTopOf="@+id/et_11"
+                app:layout_constraintVertical_bias="0.448" />
 
-        <EditText
-            android:id="@+id/et_41"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="60"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBaseline_toBaselineOf="@+id/et_42"
-            app:layout_constraintBottom_toBottomOf="@+id/et_42"
-            app:layout_constraintEnd_toStartOf="@+id/et_42"
-            app:layout_constraintHorizontal_bias="0.736"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_42"
-            app:layout_constraintVertical_bias="0.0" />
+            <EditText
+                android:id="@+id/et_12"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="100"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_full_mark"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/et_full_mark"
+                app:layout_constraintTop_toBottomOf="@+id/et_full_mark" />
 
-        <View
-            android:id="@+id/view8"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_41"
-            app:layout_constraintEnd_toEndOf="@+id/view17"
-            app:layout_constraintLeft_toRightOf="@+id/et_41"
-            app:layout_constraintTop_toTopOf="@+id/et_41" />
+            <View
+                android:id="@+id/view6"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_12"
+                app:layout_constraintEnd_toStartOf="@+id/tv_13"
+                app:layout_constraintStart_toEndOf="@+id/et_12"
+                app:layout_constraintTop_toTopOf="@+id/et_12" />
 
-        <EditText
-            android:id="@+id/et_42"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="70"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/et_32"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/et_32"
-            app:layout_constraintTop_toBottomOf="@+id/et_32"
-            app:layout_constraintVertical_bias="0.082" />
+            <TextView
+                android:id="@+id/tv_13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="48dp"
+                android:text="27人"
+                android:textColor="@color/black0"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_12"
+                app:layout_constraintEnd_toEndOf="@+id/tv_full_score_3"
+                app:layout_constraintLeft_toRightOf="@+id/et_12" />
 
-        <View
-            android:id="@+id/view7"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_42"
-            app:layout_constraintEnd_toEndOf="@+id/view19"
-            app:layout_constraintLeft_toRightOf="@+id/et_42"
-            app:layout_constraintTop_toTopOf="@+id/et_42" />
+            <EditText
+                android:id="@+id/et_21"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="80"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_22"
+                app:layout_constraintBottom_toBottomOf="@+id/et_22"
+                app:layout_constraintEnd_toStartOf="@+id/et_22"
+                app:layout_constraintHorizontal_bias="0.736"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_22"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/tv_43"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:text="0人"
-            android:textColor="@color/black0"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/et_42"
-            app:layout_constraintEnd_toEndOf="@+id/tv_33"
-            app:layout_constraintLeft_toRightOf="@+id/et_42" />
+            <View
+                android:id="@+id/view16"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_21"
+                app:layout_constraintEnd_toEndOf="@+id/view15"
+                app:layout_constraintLeft_toRightOf="@+id/et_21"
+                app:layout_constraintTop_toTopOf="@+id/et_21" />
 
-        <EditText
-            android:id="@+id/et_51"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="1"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="@+id/et_52"
-            app:layout_constraintEnd_toStartOf="@+id/et_52"
-            app:layout_constraintHorizontal_bias="0.736"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_52"
-            app:layout_constraintVertical_bias="0.0" />
+            <EditText
+                android:id="@+id/et_22"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="90"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_12"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/et_12"
+                app:layout_constraintTop_toBottomOf="@+id/et_12" />
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_51"
-            app:layout_constraintEnd_toEndOf="@+id/view8"
-            app:layout_constraintLeft_toRightOf="@+id/et_51"
-            app:layout_constraintTop_toTopOf="@+id/et_51" />
+            <View
+                android:id="@+id/view18"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_22"
+                app:layout_constraintEnd_toEndOf="@+id/view6"
+                app:layout_constraintLeft_toRightOf="@+id/et_22"
+                app:layout_constraintTop_toTopOf="@+id/et_22" />
 
-        <EditText
-            android:id="@+id/et_52"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
-            android:gravity="end"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:text="60"
-            android:textColor="@color/blue"
-            android:textSize="22sp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/et_42"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/et_42"
-            app:layout_constraintTop_toBottomOf="@+id/et_42"
-            app:layout_constraintVertical_bias="0.105" />
-
-        <View
-            android:id="@+id/view9"
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/et_52"
-            app:layout_constraintEnd_toEndOf="@+id/view7"
-            app:layout_constraintLeft_toRightOf="@+id/et_52"
-            app:layout_constraintTop_toTopOf="@+id/et_52" />
-
-        <TextView
-            android:id="@+id/tv_53"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:text="0人"
-            android:textColor="@color/black0"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/et_52"
-            app:layout_constraintEnd_toEndOf="@+id/tv_43"
-            app:layout_constraintLeft_toRightOf="@+id/et_52" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="（含）"
-            android:textColor="@color/black0"
-            android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="@+id/et_51"
-            app:layout_constraintTop_toBottomOf="@+id/et_51" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="（不含）"
-            android:textColor="@color/black0"
-            android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="@+id/et_52"
-            app:layout_constraintTop_toBottomOf="@+id/et_52" />
-
-        <TextView
-            android:id="@+id/tv_61"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="未参试或0分："
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/et_51"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-        <View
-            android:id="@+id/view20"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_61"
-            app:layout_constraintEnd_toStartOf="@+id/tv_61"
-            app:layout_constraintStart_toStartOf="@+id/view12"
-            app:layout_constraintTop_toTopOf="@+id/tv_61" />
-
-        <View
-            android:layout_width="16dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_61"
-            app:layout_constraintEnd_toEndOf="@+id/view9"
-            app:layout_constraintLeft_toRightOf="@+id/tv_61"
-            app:layout_constraintTop_toTopOf="@+id/tv_61" />
-
-        <TextView
-            android:id="@+id/tv_63"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:text="0人"
-            android:textColor="@color/black0"
-            android:textSize="22sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_61"
-            app:layout_constraintEnd_toEndOf="@+id/tv_53"
-            app:layout_constraintLeft_toRightOf="@+id/tv_61" />
+            <TextView
+                android:id="@+id/tv_23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="48dp"
+                android:text="10人"
+                android:textColor="@color/black0"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_22"
+                app:layout_constraintEnd_toEndOf="@+id/tv_13"
+                app:layout_constraintLeft_toRightOf="@+id/et_22" />
 
 
-        <Button
-            android:id="@+id/btn_copy_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/semi_round_background"
-            android:text="复制信息"
-            android:textColor="#4169E1"
-            android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_excellent_score_line_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_61"
-            app:layout_constraintVertical_bias="0.283" />
+            <EditText
+                android:id="@+id/et_31"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="70"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_32"
+                app:layout_constraintBottom_toBottomOf="@+id/et_32"
+                app:layout_constraintEnd_toStartOf="@+id/et_32"
+                app:layout_constraintHorizontal_bias="0.736"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_32"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <Button
-            android:id="@+id/btn_refresh"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/semi_round_background"
-            android:text="手动修改后需刷新"
-            android:textColor="#3D9140"
-            android:textSize="17dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_copy_info"
-            app:layout_constraintEnd_toEndOf="@+id/tv_63"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/btn_copy_info"
-            app:layout_constraintTop_toTopOf="@+id/btn_copy_info"
-            app:layout_constraintVertical_bias="0.0" />
+            <View
+                android:id="@+id/view17"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_31"
+                app:layout_constraintEnd_toEndOf="@+id/view16"
+                app:layout_constraintLeft_toRightOf="@+id/et_31"
+                app:layout_constraintTop_toTopOf="@+id/et_31" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/et_32"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="80"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_22"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/et_22"
+                app:layout_constraintTop_toBottomOf="@+id/et_22" />
+
+            <View
+                android:id="@+id/view19"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_32"
+                app:layout_constraintEnd_toEndOf="@+id/view18"
+                app:layout_constraintLeft_toRightOf="@+id/et_32"
+                app:layout_constraintTop_toTopOf="@+id/et_32" />
+
+            <TextView
+                android:id="@+id/tv_33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:text="0人"
+                android:textColor="@color/black0"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_32"
+                app:layout_constraintEnd_toEndOf="@+id/tv_23"
+                app:layout_constraintLeft_toRightOf="@+id/et_32" />
+
+            <EditText
+                android:id="@+id/et_41"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="60"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_42"
+                app:layout_constraintBottom_toBottomOf="@+id/et_42"
+                app:layout_constraintEnd_toStartOf="@+id/et_42"
+                app:layout_constraintHorizontal_bias="0.736"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_42"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_41"
+                app:layout_constraintEnd_toEndOf="@+id/view17"
+                app:layout_constraintLeft_toRightOf="@+id/et_41"
+                app:layout_constraintTop_toTopOf="@+id/et_41" />
+
+            <EditText
+                android:id="@+id/et_42"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="70"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_32"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/et_32"
+                app:layout_constraintTop_toBottomOf="@+id/et_32" />
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_42"
+                app:layout_constraintEnd_toEndOf="@+id/view19"
+                app:layout_constraintLeft_toRightOf="@+id/et_42"
+                app:layout_constraintTop_toTopOf="@+id/et_42" />
+
+            <TextView
+                android:id="@+id/tv_43"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:text="0人"
+                android:textColor="@color/black0"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_42"
+                app:layout_constraintEnd_toEndOf="@+id/tv_33"
+                app:layout_constraintLeft_toRightOf="@+id/et_42" />
+
+            <EditText
+                android:id="@+id/et_51"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="1"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/et_52"
+                app:layout_constraintEnd_toStartOf="@+id/et_52"
+                app:layout_constraintHorizontal_bias="0.736"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_52"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_51"
+                app:layout_constraintEnd_toEndOf="@+id/view8"
+                app:layout_constraintLeft_toRightOf="@+id/et_51"
+                app:layout_constraintTop_toTopOf="@+id/et_51" />
+
+            <EditText
+                android:id="@+id/et_52"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edit_text_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="end"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="60"
+                android:textColor="@color/blue"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_42"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/et_42"
+                app:layout_constraintTop_toBottomOf="@+id/et_42" />
+
+            <View
+                android:id="@+id/view9"
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/et_52"
+                app:layout_constraintEnd_toEndOf="@+id/view7"
+                app:layout_constraintLeft_toRightOf="@+id/et_52"
+                app:layout_constraintTop_toTopOf="@+id/et_52" />
+
+            <TextView
+                android:id="@+id/tv_53"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:text="0人"
+                android:textColor="@color/black0"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_52"
+                app:layout_constraintEnd_toEndOf="@+id/tv_43"
+                app:layout_constraintLeft_toRightOf="@+id/et_52" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="（含）"
+                android:textColor="@color/black0"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_51"
+                app:layout_constraintTop_toBottomOf="@+id/et_51" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="（不含）"
+                android:textColor="@color/black0"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_52"
+                app:layout_constraintTop_toBottomOf="@+id/et_52" />
+
+            <TextView
+                android:id="@+id/tv_61"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="未参试或0分："
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/et_51"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+            <View
+                android:id="@+id/view20"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_61"
+                app:layout_constraintEnd_toStartOf="@+id/tv_61"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/view12"
+                app:layout_constraintTop_toTopOf="@+id/tv_61" />
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_61"
+                app:layout_constraintEnd_toEndOf="@+id/view9"
+                app:layout_constraintLeft_toRightOf="@+id/tv_61"
+                app:layout_constraintTop_toTopOf="@+id/tv_61" />
+
+            <TextView
+                android:id="@+id/tv_63"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:text="0人"
+                android:textColor="@color/black0"
+                android:textSize="22sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_61"
+                app:layout_constraintEnd_toEndOf="@+id/tv_53"
+                app:layout_constraintLeft_toRightOf="@+id/tv_61" />
+
+
+            <Button
+                android:id="@+id/btn_copy_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
+                android:background="@drawable/semi_round_background"
+                android:text="复制信息"
+                android:textColor="#4169E1"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="@+id/tv_excellent_score_line_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_61" />
+
+            <Button
+                android:id="@+id/btn_refresh"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/semi_round_background"
+                android:text="手动修改后需刷新"
+                android:textColor="#3D9140"
+                android:textSize="17dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_copy_info"
+                app:layout_constraintEnd_toEndOf="@+id/tv_63"
+                app:layout_constraintHorizontal_bias="0.982"
+                app:layout_constraintStart_toEndOf="@+id/btn_copy_info"
+                app:layout_constraintTop_toTopOf="@+id/btn_copy_info"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 
 </LinearLayout>
