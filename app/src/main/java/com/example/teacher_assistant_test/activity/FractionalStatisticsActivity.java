@@ -80,7 +80,7 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     @BindView(R.id.tv_63) TextView tv_63;
 
     @BindView(R.id.btn_copy_info) Button btn_copy_info;
-    @BindView(R.id.btn_refresh) Button btn_refresh;
+    @BindView(R.id.btn_save) Button btn_save;
 
 
     private long test_id;
@@ -105,7 +105,7 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
         ButterKnife.bind(this);
 
         btn_copy_info.setOnClickListener(this);
-        btn_refresh.setOnClickListener(this);
+        btn_save.setOnClickListener(this);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 禁用横屏
 
@@ -140,7 +140,7 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
                                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                                 tv_test_time.setText(DateUtils.date2String(calendar.getTime(), DateUtils.YMD_FORMAT));
 
-                                updateTestTimeByTestId(test_id, tv_test_time.getText().toString());
+//                                updateTestTimeByTestId(test_id, tv_test_time.getText().toString());
                                 test_time = tv_test_time.getText().toString();
                             }
                         },
@@ -319,13 +319,11 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
                     et.setText(s.toString());
                 }
 
-                //动态更新满分
+                //防止initUI()发生异常，先设置好test_full_mark
                 if (!TextUtils.isEmpty(et_full_mark.getText().toString())) {
                     test_full_mark = Integer.parseInt(et_full_mark.getText().toString());
-                    updateTestFullMarkByTestId(test_id, test_full_mark);
                 } else {
                     test_full_mark = 0;
-                    updateTestFullMarkByTestId(test_id, test_full_mark);
                 }
 
                 initUI();
@@ -405,14 +403,16 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
                 copyInfo();
                 break;
 
-            case R.id.btn_refresh:
-                //更新满分
-                if (!TextUtils.isEmpty(et_full_mark.getText().toString())) {
-                    test_full_mark = Integer.parseInt(et_full_mark.getText().toString());
-                    updateTestFullMarkByTestId(test_id, test_full_mark);
-                }
+            case R.id.btn_save:
 
-                initUI();
+                //更新满分
+                updateTestFullMarkByTestId(test_id, test_full_mark);
+
+                //更新测试时间
+                updateTestTimeByTestId(test_id, tv_test_time.getText().toString());
+
+                Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
+
                 break;
             default:
                 break;
