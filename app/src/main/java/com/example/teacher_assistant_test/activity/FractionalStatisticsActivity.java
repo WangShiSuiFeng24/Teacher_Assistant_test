@@ -2,6 +2,7 @@ package com.example.teacher_assistant_test.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
@@ -15,14 +16,18 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.util.DateUtils;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.util.TitleBarView;
@@ -30,11 +35,14 @@ import com.example.teacher_assistant_test.util.TouchEmptyCloseKeyBoardUtils;
 
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FractionalStatisticsActivity extends AppCompatActivity implements View.OnClickListener {
+
+    public static final String TAG = "FSActivity";
 
     @BindView(R.id.title)
     TitleBarView titleBarView;
@@ -114,6 +122,33 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
         initTitleBar();
 
         initUI();
+
+        //设置测试时间TextView监听
+        tv_test_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+//                tv_test_time.setText(DateUtils.date2String(calendar.getTime(), DateUtils.YMD_FORMAT));
+                DatePickerDialog dialog = new DatePickerDialog(FractionalStatisticsActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                Log.d(TAG, "onDateSet: year: " + year + ", month: " + month + ", dayOfMonth: " + dayOfMonth);
+
+                                calendar.set(Calendar.YEAR, year);
+                                calendar.set(Calendar.MONTH, month);
+                                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                tv_test_time.setText(DateUtils.date2String(calendar.getTime(), DateUtils.YMD_FORMAT));
+                                updateTestTimeByTestId(test_id, tv_test_time.getText().toString());
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                dialog.show();
+            }
+        });
+
 
         //给EditText添加监听
         addListener(et_excellent_score_line);
@@ -484,6 +519,21 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
         db.close();
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * 更新测试时间test_time通过测试号test_id
+     * @param test_id
+     * @param test_time
+     */
+    private void updateTestTimeByTestId(long test_id, String test_time) {
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
+
+        ContentValues values = new ContentValues();
+
+        values.put("test_time", test_time);
+
+        db.update("StudentTest", values, "test_id = ?", new String[]{"" + test_id + ""});
     }
 
     /**
