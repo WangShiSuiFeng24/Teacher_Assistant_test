@@ -1241,8 +1241,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         recordAdapter.setOnFooterClickListener(new RecordAdapter.OnFooterClickListener() {
             @Override
-            public void onFooterClick(int position) {
+            public void onFooterLeftClick(int position) {
                 recordAdapterOnFooterClick(position);
+            }
+
+            @Override
+            public void onFooterRightClick() {
+
             }
         });
 

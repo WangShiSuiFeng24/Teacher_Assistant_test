@@ -512,9 +512,13 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
         recordAdapter.setOnFooterClickListener(new RecordAdapter.OnFooterClickListener() {
             @Override
-            public void onFooterClick(int position) {
-//                recordAdapterOnFooterClick(position);
-                FractionalStatisticsActivity.actionStart(getContext(), current_test_id);
+            public void onFooterLeftClick(int position) {
+                recordAdapterOnFooterLeftClick(position);
+            }
+
+            @Override
+            public void onFooterRightClick() {
+                recordAdapterOnFooterRightClick();
             }
         });
 
@@ -665,7 +669,7 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
      *     - 订正尚缺：（列出姓名）
      * @param position 点击位置
      */
-    private void recordAdapterOnFooterClick(int position) {
+    private void recordAdapterOnFooterLeftClick(int position) {
 
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.statistical_info_dialog, null, false);
 
@@ -790,6 +794,10 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
         lack_correct_name.setText(stringBuilder1.toString());
 
+    }
+
+    private void recordAdapterOnFooterRightClick() {
+        FractionalStatisticsActivity.actionStart(getContext(), current_test_id);
     }
 
     /**

@@ -80,10 +80,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     static class FootViewHolder extends RecyclerView.ViewHolder {
         TextView statistical_info;
+        TextView fractional_statistics;
 
         public FootViewHolder(@NonNull View itemView) {
             super(itemView);
             statistical_info = itemView.findViewById(R.id.statistical_info);
+            fractional_statistics = itemView.findViewById(R.id.fractional_statistics);
         }
     }
 
@@ -141,10 +143,16 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             footViewHolder.statistical_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onFooterClickListener.onFooterClick(position);
+                    onFooterClickListener.onFooterLeftClick(position);
                 }
             });
 
+            footViewHolder.fractional_statistics.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFooterClickListener.onFooterRightClick();
+                }
+            });
             return;
         }
 
@@ -348,7 +356,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private RecordAdapter.OnFooterClickListener onFooterClickListener;
 
     public interface OnFooterClickListener {
-        void onFooterClick(int position);
+        void onFooterLeftClick(int position);
+        void onFooterRightClick();
     }
 
     public void setOnFooterClickListener(RecordAdapter.OnFooterClickListener onFooterClickListener) {
