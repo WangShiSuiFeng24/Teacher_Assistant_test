@@ -139,7 +139,9 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
                                 calendar.set(Calendar.MONTH, month);
                                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                                 tv_test_time.setText(DateUtils.date2String(calendar.getTime(), DateUtils.YMD_FORMAT));
+
                                 updateTestTimeByTestId(test_id, tv_test_time.getText().toString());
+                                test_time = tv_test_time.getText().toString();
                             }
                         },
                         calendar.get(Calendar.YEAR),
@@ -302,7 +304,32 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
                 // 那么会重复触发对此方法的递归死循环调用, 产生ANR
                 //在执行逻辑前先remove掉EditText绑定的监听器，等逻辑执行完毕后再绑定该监听器.
                 et.removeTextChangedListener(this);
-                et.setText(s.toString());
+
+                //设置EditText可以输入0，但不能输入以0开头的数字
+                String text = s.toString();
+                int len = s.toString().length();
+                if (len > 1 && text.startsWith("0")) {
+                    s.replace(0, 1, "");
+                }
+
+                //设置EditText为空""时显示0
+                if (TextUtils.isEmpty(s.toString())) {
+                    et.setText("0");
+                } else {
+                    et.setText(s.toString());
+                }
+
+                //动态更新满分
+                if (!TextUtils.isEmpty(et_full_mark.getText().toString())) {
+                    test_full_mark = Integer.parseInt(et_full_mark.getText().toString());
+                    updateTestFullMarkByTestId(test_id, test_full_mark);
+                } else {
+                    test_full_mark = 0;
+                    updateTestFullMarkByTestId(test_id, test_full_mark);
+                }
+
+                initUI();
+
                 et.setSelection(s.length());
                 et.addTextChangedListener(this);
             }
