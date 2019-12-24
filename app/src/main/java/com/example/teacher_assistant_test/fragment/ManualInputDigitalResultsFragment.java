@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.activity.FractionalStatisticsActivity;
 import com.example.teacher_assistant_test.activity.MainActivity;
 import com.example.teacher_assistant_test.adapter.ResultAdapter;
 import com.example.teacher_assistant_test.bean.Result;
@@ -147,8 +148,13 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
 
         resultAdapter.setOnFooterClickListener(new ResultAdapter.OnFooterClickListener() {
             @Override
-            public void onFooterClick() {
-                resultAdapterOnFooterClick();
+            public void onFooterLeftClick() {
+                resultAdapterOnFooterLeftClick();
+            }
+
+            @Override
+            public void onFooterRightClick() {
+                resultAdapterOnFooterRightClick();
             }
         });
 
@@ -279,7 +285,7 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
      *     - 成绩尚缺：（列出姓名）
      *     - 订正尚缺：（列出姓名）
      */
-    private void resultAdapterOnFooterClick() {
+    private void resultAdapterOnFooterLeftClick() {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.statistical_info_dialog, null, false);
 
         EditText test_full_mark_edit = view.findViewById(R.id.test_full_mark_edit);
@@ -339,6 +345,39 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
         }
 
         lack_correct_name.setText(stringBuilder1.toString());
+    }
+
+    /**
+     * 分数段统计点击事件
+     */
+    private void resultAdapterOnFooterRightClick() {
+        //查询StudentTest表中是否有current_test_id
+
+        SQLiteDatabase db = MyDatabaseHelper.getInstance(getContext());
+
+        Cursor cursor = db.rawQuery("select test_id from StudentTest", new String[]{});
+
+        boolean exist_test_id = false;
+
+        while (cursor.moveToNext()) {
+            long test_id = cursor.getLong(cursor.getColumnIndex("test_id"));
+
+            if (test_id == current_test_id) {
+                exist_test_id = true;
+                break;
+            }
+        }
+
+        if (exist_test_id) {
+
+            FractionalStatisticsActivity.actionStart(getContext(), current_test_id);
+        } else {
+
+            FractionalStatisticsActivity.actionStart(getContext(), resultList);
+        }
+
+        cursor.close();
+        db.close();
     }
 
 

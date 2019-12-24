@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.bean.Result;
 import com.example.teacher_assistant_test.util.DateUtils;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
 import com.example.teacher_assistant_test.util.MyDatabaseHelper;
@@ -34,8 +35,11 @@ import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.util.TouchEmptyCloseKeyBoardUtils;
 
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,6 +97,8 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     private int[] scores = new int[42];
 
 
+    //新建传入的resultList
+    private List<Result> resultList;
 
 
 
@@ -113,11 +119,31 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
 
         test_id = getIntent().getLongExtra("test_id", 0);
 
+        if (test_id != 0) {
+
+            initTestInfo();
+
+            initScoreInfo();
+        }
+
+        if (test_id == 0) {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            test_time = dateFormat.format(Calendar.getInstance().getTime());
 
 
-        initTestInfo();
+            resultList = (List<Result>) getIntent().getSerializableExtra("resultList");
 
-        initScoreInfo();
+            scores = new int[resultList.size()];
+
+            for (Result result : resultList) {
+                scores[count++] = result.getTotal_score();
+            }
+        }
+
+//        initTestInfo();
+//
+//        initScoreInfo();
 
         initTitleBar();
 
@@ -470,6 +496,37 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     private String getFullScoreStudent(int num) {
         if (num <= 0) return "";
 
+        //新建模式
+        if (test_id == 0) {
+
+            int i = 0;
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (Result result :resultList) {
+
+                if (result.getTotal_score() == test_full_mark) {
+
+                    i++;
+
+                    String stu_name = result.getStu_name();
+
+                    stringBuilder.append(stu_name);
+
+                    if (i == num) break;
+
+                    if (i % 5 == 0) {
+                        stringBuilder.append("\r\n");
+                    } else {
+                        stringBuilder.append(" ");
+                    }
+                }
+            }
+            return stringBuilder.toString();
+        }
+
+
+        //查看模式
         SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
 
         String sql = "select stu_name from Student "
@@ -513,6 +570,39 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     private String getExcellentStudent(int num) {
         if (num <= 0) return "";
 
+        //新建模式
+        if (test_id == 0) {
+
+            int i = 0;
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (Result result :resultList) {
+
+                if (result.getTotal_score() >= Integer.parseInt(et_excellent_score_line.getText().toString())) {
+
+                    i++;
+
+                    String stu_name = result.getStu_name();
+
+                    stringBuilder.append(stu_name);
+
+                    if (i == num) break;
+
+                    if (i % 5 == 0) {
+                        stringBuilder.append("\r\n");
+                    } else {
+                        stringBuilder.append(" ");
+                    }
+                }
+            }
+
+            return stringBuilder.toString();
+        }
+
+
+
+        //查看模式
         SQLiteDatabase db = MyDatabaseHelper.getInstance(this);
 
         String sql = "select stu_name from Student inner join StudentMark "
@@ -594,6 +684,17 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     public static void actionStart(Context context, long test_id) {
         Intent intent = new Intent(context, FractionalStatisticsActivity.class);
         intent.putExtra("test_id", test_id);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 传入resultList
+     * @param context 上下文
+     * @param resultList
+     */
+    public static void actionStart(Context context, List<Result> resultList) {
+        Intent intent = new Intent(context, FractionalStatisticsActivity.class);
+        intent.putExtra("resultList", (Serializable) resultList);
         context.startActivity(intent);
     }
 }

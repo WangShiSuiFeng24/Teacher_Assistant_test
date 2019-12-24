@@ -1,9 +1,11 @@
 package com.example.teacher_assistant_test.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Andong Ming on 2019.12.10.
  */
-public class Result {
+public class Result implements Serializable {
     private String stu_id;
     private String stu_name;
     private String stu_gender;

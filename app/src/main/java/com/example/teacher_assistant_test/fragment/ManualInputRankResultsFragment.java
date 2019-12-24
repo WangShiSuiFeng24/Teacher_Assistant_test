@@ -151,8 +151,13 @@ public class ManualInputRankResultsFragment extends Fragment implements Fragment
 
         resultAdapter.setOnFooterClickListener(new ResultAdapter.OnFooterClickListener() {
             @Override
-            public void onFooterClick() {
+            public void onFooterLeftClick() {
                 resultAdapterOnFooterClick();
+            }
+
+            @Override
+            public void onFooterRightClick() {
+
             }
         });
 
