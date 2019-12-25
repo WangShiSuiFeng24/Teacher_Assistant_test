@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.MyEvent;
 import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.bean.Result;
 import com.example.teacher_assistant_test.util.DateUtils;
@@ -34,6 +35,8 @@ import com.example.teacher_assistant_test.util.MyDatabaseHelper;
 import com.example.teacher_assistant_test.util.TitleBarView;
 import com.example.teacher_assistant_test.util.TouchEmptyCloseKeyBoardUtils;
 
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
@@ -436,6 +439,8 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
 
                 //更新测试时间
                 updateTestTimeByTestId(test_id, tv_test_time.getText().toString());
+
+                EventBus.getDefault().post(new MyEvent(test_full_mark, tv_test_time.getText().toString()));
 
                 Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
 

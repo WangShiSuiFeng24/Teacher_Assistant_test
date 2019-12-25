@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teacher_assistant_test.MyEvent;
 import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.activity.FractionalStatisticsActivity;
 import com.example.teacher_assistant_test.activity.MainActivity;
@@ -43,6 +44,10 @@ import com.example.teacher_assistant_test.util.MyDividerItemDecoration;
 import com.example.teacher_assistant_test.util.RecyclerViewEmptySupport;
 import com.example.teacher_assistant_test.util.ToastHelper;
 import com.example.teacher_assistant_test.util.WrapContentLinearLayoutManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -75,6 +80,8 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
 
     private String current_test_time;
 
+    private int test_full_mark = -1;
+
     private boolean isResultListUpdate = false;
 
     private Button save_to_db;
@@ -89,6 +96,8 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        EventBus.getDefault().register(this);
 
         View view = inflater.inflate(R.layout.fragment_manual_input_results, container, false);
 
@@ -176,6 +185,19 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    /**
+     * 默认情况下，如果消息是主线程发送的，那么消息的响应者（接收者）
+     * 就在主线程运行
+     * 如果消息是子线程发送的，那么消息的响应者（接收者）
+     * 就在子线程运行
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MyEvent event) {
+        current_test_time = event.getTest_time();
+        test_full_mark = event.getTest_full_mark();
     }
 
     private void initResultList() {
@@ -411,13 +433,22 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
                 return;
             }
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            current_test_time = dateFormat.format(Calendar.getInstance().getTime());
+            if (current_test_time == null) {
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                current_test_time = dateFormat.format(Calendar.getInstance().getTime());
+            }
+
 
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_test_name_and_test_full_mark_view, null, false);
 
             EditText test_name_edit = view.findViewById(R.id.test_name_edit);
             EditText test_full_mark_edit = view.findViewById(R.id.test_full_mark_edit);
+
+            if (test_full_mark != -1) {
+                test_full_mark_edit.setText(String.valueOf(test_full_mark));
+            }
+
 
             final AlertDialog alertDialog = GetAlertDialog
                     .getAlertDialog(getActivity(),getString(R.string.please_enter_the_test_name),
@@ -693,5 +724,11 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
 //        mListener.toDigitalResults();
 //
 //        return BackHandlerHelper.handleBackPress(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
