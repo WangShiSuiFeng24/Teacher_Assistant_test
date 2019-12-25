@@ -4,13 +4,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="10dp"
     android:paddingLeft="30dp"
     android:paddingRight="30dp">
 
     <LinearLayout
         android:id="@+id/ll_edit_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,14 +30,6 @@
             android:maxLength="3"
             android:gravity="center"
             android:inputType="number" />
-
-<!--        <Button-->
-<!--            android:id="@+id/edit_button"-->
-<!--            android:layout_width="64dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:text="@string/edit"-->
-<!--            android:textColor="@color/colorAccent" />-->
-<!--            android:background="@android:color/transparent" />-->
 
     </LinearLayout>
 
