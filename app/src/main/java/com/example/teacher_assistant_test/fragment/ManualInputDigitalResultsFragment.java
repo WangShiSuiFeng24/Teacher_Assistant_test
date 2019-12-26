@@ -33,6 +33,7 @@ import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.activity.FractionalStatisticsActivity;
 import com.example.teacher_assistant_test.activity.MainActivity;
 import com.example.teacher_assistant_test.adapter.ResultAdapter;
+import com.example.teacher_assistant_test.bean.NameAndScore;
 import com.example.teacher_assistant_test.bean.Result;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
@@ -394,8 +395,19 @@ public class ManualInputDigitalResultsFragment extends Fragment implements  Frag
 
             FractionalStatisticsActivity.actionStart(getContext(), current_test_id);
         } else {
+            List<NameAndScore> list = new ArrayList<>();
 
-            FractionalStatisticsActivity.actionStart(getContext(), resultList);
+            for (Result result : resultList) {
+
+                String stu_name = result.getStu_name();
+                int total_score = result.getTotal_score();
+
+                NameAndScore nameAndScore = new NameAndScore(stu_name, total_score);
+
+                list.add(nameAndScore);
+            }
+
+            FractionalStatisticsActivity.actionStart(getContext(), list);
         }
 
         cursor.close();

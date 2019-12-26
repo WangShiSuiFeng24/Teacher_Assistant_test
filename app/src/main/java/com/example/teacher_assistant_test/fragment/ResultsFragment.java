@@ -33,11 +33,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.teacher_assistant_test.MyEvent;
 import com.example.teacher_assistant_test.R;
 import com.example.teacher_assistant_test.activity.FractionalStatisticsActivity;
 import com.example.teacher_assistant_test.activity.MainActivity;
 import com.example.teacher_assistant_test.adapter.RecordAdapter;
 import com.example.teacher_assistant_test.bean.Mark;
+import com.example.teacher_assistant_test.bean.NameAndScore;
 import com.example.teacher_assistant_test.bean.Record;
 import com.example.teacher_assistant_test.util.Calculator;
 import com.example.teacher_assistant_test.util.CheckExpression;
@@ -61,6 +63,9 @@ import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -108,6 +113,8 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
     //当前点击test_time
     private String current_test_time;
+
+    private int test_full_mark = -1;
 
 
     private LinearLayout record_title;
@@ -174,6 +181,8 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        EventBus.getDefault().register(this);
 
         View view = inflater.inflate(R.layout.record_mark, container, false);
 
@@ -335,6 +344,12 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
         SpeechUtility.createUtility(getActivity(), SpeechConstant.APPID + "=5db04b35");
 
         return view;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MyEvent event) {
+        current_test_time = event.getTest_time();
+        test_full_mark = event.getTest_full_mark();
     }
 
     private void setSaveBtnBackground(boolean isRecordListUpdate) {
@@ -797,7 +812,27 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
     }
 
     private void recordAdapterOnFooterRightClick() {
-        FractionalStatisticsActivity.actionStart(getContext(), current_test_id);
+
+        if (current_test_id != -1) {
+
+            FractionalStatisticsActivity.actionStart(getContext(), current_test_id);
+        } else {
+
+            List<NameAndScore> list = new ArrayList<>();
+
+            for (Record record : recordList) {
+
+                String stu_name = record.getStu_name();
+                int total_score = record.getTotal_score();
+
+                NameAndScore nameAndScore = new NameAndScore(stu_name, total_score);
+
+                list.add(nameAndScore);
+            }
+
+            FractionalStatisticsActivity.actionStart(getContext(), list);
+        }
+
     }
 
     /**
@@ -887,13 +922,20 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
 
             //非点击testItem，新建模式的保存方式
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            current_test_time = dateFormat.format(Calendar.getInstance().getTime());
+            if (current_test_time == null) {
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                current_test_time = dateFormat.format(Calendar.getInstance().getTime());
+            }
 
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_test_name_and_test_full_mark_view, null, false);
 
             EditText test_name_edit = view.findViewById(R.id.test_name_edit);
             EditText test_full_mark_edit = view.findViewById(R.id.test_full_mark_edit);
+
+            if (test_full_mark != -1) {
+                test_full_mark_edit.setText(String.valueOf(test_full_mark));
+            }
 
             final AlertDialog alertDialog = GetAlertDialog
                     .getAlertDialog(getActivity(),getString(R.string.please_enter_the_test_name),
@@ -1816,5 +1858,11 @@ public class ResultsFragment extends Fragment implements FragmentBackHandler{
                 return i;
         }
         return -1;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.example.teacher_assistant_test.MyEvent;
 import com.example.teacher_assistant_test.R;
+import com.example.teacher_assistant_test.bean.NameAndScore;
 import com.example.teacher_assistant_test.bean.Result;
 import com.example.teacher_assistant_test.util.DateUtils;
 import com.example.teacher_assistant_test.util.ImmersiveStatusBar;
@@ -100,8 +101,8 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     private int[] scores = new int[42];
 
 
-    //新建传入的resultList
-    private List<Result> resultList;
+    //新建传入的list
+    private List<NameAndScore> list;
 
 
 
@@ -135,12 +136,12 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
             test_time = dateFormat.format(Calendar.getInstance().getTime());
 
 
-            resultList = (List<Result>) getIntent().getSerializableExtra("resultList");
+            list = (List<NameAndScore>) getIntent().getSerializableExtra("list");
 
-            scores = new int[resultList.size()];
+            scores = new int[list.size()];
 
-            for (Result result : resultList) {
-                scores[count++] = result.getTotal_score();
+            for (NameAndScore nameAndScore : list) {
+                scores[count++] = nameAndScore.getTotal_score();
             }
         }
 
@@ -508,13 +509,13 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            for (Result result :resultList) {
+            for (NameAndScore nameAndScore : list) {
 
-                if (result.getTotal_score() == test_full_mark) {
+                if (nameAndScore.getTotal_score() == test_full_mark) {
 
                     i++;
 
-                    String stu_name = result.getStu_name();
+                    String stu_name = nameAndScore.getStu_name();
 
                     stringBuilder.append(stu_name);
 
@@ -582,13 +583,13 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            for (Result result :resultList) {
+            for (NameAndScore nameAndScore : list) {
 
-                if (result.getTotal_score() >= Integer.parseInt(et_excellent_score_line.getText().toString())) {
+                if (nameAndScore.getTotal_score() >= Integer.parseInt(et_excellent_score_line.getText().toString())) {
 
                     i++;
 
-                    String stu_name = result.getStu_name();
+                    String stu_name = nameAndScore.getStu_name();
 
                     stringBuilder.append(stu_name);
 
@@ -695,11 +696,11 @@ public class FractionalStatisticsActivity extends AppCompatActivity implements V
     /**
      * 传入resultList
      * @param context 上下文
-     * @param resultList
+     * @param list
      */
-    public static void actionStart(Context context, List<Result> resultList) {
+    public static void actionStart(Context context, List<NameAndScore> list) {
         Intent intent = new Intent(context, FractionalStatisticsActivity.class);
-        intent.putExtra("resultList", (Serializable) resultList);
+        intent.putExtra("list", (Serializable) list);
         context.startActivity(intent);
     }
 }
