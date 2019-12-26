@@ -29,7 +29,8 @@
             android:maxLines="1"
             android:maxLength="3"
             android:gravity="center"
-            android:inputType="number" />
+            android:inputType="number"
+            android:hint="@null" />
 
     </LinearLayout>
 
