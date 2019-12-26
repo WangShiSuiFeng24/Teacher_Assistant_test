@@ -58,7 +58,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
@@ -68,13 +68,13 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
 
     implementation 'com.github.jokar:FloatMenu:0.0.3'
-    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.core:core-ktx:1.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.jianyu:switchbutton:1.0.0'
 
-    implementation 'com.jakewharton:butterknife:10.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     implementation 'org.greenrobot:eventbus:3.1.1'
 
