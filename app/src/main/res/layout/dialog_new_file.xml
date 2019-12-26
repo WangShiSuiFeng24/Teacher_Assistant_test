@@ -18,7 +18,7 @@
             android:gravity="left|center_vertical"
             android:padding="20dp"
             android:paddingLeft="20dp"
-            android:text="语音录入成绩"
+            android:text="@string/voice_input_score"
             android:textColor="@color/gray0"
             android:textSize="16sp"/>
 
@@ -34,7 +34,7 @@
             android:gravity="left|center_vertical"
             android:padding="20dp"
             android:paddingLeft="20dp"
-            android:text="创建空白成绩单（数字）"
+            android:text="@string/create_number_blank_transcripts"
             android:textColor="@color/gray0"
             android:textSize="16sp"/>
 
@@ -50,7 +50,7 @@
             android:gravity="left|center_vertical"
             android:padding="20dp"
             android:paddingLeft="20dp"
-            android:text="创建空白成绩单（等级）"
+            android:text="@string/create_rank_blank_transcripts"
             android:textColor="@color/gray0"
             android:textSize="16sp"/>
 

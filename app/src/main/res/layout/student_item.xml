@@ -17,7 +17,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="学号" />
+        android:text="@string/stu_id" />
 
     <TextView
         android:id="@+id/stu_name"
@@ -25,7 +25,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="名字" />
+        android:text="@string/stu_name" />
 
     <TextView
         android:id="@+id/stu_gender"
@@ -33,7 +33,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="性别" />
+        android:text="@string/stu_gender" />
 
     <EditText
         android:id="@+id/stu_score"
@@ -45,7 +45,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:textSize="15sp"
-        android:text="成绩"
+        android:text="@string/score"
         android:hint="@null"/>
 
     <TextView
@@ -54,6 +54,6 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:layout_weight="1.2"
-        android:text="总成绩" />
+        android:text="@string/total_score" />
 
 </LinearLayout>

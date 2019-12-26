@@ -39,7 +39,7 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="学号" />
+                    android:text="@string/stu_id" />
 
                 <ImageView
                     android:id="@+id/id_sort"
@@ -73,7 +73,7 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="成绩" />
+                    android:text="@string/score" />
 
                 <ImageView
                     android:id="@+id/score_sort"
@@ -98,7 +98,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:textStyle="bold"
-            android:text="总成绩" />
+            android:text="@string/total_score" />
 
     </LinearLayout>
 
@@ -169,7 +169,7 @@
             android:layout_weight="1"
             app:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="清空"
+            android:text="@string/clear"
             android:layout_gravity="bottom"/>
 
         <com.github.clans.fab.FloatingActionButton
@@ -189,7 +189,7 @@
             android:layout_weight="1"
             app:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
-            android:text="保存"
+            android:text="@string/save"
             android:layout_gravity="bottom"/>
 
     </LinearLayout>

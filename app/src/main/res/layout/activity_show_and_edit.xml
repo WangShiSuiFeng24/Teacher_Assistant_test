@@ -39,7 +39,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="学号" />
+                    android:text="@string/stu_id" />
 
                 <ImageView
                     android:id="@+id/id_select_sort"
@@ -63,7 +63,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:textStyle="bold"
-            android:text="姓名" />
+            android:text="@string/stu_name" />
 
         <TextView
             android:id="@+id/stu_gender"
@@ -72,7 +72,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:textStyle="bold"
-            android:text="性别" />
+            android:text="@string/stu_gender" />
 
         <TextView
             android:id="@+id/stu_score"
@@ -81,7 +81,7 @@
             android:gravity="center"
             android:layout_weight="1.5"
             android:textStyle="bold"
-            android:text="成绩" />
+            android:text="@string/score" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -99,7 +99,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="总成绩" />
+                    android:text="@string/total_score" />
 
                 <ImageView
                     android:id="@+id/score_select_sort"
