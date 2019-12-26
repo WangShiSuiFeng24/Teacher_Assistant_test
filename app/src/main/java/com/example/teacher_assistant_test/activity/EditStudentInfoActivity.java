@@ -449,7 +449,7 @@ public class EditStudentInfoActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    Toast.makeText(EditStudentInfoActivity.this, getString(R.string.insert_illegal_stu_id_hint, edit_stu_id.getText().toString().trim()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStudentInfoActivity.this, getString(R.string.insert_illegal_stu_id_hint), Toast.LENGTH_SHORT).show();
                 }
             }
         });

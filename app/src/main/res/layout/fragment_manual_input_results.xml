@@ -165,7 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/colorAccent"
+            app:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
             android:text="@string/export"
             android:layout_gravity="bottom"/>
@@ -184,7 +184,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/colorAccent"
+            app:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
             android:text="@string/save"
             android:layout_gravity="bottom"/>

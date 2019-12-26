@@ -167,7 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/colorAccent"
+            app:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
             android:text="清空"
             android:layout_gravity="bottom"/>
@@ -187,7 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/colorAccent"
+            app:backgroundTint="@color/colorAccent"
             android:textColor="#FFF"
             android:text="保存"
             android:layout_gravity="bottom"/>
